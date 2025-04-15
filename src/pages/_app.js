@@ -6,14 +6,14 @@ export default function App({ Component, pageProps }) {
     <>
       <Head>
         <title>Paraíso Huatulco App</title>
-        <meta name="description" content="Paraíso Huatulco" />
-        <meta name="theme-color" content="#fcd847" />
+        <meta name="description" content="Paraíso Huatulco App" />
         <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#fff" />
         <link rel="apple-touch-icon" href="/icon512_rounded.png" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="mobile-web-app-capable" content="yes" />
       </Head>
-      <Component {...pageProps} />
+      <div>
+        <Component {...pageProps} />
+      </div>
     </>
   );
 }

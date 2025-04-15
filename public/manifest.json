@@ -20,5 +20,7 @@
   "dir": "auto",
   "lang": "es-MX",
   "name": "Paraíso Huatulco",
-  "short_name": "ph"
+  "short_name": "ph",
+  "start_url": "/",
+  "scope": "/"
 }
