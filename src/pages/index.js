@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <BodyStyled>
-      <h1>Paraíso Huatulco - Tours</h1>
+      <h1>Paraíso Huatulco - Tours y Traslados</h1>
       {tours.map((tour, index) => 
         <Card title={tour.name} description={tour.short_description}/>
       )}
