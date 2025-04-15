@@ -1,10 +1,11 @@
 import ITourRepo from "@/domain/repositories/ITourRepo";
 import axios from "axios";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 class TourRepo extends ITourRepo {
     constructor() {
         super();
-        this.url = "https://admindemo.paraisohuatulco.com/admin/products/getProductsMovil?id_servicio=2";
+        this.url = `${apiUrl}/products/getProductsMovil?id_servicio=2`;
     }
 
     async getAll() {

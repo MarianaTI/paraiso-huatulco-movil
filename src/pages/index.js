@@ -1,5 +1,7 @@
 import GetAllToursUseCase from "@/application/usecases/GetAllToursUseCase";
+import Card from "@/components/card/Card";
 import TourRepo from "@/infraestructure/implementation/httpRequest/axios/TourRepo";
+import { BodyStyled } from "@/styles/Home.styled";
 import React, { useEffect, useState } from "react";
 export default function Home() {
   const [tours, setTours] = useState([]);
@@ -15,13 +17,16 @@ export default function Home() {
     }
   };
 
-  // useEffect(() => {
-  //   fetchTours();
-  // }, []);
+  useEffect(() => {
+    fetchTours();
+  }, []);
 
   return (
-    <>
-      <h1>Paraíso Huatulco</h1>
-    </>
+    <BodyStyled>
+      <h1>Paraíso Huatulco - Tours</h1>
+      {tours.map((tour, index) => 
+        <Card title={tour.name} description={tour.short_description}/>
+      )}
+    </BodyStyled>
   );
 }
