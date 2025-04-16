@@ -1,3 +1,4 @@
+import Layout from "@/layout";
 import "@/styles/globals.css";
 import Head from "next/head";
 
@@ -12,9 +13,9 @@ export default function App({ Component, pageProps }) {
         <link rel="apple-touch-icon" href="/icon512_rounded.png" />
         <link rel="icon" href="/icon512_rounded.png" />
       </Head>
-      <div>
+      <Layout>
         <Component {...pageProps} />
-      </div>
+      </Layout>
     </>
   );
 }
