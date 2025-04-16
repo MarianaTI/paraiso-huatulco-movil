@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
         <Link href="/" style={{ marginRight: "1rem" }}>
           Home
         </Link>
-        <Link href="/products">Products</Link>
+        {/* <Link href="/products">Products</Link> */}
       </nav>
       <main>{children}</main>
     </div>
