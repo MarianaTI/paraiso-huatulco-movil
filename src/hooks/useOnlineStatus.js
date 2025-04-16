@@ -1,12 +1,14 @@
 const { useState, useEffect } = require("react");
 
 const useOnlineStatus = () => {
-  const [isOnline, setIsOnline] = useState(
-    typeof window !== "undefined" && navigator.onLine
-  );
+  const [isOnline, setIsOnline] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    
+    const updateStatus = () => setIsOnline(navigator.onLine);
+
+    updateStatus();
 
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
