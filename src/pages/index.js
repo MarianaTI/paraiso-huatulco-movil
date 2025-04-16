@@ -3,17 +3,31 @@ import RatesRepo from "@/infraestructure/implementation/httpRequest/axios/RateRe
 import { BodyStyled } from "@/styles/Home.styled";
 import React, { useEffect, useState } from "react";
 export default function Home() {
+  const [rate, setRate] = useState([]);
+  const [formData, setFormData] = useState({
+    product_code: "1",
+    adults: "2",
+    children: "0",
+    codigo_destino: "HX",
+    start_date: "2025-04-15",
+  });
 
-  const onSubmit = async () => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
     const searchRate = {
-      product_code: "1",
-      adults: "2",
-      children: "0",
+      ...formData,
       id_servicio: "2",
       business_code: "2",
-      codigo_destino: "HX",
       plataforma: "admin",
-      start_date: "2025-04-15",
       end_date: "",
       zona_hotel: "",
       categoria_transporte: "",
@@ -21,20 +35,27 @@ export default function Home() {
     };
 
     try {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
       const ratesRepo = new RatesRepo();
       const createRateUseCase = new SearchRatesUseCase(ratesRepo);
       const response = await createRateUseCase.run(searchRate);
-      console.log(response);
+      setRate(response);
     } catch (error) {
-      console.log("Error", error);
+      console.log("Error en submit", error);
     }
   };
+
+  useEffect(() => {
+    if (rate) {
+      console.log("rate actualizado:", rate);
+    }
+  }, [rate]);
 
   return (
     <BodyStyled>
       <h1>Paraíso Huatulco - Tours</h1>
-      <button onClick={onSubmit}>Buscar tarifas</button>
-      {/* <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit}>
         <div>
           <input
             type="text"
@@ -71,7 +92,22 @@ export default function Home() {
             onChange={handleChange}
           />
         </div>
-      </form> */}
+        <button type="submit">Buscar tarifas</button>
+      </form>
+      <div>
+        <h2>Tarifas:</h2>
+        {rate.map((item, index) => (
+          <div key={index}>
+            <h3>{item.name}</h3>
+            {item.rates.map((rateItem, idx) => (
+              <div key={idx} style={{display: "flex", gap: 20}}>
+                <p>{rateItem.rate_title}</p>
+                <p>$ {rateItem.public_rate} {rateItem.moneda}</p>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
       {/* <div>
         <h2>Resultado:</h2>
         {results.map((item, index) => (

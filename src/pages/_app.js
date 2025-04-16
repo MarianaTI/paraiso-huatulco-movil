@@ -10,6 +10,7 @@ export default function App({ Component, pageProps }) {
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#fff" />
         <link rel="apple-touch-icon" href="/icon512_rounded.png" />
+        <link rel="icon" href="/icon512_rounded.png" />
       </Head>
       <div>
         <Component {...pageProps} />
