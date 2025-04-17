@@ -12,22 +12,6 @@ export default function Home() {
   const toursRepo = new TourRepo();
   const getAllToursUseCase = new GetAllToursUseCase(toursRepo);
 
-  // const fetchTours = async () => {
-  //   if (isOnline) {
-  //     try {
-  //       const response = await getAllToursUseCase.run();
-  //       setTours(response);
-  //       localStorage.setItem("offlineData", JSON.stringify(response));
-  //     } catch (error) {
-  //       console.error("Error fetching tours: ", error);
-  //     }
-  //   } else {
-  //     const offlineTours =
-  //       JSON.parse(localStorage.getItem("offlineData")) || [];
-  //     setTours(offlineTours);
-  //   }
-  // };
-
   useEffect(() => {
     const loadTours = async () => {
       const offlineData = JSON.parse(localStorage.getItem("offlineData")) || [];
@@ -39,7 +23,6 @@ export default function Home() {
           if (response && Array.isArray(response)) {
             setTours(response);
             localStorage.setItem("offlineData", JSON.stringify(response));
-            console.log("Datos guardados en localStorage");
           }
         } catch (error) {
           console.error("Error al obtener los tours:", error);
@@ -47,7 +30,6 @@ export default function Home() {
       }
     }
     loadTours();
-    // fetchTours();
   }, [isOnline]);
 
   return (
