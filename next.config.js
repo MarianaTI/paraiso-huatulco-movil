@@ -1,16 +1,16 @@
 const withPWA = require("next-pwa")({
-  dest: "public",
-  // disable: process.env.NODE_ENV === 'development',
-  disable: false,
+  dest: 'public',
+  disable: process.env.NODE_ENV === 'development',
   register: true,
   skipWaiting: true,
-  swSrc: "service-worker.js",
+  additionalManifestEntries: [
+    {url: '/', revision: null}
+  ]
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  basePath: "/pwa",
   output: "export",
   images: {
     unoptimized: true,
