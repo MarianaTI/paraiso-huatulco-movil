@@ -37,10 +37,11 @@ export default function Home() {
 
   return (
     <div className="mx-5 my-3">
-      <h1 className="principal-title">Productos</h1>
+      <h1 className="title">Productos</h1>
       {tours.map((tour, index) => (
         <Product
           key={index}
+          location={tour.code}
           title={tour.name}
           description={tour.short_description}
           img={`${apiUrl}/images/multimedia/${tour.multimedias[0]?.path}`}

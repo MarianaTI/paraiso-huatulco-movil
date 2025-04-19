@@ -11,8 +11,8 @@ export default function Navbar() {
             src="https://www.2businesstravel.com/images/agencia_899/899_logo_agencia.webp"
             alt="Logo Paraiso Huatulco"
             style={{ padding: 20 }}
-            width={180}
-            height={80}
+            width={170}
+            height={75}
           />
         </Link>
 
