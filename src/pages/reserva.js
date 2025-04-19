@@ -1,6 +1,5 @@
 import SearchRatesUseCase from "@/application/usecases/RatesUseCase/SearchRatesUseCase";
 import RatesRepo from "@/infraestructure/implementation/httpRequest/axios/RateRepo";
-import { BodyStyled } from "@/styles/Home.styled";
 import React, { useEffect, useState } from "react";
 
 
@@ -55,7 +54,7 @@ export default function Reserva() {
   }, [rate]);
 
   return (
-    <BodyStyled>
+    <div>
       <h1>Paraíso Huatulco - Tours</h1>
       <form onSubmit={onSubmit}>
         <div>
@@ -131,6 +130,6 @@ export default function Reserva() {
           </div>
         ))}
       </div> */}
-    </BodyStyled>
+    </div>
   );
 }

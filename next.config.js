@@ -1,8 +1,8 @@
 const withPWA = require("next-pwa")({
   dest: 'public',
-  disable: process.env.NODE_ENV === 'development',
   register: true,
   skipWaiting: true,
+  buildExcludes: [/middleware-manifest\.json$/, /dynamic-css-manifest\.json$/],
   additionalManifestEntries: [
     {url: '/', revision: null}
   ]
@@ -12,6 +12,7 @@ const withPWA = require("next-pwa")({
 const nextConfig = {
   reactStrictMode: true,
   output: "export",
+  trailingSlash: true,
   images: {
     unoptimized: true,
     domains: ["content.r9cdn.net"],

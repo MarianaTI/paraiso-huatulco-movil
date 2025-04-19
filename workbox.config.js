@@ -8,7 +8,7 @@ module.exports = {
     skipWaiting: true,
     runtimeCaching: [
       {
-        urlPattern: /^https:\/admindemo.\/paraisohuatulco.com\/admin\/products\/getProductsMovil/,
+        urlPattern: /^https:\/admindemo\/.paraisohuatulco.com\/admin\/products\/getProductsMovil/,
         handler: 'NetworkFirst',
         options: {
           cacheName: 'products-cache',
