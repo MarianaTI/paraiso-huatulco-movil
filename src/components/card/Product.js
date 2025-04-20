@@ -32,7 +32,7 @@ const Product = ({ title, description, location, img, price, currency, onClick }
         <p>{description}</p>
       </div>
       <div className="w-100 px-3 pb-4 price-section">
-        <span className="price">${price} {currency}</span>
+        <span className="price">$0.00 MXN{price} {currency}</span>
         <span className="price-label">precio total</span>
       </div>
     </div>

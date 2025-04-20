@@ -162,6 +162,19 @@ a {
   height: 55px;
 }
 
+.form-btn-styled {
+  background-color: #000f9f;
+  color: #ffffff;
+  padding:
+14px 38px;
+  font-weight: 700;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  height: 55px;
+  border: none;
+  border-radius: 6px;
+  width: 100%;
+}
+
 /* Product Card styles  */
 
 .card-style {

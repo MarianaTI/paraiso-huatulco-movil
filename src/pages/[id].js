@@ -73,10 +73,10 @@ export default function ProductDetail({ tour }) {
       </div>
       <form className="form-style my-5">
         <h5>Reserva</h5>
-        <div className="d-flex gap-2">
+        <div className="d-flex gap-2 align-items-end my-3">
           <span>Desde</span>
-          <p>
-            $2,680.00 <span>MXN</span>
+          <p className="fs-4 fw-bolder m-0">
+            $0.00 <span>MXN</span>
           </p>
         </div>
         <div className="d-flex justify-content-center align-items-center gap-4 mb-3">
@@ -89,9 +89,9 @@ export default function ProductDetail({ tour }) {
           <input type="text" class="form-control"/>
         </div>
         <hr className="line-styled" />
-        <div>
+        <div className="d-flex justify-content-center align-items-center gap-4 mb-3">
           <IoFlash />
-          <button>Cotizar</button>
+          <button className="form-btn-styled">Cotizar</button>
         </div>
       </form>
     </div>
