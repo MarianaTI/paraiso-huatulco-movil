@@ -175,6 +175,21 @@ a {
   width: 100%;
 }
 
+.search-input {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding-left: 6px;
+}
+
+.search-input:focus, .search-input:active {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  outline: none;
+  padding-left: 6px;
+  font-weight: 400;
+}
+
 /* Product Card styles  */
 
 .card-style {

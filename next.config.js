@@ -4,7 +4,7 @@ const withPWA = require("next-pwa")({
   skipWaiting: true,
   buildExcludes: [/middleware-manifest\.json$/, /dynamic-css-manifest\.json$/],
   additionalManifestEntries: [
-    {url: '/', revision: null}
+    {url: '/', revision: null},
   ]
 });
 
