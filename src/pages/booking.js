@@ -36,6 +36,14 @@ export default function Booking() {
     codigo: "",
     hora: "09:00:00",
     plataforma: "movil",
+
+    client_name: "test pwa",
+    client_lastname: "movil", 
+    client_phone: "9999999999",
+    client_mail: "test@pwa.com",
+    start_date: "2025-05-24",
+    pax_adults: "2",
+    comments: "prueba de envío con pwa"
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -103,7 +111,7 @@ export default function Booking() {
       <p>
         Precio por día: ${parseFloat(price).toFixed(2)} {moneda}
       </p>
-      <section className="d-flex flex-column">
+      {/* <section className="d-flex flex-column">
         <label>Nombre(s)</label>
         <input
           type="text"
@@ -166,7 +174,7 @@ export default function Booking() {
           value={data.comments}
           onChange={handleChange}
         />
-      </section>
+      </section> */}
       <button type="submit" className="w-100 my-4 p-2">
         Reservar
       </button>
