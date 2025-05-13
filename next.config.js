@@ -1,8 +1,10 @@
 const withPWA = require("next-pwa")({
   dest: 'public',
+  swSrc: 'service-worker.js',
   register: true,
   skipWaiting: true,
   buildExcludes: [/middleware-manifest\.json$/, /dynamic-css-manifest\.json$/],
+  disable: false,
   additionalManifestEntries: [
     {url: '/', revision: null},
   ]
