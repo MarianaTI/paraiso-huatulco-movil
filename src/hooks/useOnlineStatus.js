@@ -1,15 +1,9 @@
-const { useState, useEffect } = require("react");
+import { useState, useEffect } from "react";
 
-const useOnlineStatus = () => {
-  const [isOnline, setIsOnline] = useState(false);
+export default function useOnlineStatus() {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    
-    const updateStatus = () => setIsOnline(navigator.onLine);
-
-    updateStatus();
-
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
@@ -23,6 +17,4 @@ const useOnlineStatus = () => {
   }, []);
 
   return isOnline;
-};
-
-export default useOnlineStatus;
+}

@@ -1,13 +1,15 @@
-import BookingUseCase from "@/application/usecases/BookingUseCase/BookingUseCase";
-import BookingRepo from "@/infraestructure/implementation/httpRequest/axios/BookingRepo";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
+import { saveOfflineBooking } from "@/utils/offlineBooking";
+import { sendBooking } from "@/utils/sendBooking";
 
 export default function Booking() {
   const router = useRouter();
   const [rent, setRent] = useState([]);
   const isOnline = useOnlineStatus();
+  console.log("Estado de conexión:", isOnline);
+
   const { name, rateTitle, rateCode, productCode, price, moneda } =
     router.query;
 
@@ -57,51 +59,53 @@ export default function Booking() {
     e.preventDefault();
     const bookingData = { ...data };
 
-    if (!isOnline) {
-      const offlineQueue = JSON.parse(localStorage.getItem("offlineBooking")) || [];
-      offlineQueue.push(bookingData);
-      localStorage.setItem("offlineBooking", JSON.stringify(offlineQueue));
+    if (!navigator.onLine) {
+      console.log("Estado de conexión en navigator.onLine:", navigator.onLine);
+      // const offlineQueue = JSON.parse(localStorage.getItem("offlineBooking")) || [];
+      // offlineQueue.push(bookingData);
+      // localStorage.setItem("offlineBooking", JSON.stringify(offlineQueue));
+      // alert("Sin conexión. Tu reserva se guardó y se enviará al recuperar la conexión.");
+      // return router.push("/confirmation");
+
+      
+      console.log('Offline detected, saving to IndexedDB');
+      await saveOfflineBooking(bookingData);
+      console.log('bookingData: ', bookingData);
+
+      try {
+        if ('serviceWorker' in navigator && 'SyncManager' in window) {
+          const registration = await navigator.serviceWorker.ready;
+          await registration.sync.register('sync-bookings');
+          console.log('🔄 Sync registrado: sync-bookings');
+        }
+      } catch (err) {
+        console.error('❌ Error al registrar sync:', err);
+      }    
+      
       alert("Sin conexión. Tu reserva se guardó y se enviará al recuperar la conexión.");
-      return router.push("/confirmation");
+      // return router.push("/confirmation");
     }
 
     try {
-      const bookingRepo = new BookingRepo();
-      const createBookingUseCase = new BookingUseCase(bookingRepo);
-      const response = await createBookingUseCase.run(bookingData);
+      // const bookingRepo = new BookingRepo();
+      // const createBookingUseCase = new BookingUseCase(bookingRepo);
+      // const response = await createBookingUseCase.run(bookingData);
+      // setRent(response);
+      // console.log(response);
+
+
+      console.log("enviando data...", bookingData);
+      
+      const response = await sendBooking(bookingData);
       setRent(response);
-      console.log(response);
-      return router.push("/confirmation");
+      // console.log("Reserva enviada:", response);
+      alert("Reserva enviada!");
+      // return router.push("/confirmation");
     } catch (error) {
       console.log("Error en submit", error);
     }
   };
 
-  useEffect(() => {
-    const sendOfflineBookings = async () => {
-      const offlineQueue = JSON.parse(localStorage.getItem("offlineBooking")) || [];
-      if (offlineQueue.length === 0) return;
-
-      const bookingRepo = new BookingRepo();
-      const createBookingUseCase = new BookingUseCase(bookingRepo);
-
-      for (const booking of offlineQueue) {
-        try {
-          await createBookingUseCase.run(booking);
-        } catch (error) {
-          console.error("Error al enviar reserva pendiente:", err);
-          return;
-        }
-      }
-
-      localStorage.removeItem("offlineBooking");
-      alert("Tus reservas pendientes se han enviado correctamente.");
-    };
-
-    if (isOnline) {
-      sendOfflineBookings();
-    }
-  }, [isOnline]);
 
   return (
     <form onSubmit={onSubmit} className="px-5">
@@ -111,7 +115,14 @@ export default function Booking() {
       <p>
         Precio por día: ${parseFloat(price).toFixed(2)} {moneda}
       </p>
-      {/* <section className="d-flex flex-column">
+      <button type="submit" className="w-100 my-4 p-2">
+        Reservar
+      </button>
+    </form>
+  );
+}
+
+ {/* <section className="d-flex flex-column">
         <label>Nombre(s)</label>
         <input
           type="text"
@@ -175,9 +186,30 @@ export default function Booking() {
           onChange={handleChange}
         />
       </section> */}
-      <button type="submit" className="w-100 my-4 p-2">
-        Reservar
-      </button>
-    </form>
-  );
-}
+
+
+  // useEffect(() => {
+  //   const sendOfflineBookings = async () => {
+  //     const offlineQueue = JSON.parse(localStorage.getItem("offlineBooking")) || [];
+  //     if (offlineQueue.length === 0) return;
+
+  //     const bookingRepo = new BookingRepo();
+  //     const createBookingUseCase = new BookingUseCase(bookingRepo);
+
+  //     for (const booking of offlineQueue) {
+  //       try {
+  //         await createBookingUseCase.run(booking);
+  //       } catch (error) {
+  //         console.error("Error al enviar reserva pendiente:", err);
+  //         return;
+  //       }
+  //     }
+
+  //     localStorage.removeItem("offlineBooking");
+  //     alert("Tus reservas pendientes se han enviado correctamente.");
+  //   };
+
+  //   if (isOnline) {
+  //     sendOfflineBookings();
+  //   }
+  // }, [isOnline]);

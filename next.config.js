@@ -1,6 +1,6 @@
 const withPWA = require("next-pwa")({
   dest: 'public',
-  swSrc: 'service-worker.js',
+  swSrc: 'public/service-worker.js',
   register: true,
   skipWaiting: true,
   buildExcludes: [/middleware-manifest\.json$/, /dynamic-css-manifest\.json$/],
@@ -13,7 +13,7 @@ const withPWA = require("next-pwa")({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // output: "export",
+  output: "export",
   trailingSlash: true,
   images: {
     unoptimized: true,
