@@ -6,19 +6,19 @@ importScripts(
 workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
 
 self.addEventListener('install', (event) => {
-  console.log('[SW] Instalado');
+  // console.log('[SW] Instalado');
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activado');
+  // console.log('[SW] Activado');
   return self.clients.claim();
 });
 
 // Manejo del evento de sincronización de fondo
 self.addEventListener('sync', (event) => {
   if (event.tag === 'sync-bookings') {
-    console.log('[SW] Evento de sincronización recibido');
+    // console.log('[SW] Evento de sincronización recibido');
     event.waitUntil(sendOfflineBookingsToServer());
   }
 });
@@ -26,14 +26,14 @@ self.addEventListener('sync', (event) => {
 // Manejo de mensaje manual desde la app
 self.addEventListener('message', (event) => {
   if (event.data && event.data.action === 'force-sync-bookings') {
-    console.log('[SW] 🔄 Forzando sincronización manual');
+    // console.log('[SW] 🔄 Forzando sincronización manual');
     event.waitUntil(sendOfflineBookingsToServer());
   }
 });
 
 // Función para enviar reservas offline
 const sendOfflineBookingsToServer = async () => {
-  console.log('[SW] Enviando reservas offline al servidor...');
+  // console.log('[SW] Enviando reservas offline al servidor...');
   const db = await getOfflineDB();
   const tx = db.transaction('reservas', 'readonly');
   const store = tx.objectStore('reservas');
@@ -41,7 +41,7 @@ const sendOfflineBookingsToServer = async () => {
 
   getAllRequest.onsuccess = async () => {
     const all = getAllRequest.result;
-    console.log(`[SW] ${all.length} reservas encontradas`);
+    // console.log(`[SW] ${all.length} reservas encontradas`);
 
     for (const reserva of all) {
       try {
@@ -62,7 +62,13 @@ const sendOfflineBookingsToServer = async () => {
           const deleteTx = db.transaction('reservas', 'readwrite');
           const deleteStore = deleteTx.objectStore('reservas');
           deleteStore.delete(reserva.id);
-          console.log(`[SW] ✅ Reserva enviada y eliminada: ${reserva.id}`);
+          // console.log(`[SW] ✅ Reserva enviada y eliminada: ${reserva.id}`);
+
+          // Notificación 
+          self.registration.showNotification("Reserva enviada", {
+            body: "Tu reserva offline fue enviada correctamente.",
+            icon: "/icon512_rounded.png", 
+          });
         } else {
           console.warn('[SW] ⚠️ Error del servidor al reenviar reserva');
         }

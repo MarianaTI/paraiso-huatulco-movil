@@ -99,7 +99,16 @@ export default function Booking() {
       const response = await sendBooking(bookingData);
       setRent(response);
       // console.log("Reserva enviada:", response);
-      alert("Reserva enviada!");
+      
+
+      // Notificación paso 3
+      if ('serviceWorker' in navigator && 'Notification' in window && Notification.permission === 'granted') {
+        const reg = await navigator.serviceWorker.ready;
+        reg.showNotification("Reserva enviada", {
+          body: "Tu reserva fue registrada con éxito.",
+          icon: "/icon512_rounded.png",
+        });
+      }
       // return router.push("/confirmation");
     } catch (error) {
       console.log("Error en submit", error);

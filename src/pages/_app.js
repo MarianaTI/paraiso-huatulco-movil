@@ -38,6 +38,15 @@ export default function App({ Component, pageProps }) {
     }
   }, [isOnline]);
 
+
+  // Pedir permiso para mostrar notificaciones
+  useEffect(() => {
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+  }, []);
+  
+
   return (
     <>
       <Head>
