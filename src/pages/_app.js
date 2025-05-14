@@ -8,7 +8,7 @@ import useOnlineStatus from "@/hooks/useOnlineStatus";
 
 export default function App({ Component, pageProps }) {
   const isOnline = useOnlineStatus();
-  console.log("Estado de conexión en _app:", isOnline);
+  // console.log("Estado de conexión en _app:", isOnline);
 
   useEffect(() => {
     require('bootstrap/dist/js/bootstrap.bundle.min.js');
@@ -19,7 +19,7 @@ export default function App({ Component, pageProps }) {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.addEventListener("message", async (event) => {
         if (event.data?.type === "SYNC_BOOKINGS") {
-          console.log("🔁 Recibido mensaje para sincronizar reservas");
+          // console.log("🔁 Recibido mensaje para sincronizar reservas");
           await sendOfflineBookingsToServer(); // Si tienes esta función localmente
         }
       });
@@ -40,11 +40,11 @@ export default function App({ Component, pageProps }) {
 
 
   // Pedir permiso para mostrar notificaciones
-  useEffect(() => {
-    if ('Notification' in window && Notification.permission !== 'granted') {
-      Notification.requestPermission();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if ('Notification' in window && Notification.permission !== 'granted') {
+  //     Notification.requestPermission();
+  //   }
+  // }, []);
   
 
   return (

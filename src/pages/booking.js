@@ -59,6 +59,14 @@ export default function Booking() {
     e.preventDefault();
     const bookingData = { ...data };
 
+    // Notificaciones para ios y android
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        console.warn("❌ Usuario no permitió las notificaciones.");
+      }
+    }    
+
     if (!navigator.onLine) {
       console.log("Estado de conexión en navigator.onLine:", navigator.onLine);
       // const offlineQueue = JSON.parse(localStorage.getItem("offlineBooking")) || [];
@@ -76,7 +84,7 @@ export default function Booking() {
         if ('serviceWorker' in navigator && 'SyncManager' in window) {
           const registration = await navigator.serviceWorker.ready;
           await registration.sync.register('sync-bookings');
-          console.log('🔄 Sync registrado: sync-bookings');
+          // console.log('🔄 Sync registrado: sync-bookings');
         }
       } catch (err) {
         console.error('❌ Error al registrar sync:', err);
