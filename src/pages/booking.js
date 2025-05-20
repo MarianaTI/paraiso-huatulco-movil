@@ -40,12 +40,12 @@ export default function Booking() {
     plataforma: "movil",
 
     client_name: "test pwa",
-    client_lastname: "movil", 
+    client_lastname: "movil",
     client_phone: "9999999999",
     client_mail: "test@pwa.com",
     start_date: "2025-05-24",
     pax_adults: "2",
-    comments: "prueba de envío con pwa"
+    // comments: "prueba de envío con pwa"
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,12 +60,12 @@ export default function Booking() {
     const bookingData = { ...data };
 
     // Notificaciones para ios y android
-    if ('Notification' in window && Notification.permission !== 'granted') {
+    if ("Notification" in window && Notification.permission !== "granted") {
       const permission = await Notification.requestPermission();
-      if (permission !== 'granted') {
+      if (permission !== "granted") {
         console.warn("❌ Usuario no permitió las notificaciones.");
       }
-    }    
+    }
 
     if (!navigator.onLine) {
       console.log("Estado de conexión en navigator.onLine:", navigator.onLine);
@@ -75,22 +75,23 @@ export default function Booking() {
       // alert("Sin conexión. Tu reserva se guardó y se enviará al recuperar la conexión.");
       // return router.push("/confirmation");
 
-      
-      console.log('Offline detected, saving to IndexedDB');
+      console.log("Offline detected, saving to IndexedDB");
       await saveOfflineBooking(bookingData);
-      console.log('bookingData: ', bookingData);
+      console.log("bookingData: ", bookingData);
 
       try {
-        if ('serviceWorker' in navigator && 'SyncManager' in window) {
+        if ("serviceWorker" in navigator && "SyncManager" in window) {
           const registration = await navigator.serviceWorker.ready;
-          await registration.sync.register('sync-bookings');
+          await registration.sync.register("sync-bookings");
           // console.log('🔄 Sync registrado: sync-bookings');
         }
       } catch (err) {
-        console.error('❌ Error al registrar sync:', err);
-      }    
-      
-      alert("Sin conexión. Tu reserva se guardó y se enviará al recuperar la conexión.");
+        console.error("❌ Error al registrar sync:", err);
+      }
+
+      alert(
+        "Sin conexión. Tu reserva se guardó y se enviará al recuperar la conexión."
+      );
       // return router.push("/confirmation");
     }
 
@@ -101,16 +102,18 @@ export default function Booking() {
       // setRent(response);
       // console.log(response);
 
-
       console.log("enviando data...", bookingData);
-      
+
       const response = await sendBooking(bookingData);
       setRent(response);
       // console.log("Reserva enviada:", response);
-      
 
       // Notificación paso 3
-      if ('serviceWorker' in navigator && 'Notification' in window && Notification.permission === 'granted') {
+      if (
+        "serviceWorker" in navigator &&
+        "Notification" in window &&
+        Notification.permission === "granted"
+      ) {
         const reg = await navigator.serviceWorker.ready;
         reg.showNotification("Reserva enviada", {
           body: "Tu reserva fue registrada con éxito.",
@@ -123,7 +126,6 @@ export default function Booking() {
     }
   };
 
-
   return (
     <form onSubmit={onSubmit} className="px-5">
       <h1>Reserva</h1>
@@ -132,6 +134,15 @@ export default function Booking() {
       <p>
         Precio por día: ${parseFloat(price).toFixed(2)} {moneda}
       </p>
+      <section className="d-flex flex-column">
+        <label>Comentarios</label>
+        <input
+          type="text"
+          name="comments"
+          value={data.comments}
+          onChange={handleChange}
+        />
+      </section>
       <button type="submit" className="w-100 my-4 p-2">
         Reservar
       </button>
@@ -139,7 +150,8 @@ export default function Booking() {
   );
 }
 
- {/* <section className="d-flex flex-column">
+{
+  /* <section className="d-flex flex-column">
         <label>Nombre(s)</label>
         <input
           type="text"
@@ -202,31 +214,31 @@ export default function Booking() {
           value={data.comments}
           onChange={handleChange}
         />
-      </section> */}
+      </section> */
+}
 
+// useEffect(() => {
+//   const sendOfflineBookings = async () => {
+//     const offlineQueue = JSON.parse(localStorage.getItem("offlineBooking")) || [];
+//     if (offlineQueue.length === 0) return;
 
-  // useEffect(() => {
-  //   const sendOfflineBookings = async () => {
-  //     const offlineQueue = JSON.parse(localStorage.getItem("offlineBooking")) || [];
-  //     if (offlineQueue.length === 0) return;
+//     const bookingRepo = new BookingRepo();
+//     const createBookingUseCase = new BookingUseCase(bookingRepo);
 
-  //     const bookingRepo = new BookingRepo();
-  //     const createBookingUseCase = new BookingUseCase(bookingRepo);
+//     for (const booking of offlineQueue) {
+//       try {
+//         await createBookingUseCase.run(booking);
+//       } catch (error) {
+//         console.error("Error al enviar reserva pendiente:", err);
+//         return;
+//       }
+//     }
 
-  //     for (const booking of offlineQueue) {
-  //       try {
-  //         await createBookingUseCase.run(booking);
-  //       } catch (error) {
-  //         console.error("Error al enviar reserva pendiente:", err);
-  //         return;
-  //       }
-  //     }
+//     localStorage.removeItem("offlineBooking");
+//     alert("Tus reservas pendientes se han enviado correctamente.");
+//   };
 
-  //     localStorage.removeItem("offlineBooking");
-  //     alert("Tus reservas pendientes se han enviado correctamente.");
-  //   };
-
-  //   if (isOnline) {
-  //     sendOfflineBookings();
-  //   }
-  // }, [isOnline]);
+//   if (isOnline) {
+//     sendOfflineBookings();
+//   }
+// }, [isOnline]);
