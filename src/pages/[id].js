@@ -13,19 +13,17 @@ export default function ProductDetail({ tour }) {
   }
 
   const handleReserva = (rate) => {
+    console.log("rate seleccionado ->", rate);
+    localStorage.setItem("selectedRate", JSON.stringify(rate));
     router.push({
       pathname: "/booking",
       query: {
         name: tour.name,
         productCode: tour.product_code,
-        rateTitle: rate.rate_title,
-        rateCode: rate.rate_code,
-        price: rate.price_day,
-        moneda: rate.moneda,
       },
     });
   };
-
+  
   return (
     <div className="px-5 py-2">
       <div>
@@ -57,11 +55,25 @@ export default function ProductDetail({ tour }) {
                     <RiArrowRightSLine />
                   </td>
                   <td className="col-1">{rate.rate_title}</td>
+
                   <td className="col-1 fw-semibold">
-                    ${parseFloat(rate.price_day).toFixed(2)} {rate.moneda}
+                    {rate.ratePrices
+                      ?.filter((price) => price.type === "1")
+                      .slice(0, 1)
+                      .map((price, idx) => (
+                        <span key={idx}>
+                          ${parseFloat(price.price_day).toFixed(2)}{" "}
+                          {price.moneda}
+                        </span>
+                      ))}
                   </td>
                   <td className="col-1">
-                    <button className="button-styled" onClick={() => handleReserva(rate)}>Reservar</button>
+                    <button
+                      className="button-styled"
+                      onClick={() => handleReserva(rate)}
+                    >
+                      Reservar
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -86,29 +98,6 @@ export default function ProductDetail({ tour }) {
           ></div>
         </div>
       </div>
-      {/* <form className="form-style my-5">
-        <h5>Reserva</h5>
-        <div className="d-flex gap-2 align-items-end my-3">
-          <span>Desde</span>
-          <p className="fs-4 fw-bolder m-0">
-            $0.00 <span>MXN</span>
-          </p>
-        </div>
-        <div className="d-flex justify-content-center align-items-center gap-4 mb-3">
-          <FaRegCalendar />
-          <input type="date" class="form-control" />
-        </div>
-        <hr className="line-styled" />
-        <div className="d-flex justify-content-center align-items-center gap-4 mb-3">
-          <IoPeopleSharp />
-          <input type="text" className="form-control" />
-        </div>
-        <hr className="line-styled" />
-        <div className="d-flex justify-content-center align-items-center gap-4 mb-3">
-          <IoFlash />
-          <button className="form-btn-styled">Cotizar</button>
-        </div>
-      </form> */}
     </div>
   );
 }
@@ -141,3 +130,5 @@ export async function getStaticProps({ params }) {
     },
   };
 }
+
+

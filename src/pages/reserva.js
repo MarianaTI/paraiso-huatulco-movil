@@ -51,7 +51,7 @@ export default function Reserva() {
     if (rate) {
       console.log("rate actualizado:", rate);
     }
-  }, [rate]);
+  }, []);
 
   return (
     <div>

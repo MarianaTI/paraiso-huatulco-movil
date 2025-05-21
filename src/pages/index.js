@@ -27,12 +27,13 @@ export default function Home() {
           if (response && Array.isArray(response)) {
             setTours(response);
             localStorage.setItem("offlineData", JSON.stringify(response));
-          }
+          } 
         } catch (error) {
           console.error("Error al obtener los tours:", error);
         }
       }
     };
+
     loadTours();
   }, [isOnline]);
 
@@ -43,7 +44,7 @@ export default function Home() {
   );  
 
   return (
-    <div className="mx-5 my-3">
+    <div className="container-main">
       <h1 className="title">Productos</h1>
       <section className="d-flex flex-column gap-1 my-4">
         <span className="fs-8">Servicios</span>

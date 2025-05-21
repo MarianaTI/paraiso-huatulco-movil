@@ -17,12 +17,17 @@ export default function App({ Component, pageProps }) {
   // Escuchar mensajes del service worker (opcional)
   useEffect(() => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener("message", async (event) => {
+      const handleMessage = async (event) => {
         if (event.data?.type === "SYNC_BOOKINGS") {
-          // console.log("🔁 Recibido mensaje para sincronizar reservas");
-          await sendOfflineBookingsToServer(); // Si tienes esta función localmente
+          await sendOfflineBookingsToServer(); // Implementa esta función si no existe
         }
-      });
+      };
+
+      navigator.serviceWorker.addEventListener("message", handleMessage);
+
+      return () => {
+        navigator.serviceWorker.removeEventListener("message", handleMessage);
+      };
     }
   }, []);
 
@@ -31,21 +36,13 @@ export default function App({ Component, pageProps }) {
     if (isOnline && 'serviceWorker' in navigator) {
       navigator.serviceWorker.ready.then((registration) => {
         if (registration.active) {
-          console.log("🌐 Conexión restaurada. Forzando sincronización...");
+          // console.log("🌐 Conexión restaurada. Forzando sincronización...");
           registration.active.postMessage({ action: 'force-sync-bookings' });
         }
       });
     }
   }, [isOnline]);
 
-
-  // Pedir permiso para mostrar notificaciones
-  // useEffect(() => {
-  //   if ('Notification' in window && Notification.permission !== 'granted') {
-  //     Notification.requestPermission();
-  //   }
-  // }, []);
-  
 
   return (
     <>

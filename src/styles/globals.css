@@ -67,6 +67,10 @@ a {
   font-weight: 700;
 }
 
+.container-main {
+  padding: 32px;
+}
+
 /* Index styles */
 
 .title {

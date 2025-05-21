@@ -3,23 +3,47 @@ import React, { useEffect, useState } from "react";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
 import { saveOfflineBooking } from "@/utils/offlineBooking";
 import { sendBooking } from "@/utils/sendBooking";
+import useRatesPrice from "@/hooks/useRatesPrice";
 
 export default function Booking() {
   const router = useRouter();
   const [rent, setRent] = useState([]);
   const isOnline = useOnlineStatus();
-  console.log("Estado de conexión:", isOnline);
+  const [rate, setRate] = useState(null);
+  const [adultos, setAdultos] = useState(1);
+  const [menores, setMenores] = useState(0);
 
-  const { name, rateTitle, rateCode, productCode, price, moneda } =
-    router.query;
+  const {name, productCode } = router.query;
 
+  useEffect(() => {
+    const storedRate = localStorage.getItem("selectedRate");
+    if (storedRate) {
+      setRate(JSON.parse(storedRate));
+    }
+  }, []); 
+
+  useEffect(() => {
+    if (rate) {
+      console.log("Rate cargada desde localStorage ->", rate);
+    }
+  }, [rate]);
+
+  const ratesData = rate ? useRatesPrice(rate, adultos, menores) : null;
+
+  useEffect(() => {
+    if (ratesData) {
+      console.log("Resultado de tarifas ->", ratesData);
+    }
+  }, [ratesData]);
+
+  
   const [data, setData] = useState({
     limit_payment: "2025-04-22",
     limit_customer: "2025-04-22",
-    rate_code: rateCode,
+    // rate_code: rateCode,
     product_code: productCode,
-    total: price,
-    currency: moneda,
+    // total: price,
+    // currency: moneda,
     pax_menor: "0",
     infantes: "0",
     pagado: "0",
@@ -59,7 +83,6 @@ export default function Booking() {
     e.preventDefault();
     const bookingData = { ...data };
 
-    // Notificaciones para ios y android
     if ("Notification" in window && Notification.permission !== "granted") {
       const permission = await Notification.requestPermission();
       if (permission !== "granted") {
@@ -69,11 +92,6 @@ export default function Booking() {
 
     if (!navigator.onLine) {
       console.log("Estado de conexión en navigator.onLine:", navigator.onLine);
-      // const offlineQueue = JSON.parse(localStorage.getItem("offlineBooking")) || [];
-      // offlineQueue.push(bookingData);
-      // localStorage.setItem("offlineBooking", JSON.stringify(offlineQueue));
-      // alert("Sin conexión. Tu reserva se guardó y se enviará al recuperar la conexión.");
-      // return router.push("/confirmation");
 
       console.log("Offline detected, saving to IndexedDB");
       await saveOfflineBooking(bookingData);
@@ -83,7 +101,6 @@ export default function Booking() {
         if ("serviceWorker" in navigator && "SyncManager" in window) {
           const registration = await navigator.serviceWorker.ready;
           await registration.sync.register("sync-bookings");
-          // console.log('🔄 Sync registrado: sync-bookings');
         }
       } catch (err) {
         console.error("❌ Error al registrar sync:", err);
@@ -92,7 +109,6 @@ export default function Booking() {
       alert(
         "Sin conexión. Tu reserva se guardó y se enviará al recuperar la conexión."
       );
-      // return router.push("/confirmation");
     }
 
     try {
@@ -126,27 +142,67 @@ export default function Booking() {
     }
   };
 
+  function handleNumericChange(e, setter) {
+    const value = e.target.value;
+    if (value === '') {
+      setter('');
+    } else {
+      const num = Number(value);
+      if (!isNaN(num) && num >= 0) {
+        setter(num);
+      }
+    }
+  }  
+
   return (
-    <form onSubmit={onSubmit} className="px-5">
-      <h1>Reserva</h1>
-      <p>Nombre del tour: {name}</p>
-      <p>Rate seleccionado: {rateTitle}</p>
-      <p>
-        Precio por día: ${parseFloat(price).toFixed(2)} {moneda}
-      </p>
+    <div className="px-5">
       <section className="d-flex flex-column">
-        <label>Comentarios</label>
+        <label>Número de adultos</label>
         <input
-          type="text"
-          name="comments"
-          value={data.comments}
-          onChange={handleChange}
+          type="number"
+          min="0"
+          value={String(adultos)}
+          onChange={(e) => handleNumericChange(e, setAdultos)}
+          onFocus={(e) => e.target.select()}
+        />
+
+        <label className="mt-3">Número de menores</label>
+        <input
+          type="number"
+          min="0"
+          value={String(menores)}
+          onChange={(e) => handleNumericChange(e, setMenores)}
+          onFocus={(e) => e.target.select()}
         />
       </section>
-      <button type="submit" className="w-100 my-4 p-2">
-        Reservar
-      </button>
-    </form>
+      {ratesData && (
+        <div className="mt-4">
+          <h2>Total estimado: ${ratesData.total.toFixed(2)}</h2>
+          <p>Detalle:</p>
+          <pre>{JSON.stringify(ratesData.detalle, null, 2)}</pre>
+        </div>
+      )}
+      <form onSubmit={onSubmit}>
+        <h1>Reserva</h1>
+        <p>Nombre del tour: {name}</p>
+        <p>Rate seleccionado: {rate?.price_foreign}</p>
+        <p>
+          Precio por día: ${parseFloat(rate?.price_day).toFixed(2)} {rate?.moneda}
+        </p>
+        <section className="d-flex flex-column">
+          <label>Comentarios</label>
+          <input
+            type="text"
+            name="comments"
+            value={data.comments}
+            onChange={handleChange}
+          />
+        </section>
+        <button type="submit" className="w-100 my-4 p-2">
+          Reservar
+        </button>
+      </form>
+    </div>
   );
 }
 
@@ -216,29 +272,3 @@ export default function Booking() {
         />
       </section> */
 }
-
-// useEffect(() => {
-//   const sendOfflineBookings = async () => {
-//     const offlineQueue = JSON.parse(localStorage.getItem("offlineBooking")) || [];
-//     if (offlineQueue.length === 0) return;
-
-//     const bookingRepo = new BookingRepo();
-//     const createBookingUseCase = new BookingUseCase(bookingRepo);
-
-//     for (const booking of offlineQueue) {
-//       try {
-//         await createBookingUseCase.run(booking);
-//       } catch (error) {
-//         console.error("Error al enviar reserva pendiente:", err);
-//         return;
-//       }
-//     }
-
-//     localStorage.removeItem("offlineBooking");
-//     alert("Tus reservas pendientes se han enviado correctamente.");
-//   };
-
-//   if (isOnline) {
-//     sendOfflineBookings();
-//   }
-// }, [isOnline]);
