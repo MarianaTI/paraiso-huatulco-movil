@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/styles/globals.css'; 
 import { useEffect } from "react";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
+require('flatpickr/dist/flatpickr.min.css');
 
 export default function App({ Component, pageProps }) {
   const isOnline = useOnlineStatus();

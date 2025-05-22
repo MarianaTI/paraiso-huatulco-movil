@@ -4,6 +4,7 @@ import useOnlineStatus from "@/hooks/useOnlineStatus";
 import { saveOfflineBooking } from "@/utils/offlineBooking";
 import { sendBooking } from "@/utils/sendBooking";
 import useRatesPrice from "@/hooks/useRatesPrice";
+import Flatpickr from "react-flatpickr";
 
 export default function Booking() {
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function Booking() {
     }
   }, [rate]);
 
-  const ratesData = rate ? useRatesPrice(rate, adultos, menores) : null;
+  const ratesData = useRatesPrice(rate, adultos, menores);
 
   useEffect(() => {
     if (ratesData) {
@@ -79,6 +80,10 @@ export default function Booking() {
     }));
   };
 
+  const handleDateChange = (selectedDates, dateStr, name) => {
+    setData((prev) => ({ ...prev, [name]: dateStr }));
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const bookingData = { ...data };
@@ -112,19 +117,8 @@ export default function Booking() {
     }
 
     try {
-      // const bookingRepo = new BookingRepo();
-      // const createBookingUseCase = new BookingUseCase(bookingRepo);
-      // const response = await createBookingUseCase.run(bookingData);
-      // setRent(response);
-      // console.log(response);
-
-      console.log("enviando data...", bookingData);
-
       const response = await sendBooking(bookingData);
       setRent(response);
-      // console.log("Reserva enviada:", response);
-
-      // Notificación paso 3
       if (
         "serviceWorker" in navigator &&
         "Notification" in window &&
@@ -136,7 +130,6 @@ export default function Booking() {
           icon: "/icon512_rounded.png",
         });
       }
-      // return router.push("/confirmation");
     } catch (error) {
       console.log("Error en submit", error);
     }
@@ -175,21 +168,22 @@ export default function Booking() {
           onFocus={(e) => e.target.select()}
         />
       </section>
-      {/* {ratesData && (
-        <div className="mt-4">
-          <h2>Total estimado: ${ratesData.total.toFixed(2)}</h2>
-          <p>Detalle:</p>
-          <pre>{JSON.stringify(ratesData.detalle, null, 2)}</pre>
-        </div>
-      )} */}
       <form onSubmit={onSubmit}>
         <h1>Reserva</h1>
         <p>Nombre del tour: {name}</p>
         <p>Rate seleccionado: {rate?.price_foreign}</p>
-        <p>
-          Total: ${parseFloat(ratesData.total).toFixed(2)} {rate?.moneda}
-        </p>
+        {ratesData && (
+          <p>
+            Total: ${parseFloat(ratesData.total).toFixed(2)} {rate?.moneda}
+          </p>
+        )}
         <section className="d-flex flex-column">
+          <label>Fecha límite de pago</label>
+          <Flatpickr
+            value={data.limit_payment}
+            options={{ dateFormat: "Y-m-d", disableMobile: true }}
+            onChange={(date, str) => handleDateChange(date, str, "start_date")}
+          />
           <label>Comentarios</label>
           <input
             type="text"

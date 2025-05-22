@@ -1,3 +1,7 @@
+:root {
+  --primary: #3B71FE;
+}
+
 html,
 body {
   background-color: #fff;
@@ -251,4 +255,25 @@ a {
 .price-section .price-label {
   font-size: 12px;
   font-weight: 500;
+}
+
+/* CATEGORIE COMPONENT */
+
+.cat-container {
+  padding: 12px 8px;
+  width: 100%;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  font-size: 18px;
+  background-color: #eee;
+  text-decoration: none;
+  text-align: center;
+  color: #1f1f1f;
+  /* box-shadow: 1px 4px 10px #c3c3c395; */
+}
+
+.cat-container:active {
+  background-color: var(--primary);
+  color: #fff;
 }

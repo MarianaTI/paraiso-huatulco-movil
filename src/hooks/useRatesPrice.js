@@ -1,4 +1,6 @@
 export default function useRatesPrice(data, adultos, menores) {
+    if (!data) return null;
+
     const precios = data.ratePrices || [];
     const xUnidad = data.x_unidad === "1";
 
