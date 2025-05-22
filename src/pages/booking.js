@@ -175,19 +175,19 @@ export default function Booking() {
           onFocus={(e) => e.target.select()}
         />
       </section>
-      {ratesData && (
+      {/* {ratesData && (
         <div className="mt-4">
           <h2>Total estimado: ${ratesData.total.toFixed(2)}</h2>
           <p>Detalle:</p>
           <pre>{JSON.stringify(ratesData.detalle, null, 2)}</pre>
         </div>
-      )}
+      )} */}
       <form onSubmit={onSubmit}>
         <h1>Reserva</h1>
         <p>Nombre del tour: {name}</p>
         <p>Rate seleccionado: {rate?.price_foreign}</p>
         <p>
-          Precio por día: ${parseFloat(rate?.price_day).toFixed(2)} {rate?.moneda}
+          Total: ${parseFloat(ratesData.total).toFixed(2)} {rate?.moneda}
         </p>
         <section className="d-flex flex-column">
           <label>Comentarios</label>
