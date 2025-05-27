@@ -2,7 +2,8 @@ import Product from "@/components/card/Product";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = 'https://admindemo.paraisohuatulco.com';
+
 export default function Tours() {
   const router = useRouter();
   const [tours, setTours] = useState([]);
@@ -11,7 +12,6 @@ export default function Tours() {
   useEffect(() => {
     const loadTours = () => {
       const products = JSON.parse(localStorage.getItem("products")) || [];
-
       const filteredTours = products.filter(
         (product) => product.id_servicio === "2"
       );
@@ -47,7 +47,7 @@ export default function Tours() {
           price={tour.rates?.[0]?.ratePrices?.[0]?.price_day || 0}
           currency={tour.rates?.[0]?.moneda || "MXN"}
           description={tour.short_description}
-          img={`${apiUrl}/images/multimedia/${tour.multimedias?.[0]?.path}`}
+          img={tour.multimedias?.[0]?.path ? `${API_URL}/images/multimedia/${tour.multimedias[0].path}` : null}
           onClick={() => router.push(`/${tour.product_code}`)}
         />
       ))}

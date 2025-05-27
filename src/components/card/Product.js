@@ -17,15 +17,19 @@ const getLocationName = (code) => {
 };
 
 const Product = ({ title, description, location, img, price, currency, onClick }) => {
+  const imageUrl = img || '/placeholder-image.png';
+  
   return (
     <div onClick={onClick} className="w-100 card-style">
-      <Image
-        src={img}
-        alt="product"
-        className="card-image"
-        width={100}
-        height={80}
-      />
+      <div style={{ position: 'relative', width: '100%', height: '200px' }}>
+        <Image
+          src={imageUrl}
+          alt={title || "product"}
+          fill
+          style={{ objectFit: 'cover' }}
+          className="card-image"
+        />
+      </div>
       <div className="px-3 d-flex flex-column gap-2">
         <span className="product-location">{getLocationName(location)}</span>
         <span className="product-title">{title}</span>
