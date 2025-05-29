@@ -41,10 +41,10 @@ export default function Booking() {
   const [data, setData] = useState({
     limit_payment: "2025-04-22",
     limit_customer: "2025-04-22",
-    // rate_code: rateCode,
+    rate_code: "1",
     product_code: productCode,
-    // total: price,
-    // currency: moneda,
+    total: "0",
+    currency: "MXN",
     pax_menor: "0",
     infantes: "0",
     pagado: "0",
