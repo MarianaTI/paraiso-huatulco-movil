@@ -7,7 +7,7 @@ module.exports = {
   runtimeCaching: [
     {
       urlPattern: /^https:\/\/admindemo\.paraisohuatulco\.com\/admin\/products\/getProductsMovil/,
-      handler: "NetworkFirst",
+      handler: "CacheFirst",
       options: {
         cacheName: "products-cache",
         expiration: {
@@ -21,7 +21,7 @@ module.exports = {
     },
     {
       urlPattern: /^https:\/\/pwa\.paraisohuatulco\.com\/[a-zA-Z0-9_-]+\/$/,
-      handler: "NetworkFirst",
+      handler: "CacheFirst",
       options: {
         cacheName: "dynamic-pages",
         expiration: {
@@ -35,10 +35,39 @@ module.exports = {
     },
     {
       urlPattern: ({ request }) => request.destination === "document",
-      handler: "NetworkFirst",
+      handler: "CacheFirst",
       options: {
         cacheName: "pages",
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 60 * 60 * 24 * 7,
+        },
+        cacheableResponse: {
+          statuses: [0, 200],
+        },
       },
     },
+    {
+      urlPattern: /\.(?:png|jpg|jpeg|svg|gif)$/,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "images",
+        expiration: {
+          maxEntries: 60,
+          maxAgeSeconds: 30 * 24 * 60 * 60, 
+        },
+      },
+    },
+    {
+      urlPattern: /\.(?:js|css)$/,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "static-resources",
+        expiration: {
+          maxEntries: 60,
+          maxAgeSeconds: 24 * 60 * 60, 
+        },
+      },
+    }
   ],
 };
