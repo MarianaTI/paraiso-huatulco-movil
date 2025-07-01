@@ -14,12 +14,14 @@ export default function ProductDetail({ tour }) {
 
   const handleReserva = (rate) => {
     console.log("rate seleccionado ->", rate);
+    console.log("product seleccionado ->", tour);
     localStorage.setItem("selectedRate", JSON.stringify(rate));
     router.push({
       pathname: "/booking",
       query: {
         name: tour.name,
         productCode: tour.product_code,
+        catName: tour.categoria_nombre,
       },
     });
   };

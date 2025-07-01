@@ -1,11 +1,12 @@
 import Layout from "@/layout";
 import "@/styles/globals.css";
 import Head from "next/head";
+import 'flatpickr/dist/flatpickr.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/styles/globals.css'; 
 import { useEffect } from "react";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
-require('flatpickr/dist/flatpickr.min.css');
+
 
 export default function App({ Component, pageProps }) {
   const isOnline = useOnlineStatus();

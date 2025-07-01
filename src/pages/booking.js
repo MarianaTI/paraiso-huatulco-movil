@@ -4,39 +4,19 @@ import useOnlineStatus from "@/hooks/useOnlineStatus";
 import { saveOfflineBooking } from "@/utils/offlineBooking";
 import { sendBooking } from "@/utils/sendBooking";
 import useRatesPrice from "@/hooks/useRatesPrice";
-import Flatpickr from "react-flatpickr";
 
 export default function Booking() {
   const router = useRouter();
-  const [rent, setRent] = useState([]);
   const isOnline = useOnlineStatus();
+  const {name, productCode, catName } = router.query;
+
+  const [step, setStep] = useState(1);
+  const [rent, setRent] = useState([]);
   const [rate, setRate] = useState(null);
   const [adultos, setAdultos] = useState(1);
   const [menores, setMenores] = useState(0);
 
-  const {name, productCode } = router.query;
-
-  useEffect(() => {
-    const storedRate = localStorage.getItem("selectedRate");
-    if (storedRate) {
-      setRate(JSON.parse(storedRate));
-    }
-  }, []); 
-
-  useEffect(() => {
-    if (rate) {
-      console.log("Rate cargada desde localStorage ->", rate);
-    }
-  }, [rate]);
-
   const ratesData = useRatesPrice(rate, adultos, menores);
-
-  useEffect(() => {
-    if (ratesData) {
-      console.log("Resultado de tarifas ->", ratesData);
-    }
-  }, [ratesData]);
-
   
   const [data, setData] = useState({
     limit_payment: "2025-04-22",
@@ -63,15 +43,21 @@ export default function Booking() {
     codigo: "",
     hora: "09:00:00",
     plataforma: "movil",
-
     client_name: "test pwa",
     client_lastname: "movil",
     client_phone: "9999999999",
     client_mail: "test@pwa.com",
     start_date: "2025-07-02",
     pax_adults: "2",
-    // comments: "prueba de envío con pwa"
+    comments: "prueba de envío con pwa"
   });
+
+  useEffect(() => {
+    const storedRate = localStorage.getItem("selectedRate");
+    if (storedRate) {
+      setRate(JSON.parse(storedRate));
+    }
+  }, []); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,6 +70,31 @@ export default function Booking() {
   const handleDateChange = (selectedDates, dateStr, name) => {
     setData((prev) => ({ ...prev, [name]: dateStr }));
   };
+
+  function handleNumericChange(e, setter) {
+    const value = e.target.value;
+    if (value === '') {
+      setter('');
+    } else {
+      const num = Number(value);
+      if (!isNaN(num) && num >= 0) {
+        setter(num);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (rate) {
+      console.log("Rate cargada desde localStorage ->", rate);
+    }
+  }, [rate]);
+
+
+  useEffect(() => {
+    if (ratesData) {
+      console.log("Resultado de tarifas ->", ratesData);
+    }
+  }, [ratesData]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -136,134 +147,173 @@ export default function Booking() {
     }
   };
 
-  function handleNumericChange(e, setter) {
-    const value = e.target.value;
-    if (value === '') {
-      setter('');
-    } else {
-      const num = Number(value);
-      if (!isNaN(num) && num >= 0) {
-        setter(num);
-      }
-    }
-  }  
-
   return (
-    <div className="px-5">
-      <section className="d-flex flex-column">
-        <label>Número de adultos</label>
-        <input
-          type="number"
-          min="0"
-          value={String(adultos)}
-          onChange={(e) => handleNumericChange(e, setAdultos)}
-          onFocus={(e) => e.target.select()}
-        />
-
-        <label className="mt-3">Número de menores</label>
-        <input
-          type="number"
-          min="0"
-          value={String(menores)}
-          onChange={(e) => handleNumericChange(e, setMenores)}
-          onFocus={(e) => e.target.select()}
-        />
-      </section>
-      <form onSubmit={onSubmit}>
-        <h1>Reserva</h1>
-        <p>Nombre del tour: {name}</p>
-        <p>Rate seleccionado: {rate?.price_foreign}</p>
-        {ratesData && (
-          <p>
-            Total: ${parseFloat(ratesData.total).toFixed(2)} {rate?.moneda}
-          </p>
+    <div>
+      <div className="px-4 py-2">
+        <h1 className="booking-title">RESERVA</h1>
+        {/* <p className="booking-subtitle">Completa este formulario para crear una nueva reservación.</p> */}
+        <div className="d-flex flex-column mb-2">
+          <span className="booking-text-product">{name}</span>
+          <span className="booking-text-cat">{catName}</span>
+        </div>
+      </div>
+      <div className="d-flex align-items-center justify-content-center mb-3">
+        {[1, 2, 3].map((n, index) => (
+          <React.Fragment key={n}>
+            <div
+              className={`step-dot ${step === n ? "active" : ""} ${n < step ? "completed" : ""}`}
+              onClick={() => setStep(n)}
+            >
+              {n}
+            </div>
+            {index < 2 && <div className="step-line"></div>}
+          </React.Fragment>
+        ))}
+      </div>
+      <form className="px-4 py-2">
+        {step === 1 && (
+          <section className="booking-steps-content">
+            <h3>Información del cliente</h3>
+            <label className="form-label-styled">Nombre completo</label>
+            <input
+              type="text"
+              name="client_name"
+              value={data.client_name}
+              onChange={handleChange}
+              className="mb-2 form-input-styled"
+            />
+            <label className="form-label-styled">Teléfono</label>
+            <input
+              type="text"
+              name="client_phone"
+              value={data.client_phone}
+              onChange={handleChange}
+              className="mb-2 form-input-styled"
+            />
+            <label className="form-label-styled">Correo electrónico</label>
+            <input
+              type="text"
+              name="client_mail"
+              value={data.client_mail}
+              onChange={handleChange}
+              className="mb-2 form-input-styled"
+            />
+            <label className="form-label-styled">Comentarios</label>
+            <input
+              type="text"
+              className="form-input-styled"
+              name="comments"
+              value={data.comments}
+              onChange={handleChange}
+            />
+            <button className="booking-button" onClick={() => setStep(2)}>
+              Siguiente
+            </button>
+          </section>
         )}
-        <section className="d-flex flex-column">
-          <label>Fecha límite de pago</label>
-          <Flatpickr
-            value={data.limit_payment}
-            options={{ dateFormat: "Y-m-d", disableMobile: true }}
-            onChange={(date, str) => handleDateChange(date, str, "start_date")}
-          />
-          <label>Comentarios</label>
-          <input
-            type="text"
-            name="comments"
-            value={data.comments}
-            onChange={handleChange}
-          />
-        </section>
-        <button type="submit" className="w-100 my-4 p-2">
-          Reservar
-        </button>
-      </form>
+        {step === 2 && (
+          <section className="booking-steps-content">
+            <h3>Información de servicio</h3>
+            <label className="form-label-styled">Lugar del hospedaje</label>
+            <input
+              type="text"
+              name="hotel"
+              value={data.hotel}
+              onChange={handleChange}
+              className="mb-3 form-input-styled"
+            />
+            <label className="form-label-styled">Fecha de inicio</label>
+            <input
+              type="date"
+              name="start_date"
+              value={data.start_date}
+              onChange={handleChange}
+              className="mb-3 form-input-styled"
+            />
+            <div className="grid-form">
+              <div className="grid-item">
+                <label className="form-label-styled">Horario de tour</label>
+                <input
+                  type="time"
+                  name="hora_llegada"
+                  value={data.hora_llegada}
+                  onChange={handleChange}
+                  className="mb-2 form-input-styled"
+                />
+              </div>
+              <div className="grid-item">
+                <label className="form-label-styled">Pickup</label>
+                <input
+                  type="time"
+                  name="pickup"
+                  value={data.pickup}
+                  onChange={handleChange}
+                  className="mb-2 form-input-styled"
+                />
+              </div>
+              <div className="grid-item">
+                <label className="form-label-styled">Adultos</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={String(adultos)}
+                  onChange={(e) => handleNumericChange(e, setAdultos)}
+                  onFocus={(e) => e.target.select()}
+                  className="mb-2 form-input-styled"
+                />
+              </div> 
+              <div className="grid-item">
+                <label className="form-label-styled">Menores</label>
+                <input
+                type="number"
+                min="0"
+                value={String(menores)}
+                onChange={(e) => handleNumericChange(e, setMenores)}
+                onFocus={(e) => e.target.select()}
+                className="mb-2 form-input-styled"
+              />
+              </div> 
+              <div className="grid-item">
+                <label className="form-label-styled">Infantes</label>
+                <input
+                  type="number"
+                  name="infantes"
+                  value={data.infantes}
+                  onChange={handleChange}
+                  className="mb-2 form-input-styled"
+                />
+              </div> 
+            </div>
+            <div className="grid-form mb-3">
+              <button className="booking-button-cancel" onClick={() => setStep(1)}>
+                Atrás
+              </button>
+              <button className="booking-button" onClick={() => setStep(3)}>
+                Siguiente
+              </button>
+            </div>
+          </section>
+        )}
+        {step === 3 && (
+          <section className="booking-steps-content">
+            <h3>Información de tarifa</h3>
+            <p>Tarifa de tipo "{rate?.rate_title}"</p>
+            {ratesData && (
+              <p>
+                Total: <span className="rate-price">${parseFloat(ratesData.total).toFixed(2)} {rate?.moneda}</span> 
+              </p>
+            )}
+            <div className="grid-form mb-3">
+              <button className="booking-button-cancel" onClick={() => setStep(2)}>
+                Atrás
+              </button>
+              <button type="submit" className="booking-button">
+                Confirmar
+              </button>
+            </div>
+          </section>
+        )}
+        </form>
     </div>
   );
-}
-
-{
-  /* <section className="d-flex flex-column">
-        <label>Nombre(s)</label>
-        <input
-          type="text"
-          name="client_name"
-          value={data.client_name}
-          onChange={handleChange}
-          className="mb-4"
-        />
-        <label>Apellidos</label>
-        <input
-          type="text"
-          name="client_lastname"
-          value={data.client_lastname}
-          onChange={handleChange}
-          className="mb-4"
-        />
-        <label>Número de teléfono</label>
-        <input
-          type="text"
-          name="client_phone"
-          value={data.client_phone}
-          onChange={handleChange}
-          className="mb-4"
-        />
-        <label>Email</label>
-        <input
-          type="text"
-          name="client_mail"
-          value={data.client_mail}
-          onChange={handleChange}
-          className="mb-4"
-        />
-        <label>Fecha de inicio</label>
-        <input
-          type="date"
-          name="start_date"
-          value={data.start_date}
-          onChange={handleChange}
-          className="mb-4"
-        />
-        <label>Fecha de salida</label>
-        <input
-          type="date"
-          name="end_date"
-          value={data.end_date}
-          onChange={handleChange}
-          className="mb-4"
-        />
-        <label>Adultos</label>
-        <input
-          type="number"
-          name="pax_adults"
-          value={data.pax_adults}
-          onChange={handleChange}
-        />
-        <label>Comentarios</label>
-        <input
-          type="text"
-          name="comments"
-          value={data.comments}
-          onChange={handleChange}
-        />
-      </section> */
 }
