@@ -87,18 +87,20 @@ a {
 /* Index styles */
 
 .container-main {
-  padding: 36px 24px;
-  /* background: linear-gradient(135deg, #012664, #fdd756); */
-  background-color: #012664;
+  padding: 56px 24px;
+  background: #012664;
+  /* background: linear-gradient(150deg, rgba(1, 38, 100, 1) 0%, rgba(1, 38, 100, 1) 23%, rgba(1, 38, 100, 1) 43%, rgba(123, 123, 93, 1) 100%, rgba(253, 215, 86, 1) 100%); */
 }
 .container-main span {
   color: #fff;
+  font-size: 12px;
+  line-height: normal;
 }
 .container-section {
   padding: 24px;
 }
 .title {
-  font-size: 20px;
+  font-size: 16px;
   line-height: 42px;
   font-weight: 700;
   margin-bottom: 6px;
@@ -294,20 +296,32 @@ a {
 /* CATEGORIE COMPONENT */
 
 .cat-container {
-  padding: 12px 8px;
-  width: 100%;
   border-radius: 8px;
-  border: none;
-  font-weight: 600;
-  font-size: 18px;
-  background-color: #eee;
-  text-decoration: none;
-  text-align: center;
+  background-color: #ccc;
   color: #1f1f1f;
-  /* box-shadow: 1px 4px 10px #c3c3c395; */
+  height: 120px;
+  margin-bottom: 8px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.cat-container:active {
+.cat-container-a {
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  box-shadow: 1px 4px 10px #c3c3c395;
+}
+
+.cat-container:active, .cat-container:hover {
   background-color: var(--primary);
   color: #fff;
+}
+
+/* DIALOG STYLED */
+
+.dialog-title {
+  font-size: 14px;
+  font-weight: 500;
 }

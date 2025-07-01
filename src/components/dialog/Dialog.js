@@ -14,12 +14,12 @@ const DialogComponent = ({
       aria-labelledby="filtroDestinoModalLabel"
       aria-hidden="true"
     >
-      <div className="modal-dialog">
+      <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="filtroDestinoModalLabel">
+            <span className="modal-title dialog-title" id="filtroDestinoModalLabel">
               Seleccionar destino
-            </h5>
+            </span>
             <button
               type="button"
               className="btn-close"

@@ -10,12 +10,11 @@ export default function Navbar() {
           <Image
             src="https://www.2businesstravel.com/images/agencia_899/899_logo_agencia.webp"
             alt="Logo"
-            width={170}
-            height={75}
-            style={{ padding: 20 }}
+            width={120}
+            height={50}
+            style={{ padding: 12 }}
           />
         </Link>
-
         <button
           className="navbar-toggler"
           type="button"
@@ -27,15 +26,20 @@ export default function Navbar() {
         </button>
 
         <div
-          className="offcanvas offcanvas-start offcanvas-custom"
+          className="offcanvas offcanvas-start offcanvas-custom d-lg-none"
           tabIndex="-1"
           id="offcanvasNavbar"
           aria-labelledby="offcanvasNavbarLabel"
         >
           <div className="offcanvas-header mt-3 mx-2">
-            <div className="offcanvas-title" id="offcanvasNavbarLabel">
-              <h5>Paraíso Huatulco</h5>
-            </div>
+            <Link href="/" className="navbar-brand">
+              <Image
+                src="https://www.2businesstravel.com/images/agencia_899/899_logo_agencia.webp"
+                alt="Logo"
+                width={100}
+                height={25}
+              />
+            </Link>
             <button
               type="button"
               className="btn-close"

@@ -3,10 +3,22 @@ import React from "react";
 
 const Categories = () => {
   return (
-    <div className="d-flex flex-column gap-3 mt-2">
-      <Link className="cat-container" href="/services/tours">Tours</Link>
-      <Link className="cat-container" href="/services/transfers">Traslados</Link>
-      <Link className="cat-container" href="/services/rents">Rentas de vehículo</Link>
+    <div>
+      <div className="d-flex w-100 gap-2">
+        <Link href="/services/tours" className="w-100 cat-container-a">
+          <div className="cat-container">
+            Tours
+          </div>
+        </Link>
+        <Link href="/services/transfers" className="w-100 cat-container-a">
+          <div className="cat-container">
+            Traslados
+          </div>
+        </Link>
+      </div>
+      <Link href="/services/rents" className="w-100 cat-container-a">
+        <div className="col-12 cat-container">Rentas de vehículo</div>
+      </Link >
     </div>
   );
 };
