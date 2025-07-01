@@ -77,14 +77,20 @@ export default function Home() {
   }, [isOnline]);
 
   return (
-    <div className="container-main">
-      <h1 className="title">Servicios</h1>
-      {!isOnline && (
-        <div className="alert alert-warning" role="alert">
-          Estás en modo offline. Algunos datos pueden no estar actualizados.
-        </div>
-      )}
-      <Categories/>
-    </div>
+    <section>
+      <div className="container-main">
+        <h1 className="title text-light">Servicios</h1>
+        <span>Embárcate en una experiencia única y descubre Huatulco desde otra perspectiva.</span>
+      </div>
+      <div className="container-section">
+        {/* <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p> */}
+        {!isOnline && (
+          <div className="alert alert-warning" role="alert">
+            Estás en modo offline. Algunos datos pueden no estar actualizados.
+          </div>
+        )}
+        <Categories/>
+      </div>
+    </section>
   );
 }

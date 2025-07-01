@@ -25,10 +25,10 @@ export default function ProductDetail({ tour }) {
   };
   
   return (
-    <div className="px-5 py-2">
+    <section className="m-4">
       <div>
-        <h1 className="title">{tour.name}</h1>
-        <div className="my-4" style={{ width: "100%", height: 250 }}>
+        <h1 className="title mt-4">{tour.name}.</h1>
+        <div className="my-4" style={{ width: "100%", height: 160 }}>
           <Image
             alt="image-product"
             src={`${apiUrl}/images/multimedia/${tour.multimedias[0]?.path}`}
@@ -83,22 +83,22 @@ export default function ProductDetail({ tour }) {
         <div className="d-flex flex-column">
           <span className="description-title">Descripción</span>
           <div
-            className="w-100 overflow-hidden"
+            className="w-100 overflow-hidden products-filter-count"
             dangerouslySetInnerHTML={{ __html: tour.description }}
           ></div>
           <span className="description-title">Incluye</span>
           <div
-            className="w-100 overflow-hidden"
+            className="w-100 overflow-hidden products-filter-count"
             dangerouslySetInnerHTML={{ __html: tour.include }}
           ></div>
           <span className="description-title">No incluye</span>
           <div
-            className="w-100 overflow-hidden"
+            className="w-100 overflow-hidden products-filter-count"
             dangerouslySetInnerHTML={{ __html: tour.not_include }}
           ></div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

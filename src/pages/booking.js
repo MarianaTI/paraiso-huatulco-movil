@@ -68,10 +68,11 @@ export default function Booking() {
     client_lastname: "movil",
     client_phone: "9999999999",
     client_mail: "test@pwa.com",
-    start_date: "2025-05-24",
+    start_date: "2025-07-02",
     pax_adults: "2",
     // comments: "prueba de envío con pwa"
   });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData((prev) => ({
