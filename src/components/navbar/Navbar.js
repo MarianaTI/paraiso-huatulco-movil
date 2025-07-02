@@ -58,17 +58,17 @@ export default function Navbar() {
                 <span className="nav-link">Servicios</span>
                 <ul className="navbar-nav ps-3">
                   <li className="nav-item">
-                    <Link href="/services/tours" className="nav-link">
+                    <Link href="/tour" className="nav-link">
                       Tours
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link href="/services/transfers" className="nav-link">
+                    <Link href="/transfer" className="nav-link">
                       Traslados
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link href="/services/rents" className="nav-link">
+                    <Link href="/rent" className="nav-link">
                       Rentas de vehículos
                     </Link>
                   </li>

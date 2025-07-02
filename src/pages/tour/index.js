@@ -1,22 +1,17 @@
 import Product from "@/components/card/Product";
 import DialogComponent from "@/components/dialog/Dialog";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import useOnlineStatus from "@/hooks/useOnlineStatus";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const TOURS_SERVICE_ID = "2"; // Solo tours
 
-const serviceIds = {
-  transfers: "1",
-  tours: "2",
-  rents: "3",
-};
-
-export default function ServicesPage() {
+export default function ToursPage() {
   const router = useRouter();
-  const { type } = router.query;
+  const isOnline = useOnlineStatus();
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
   const [selectedDestination, setSelectedDestination] = useState("HX");
   const [tempDestination, setTempDestination] = useState("HX");
 
@@ -38,32 +33,22 @@ export default function ServicesPage() {
   }, [router.query.destination]);
 
   useEffect(() => {
-    const loadData = () => {
-      const all = JSON.parse(localStorage.getItem("products")) || [];
-
-      const serviceId = serviceIds[type];
-      if (!serviceId) {
-        setProducts([]);
-        return;
-      }
-
-      const filtered = all.filter((p) => p.id_servicio === serviceId);
-      setProducts(filtered);
-    };
-
-    if (type) loadData();
-  }, [type]);
+    if (!router.isReady || typeof window === "undefined") return;
+  
+    const all = JSON.parse(localStorage.getItem("products")) || [];
+    const filtered = all.filter((p) => p.id_servicio === TOURS_SERVICE_ID);
+    setProducts(filtered);
+  }, [router.isReady]);
+  
 
   const handleSaveDestino = () => {
     setSelectedDestination(tempDestination);
     localStorage.setItem("destinoSeleccionado", tempDestination);
-  };  
+  };
 
   return (
     <div className="m-4">
-      <h1 className="title">
-        {type?.charAt(0).toUpperCase() + type?.slice(1)}
-      </h1>
+      <h1 className="title">Tours</h1>
       <section className="row my-3">
         <div className="col-10 d-flex flex-column gap-1">
           <input
@@ -93,7 +78,11 @@ export default function ServicesPage() {
           price={Number(item.rates?.[0]?.ratePrices?.[0]?.price_day) || 0}
           currency={item.rates?.[0]?.moneda || "MXN"}
           description={item?.short_description}
-          img={`${apiUrl}/images/multimedia/${item.multimedias?.[0]?.path}`}
+          img={
+            item.multimedias?.[0]?.path
+              ? `${apiUrl}/images/multimedia/${item.multimedias[0].path}`
+              : "/logo.png"
+          }
           onClick={() => router.push(`/${item.product_code}`)}
         />
       ))}

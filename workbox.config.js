@@ -1,15 +1,22 @@
 module.exports = {
   globDirectory: "out/",
-  globPatterns: ["**/*.{html,js,css,json,ico,png,svg}"],
+  globPatterns: [
+    "**/*.{html,js,css,json,ico,png,svg}",
+    "tour/index.html",
+    "tour/**/index.html",
+    "transfer/index.html",
+    "rent/index.html",
+  ],
   swDest: "public/service-worker.js",
   clientsClaim: true,
   skipWaiting: true,
   runtimeCaching: [
     {
-      urlPattern: /^https:\/\/admindemo\.paraisohuatulco\.com\/admin\/products\/getProductsMovil/,
+      urlPattern:
+        /^https:\/\/admindemo\.paraisohuatulco\.com\/admin\/products\/getProductsMovil/,
       handler: "CacheFirst",
       options: {
-        cacheName: "products-cache",
+        cacheName: "products-api-cache",
         expiration: {
           maxEntries: 50,
           maxAgeSeconds: 60 * 60 * 24 * 7,
@@ -27,6 +34,48 @@ module.exports = {
         expiration: {
           maxEntries: 100,
           maxAgeSeconds: 60 * 60 * 24 * 7,
+        },
+        cacheableResponse: {
+          statuses: [0, 200],
+        },
+      },
+    },
+    {
+      urlPattern: /^\/tour\/.*$/,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "tour-pages",
+        expiration: {
+          maxEntries: 200,
+          maxAgeSeconds: 7 * 24 * 60 * 60,
+        },
+        cacheableResponse: {
+          statuses: [0, 200],
+        },
+      },
+    },
+    {
+      urlPattern: /^\/transfer\/.*$/,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "transfer-pages",
+        expiration: {
+          maxEntries: 20,
+          maxAgeSeconds: 7 * 24 * 60 * 60,
+        },
+        cacheableResponse: {
+          statuses: [0, 200],
+        },
+      },
+    },
+    {
+      urlPattern: /^\/rent\/.*$/,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "rent-pages",
+        expiration: {
+          maxEntries: 20,
+          maxAgeSeconds: 7 * 24 * 60 * 60,
         },
         cacheableResponse: {
           statuses: [0, 200],
@@ -54,7 +103,7 @@ module.exports = {
         cacheName: "images",
         expiration: {
           maxEntries: 60,
-          maxAgeSeconds: 30 * 24 * 60 * 60, 
+          maxAgeSeconds: 30 * 24 * 60 * 60,
         },
       },
     },
@@ -65,9 +114,9 @@ module.exports = {
         cacheName: "static-resources",
         expiration: {
           maxEntries: 60,
-          maxAgeSeconds: 24 * 60 * 60, 
+          maxAgeSeconds: 24 * 60 * 60,
         },
       },
-    }
+    },
   ],
 };

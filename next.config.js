@@ -7,13 +7,17 @@ const withPWA = require("next-pwa")({
   disable: false,
   additionalManifestEntries: [
     {url: '/', revision: null},
+    {url: '/1/', revision: null},
+    {url: '/tour/', revision: null},
+    {url: '/transfer/', revision: null},
+    {url: '/rent/', revision: null},
   ]
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: "export",
+  // output: "export",
   trailingSlash: true,
   images: {
     unoptimized: true,
