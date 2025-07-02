@@ -126,6 +126,8 @@ export default function Booking() {
       alert(
         "Sin conexión. Tu reserva se guardó y se enviará al recuperar la conexión."
       );
+      router.push("/");
+      return;
     }
 
     try {
@@ -142,6 +144,7 @@ export default function Booking() {
           icon: "/icon512_rounded.png",
         });
       }
+      router.push("/");
     } catch (error) {
       console.log("Error en submit", error);
     }
@@ -170,7 +173,7 @@ export default function Booking() {
           </React.Fragment>
         ))}
       </div>
-      <form className="px-4 py-2">
+      <form className="px-4 py-2" onSubmit={onSubmit}>
         {step === 1 && (
           <section className="booking-steps-content">
             <h3>Información del cliente</h3>
@@ -297,7 +300,7 @@ export default function Booking() {
         {step === 3 && (
           <section className="booking-steps-content">
             <h3>Información de tarifa</h3>
-            <p>Tarifa de tipo "{rate?.rate_title}"</p>
+            <p>Tarifa de tipo {rate?.rate_title}</p>
             {ratesData && (
               <p>
                 Total: <span className="rate-price">${parseFloat(ratesData.total).toFixed(2)} {rate?.moneda}</span> 

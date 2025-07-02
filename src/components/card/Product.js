@@ -17,7 +17,7 @@ const Product = ({ title, cat, img, price, currency, onClick }) => {
           <div className="d-flex flex-column justify-content-between gap-2 pb-3" style={{height: "100%"}}>
             <div className="pt-1">
               <span className="product-title">{title}</span>
-              <span className="product-location">Categoria "{cat}"</span>
+              <span className="product-location">Categoria {cat}</span>
             </div>
             <span className="price">$ {price} {currency}  <span className="price-label">precio total</span></span>
           </div>
