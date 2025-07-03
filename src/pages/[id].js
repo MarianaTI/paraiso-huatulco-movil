@@ -10,7 +10,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 export default function ProductDetail({ tour: tourProps }) {
   const router = useRouter();
   const isOnline = useOnlineStatus();
-  const {id} = router.query;
+  const { id } = router.query;
   const [tour, setTour] = useState(tourProps);
 
   useEffect(() => {
@@ -32,16 +32,13 @@ export default function ProductDetail({ tour: tourProps }) {
 
   const handleReserva = (rate) => {
     localStorage.setItem("selectedRate", JSON.stringify(rate));
+    const safeTour = JSON.parse(JSON.stringify(tour));
+    localStorage.setItem("selectedProduct", JSON.stringify(safeTour));
     router.push({
       pathname: "/booking",
-      query: {
-        name: tour.name,
-        productCode: tour.product_code,
-        catName: tour.categoria_nombre,
-      },
     });
   };
-  
+
   return (
     <section className="m-4">
       <div>
@@ -148,5 +145,3 @@ export async function getStaticProps({ params }) {
     },
   };
 }
-
-

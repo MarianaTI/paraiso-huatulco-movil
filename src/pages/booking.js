@@ -8,10 +8,10 @@ import useRatesPrice from "@/hooks/useRatesPrice";
 export default function Booking() {
   const router = useRouter();
   const isOnline = useOnlineStatus();
-  const {name, productCode, catName } = router.query;
 
   const [step, setStep] = useState(1);
   const [rent, setRent] = useState([]);
+  const [product, setProduct] = useState([]);
   const [rate, setRate] = useState(null);
   const [adultos, setAdultos] = useState(1);
   const [menores, setMenores] = useState(0);
@@ -22,7 +22,7 @@ export default function Booking() {
     limit_payment: "2025-04-22",
     limit_customer: "2025-04-22",
     rate_code: "1",
-    product_code: productCode,
+    product_code: product.product_code,
     total: "0",
     currency: "MXN",
     pax_menor: "0",
@@ -54,8 +54,10 @@ export default function Booking() {
 
   useEffect(() => {
     const storedRate = localStorage.getItem("selectedRate");
-    if (storedRate) {
+    const storedProduct = localStorage.getItem("selectedProduct");
+    if (storedRate && storedProduct) {
       setRate(JSON.parse(storedRate));
+      setProduct(JSON.parse(storedProduct));
     }
   }, []); 
 
@@ -156,8 +158,8 @@ export default function Booking() {
         <h1 className="booking-title">RESERVA</h1>
         {/* <p className="booking-subtitle">Completa este formulario para crear una nueva reservación.</p> */}
         <div className="d-flex flex-column mb-2">
-          <span className="booking-text-product">{name}</span>
-          <span className="booking-text-cat">{catName}</span>
+          <span className="booking-text-product">{product.name}</span>
+          <span className="booking-text-cat">{product.categoria_nombre}</span>
         </div>
       </div>
       <div className="d-flex align-items-center justify-content-center mb-3">
