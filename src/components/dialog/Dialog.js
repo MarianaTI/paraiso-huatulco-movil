@@ -71,14 +71,14 @@ const DialogComponent = ({
           <div className="grid-form-dialog mb-3 px-3">
             <button
               type="button"
-              className="booking-button-cancel"
+              className="booking-button-cancel-dialog"
               data-bs-dismiss="modal"
             >
               Cancelar
             </button>
             <button
               type="button"
-              className="booking-button"
+              className="booking-button-dialog"
               data-bs-dismiss="modal"
               onClick={onSave}
             >

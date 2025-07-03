@@ -17,7 +17,7 @@ export default function Booking() {
   const [menores, setMenores] = useState(0);
 
   const ratesData = useRatesPrice(rate, adultos, menores);
-  
+
   const [data, setData] = useState({
     limit_payment: "2025-04-22",
     limit_customer: "2025-04-22",
@@ -49,7 +49,7 @@ export default function Booking() {
     client_mail: "test@pwa.com",
     start_date: "2025-07-02",
     pax_adults: "2",
-    comments: "prueba de envío con pwa"
+    comments: "prueba de envío con pwa",
   });
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function Booking() {
       setRate(JSON.parse(storedRate));
       setProduct(JSON.parse(storedProduct));
     }
-  }, []); 
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -75,22 +75,21 @@ export default function Booking() {
 
   function handleNumericChange(e, setter) {
     const value = e.target.value;
-    if (value === '') {
-      setter('');
+    if (value === "") {
+      setter("");
     } else {
       const num = Number(value);
       if (!isNaN(num) && num >= 0) {
         setter(num);
       }
     }
-  };
+  }
 
   useEffect(() => {
     if (rate) {
       console.log("Rate cargada desde localStorage ->", rate);
     }
   }, [rate]);
-
 
   useEffect(() => {
     if (ratesData) {
@@ -152,8 +151,14 @@ export default function Booking() {
     }
   };
 
+  const stepTitles = [
+    "DATOS",
+    "DETALLES",
+    "PAGO",
+  ];
+
   return (
-    <div>
+    <div className="mt-4">
       <div className="px-4 py-2">
         <h1 className="booking-title">RESERVA</h1>
         {/* <p className="booking-subtitle">Completa este formulario para crear una nueva reservación.</p> */}
@@ -162,16 +167,23 @@ export default function Booking() {
           <span className="booking-text-cat">{product.categoria_nombre}</span>
         </div>
       </div>
-      <div className="d-flex align-items-center justify-content-center mb-3">
+      <div className="d-flex align-items-center justify-content-center mb-3 gap-4 step-dot-container">
         {[1, 2, 3].map((n, index) => (
           <React.Fragment key={n}>
-            <div
-              className={`step-dot ${step === n ? "active" : ""} ${n < step ? "completed" : ""}`}
-              onClick={() => setStep(n)}
-            >
-              {n}
+            <div className="d-flex align-items-center gap-2">
+              <div
+                className={`step-dot ${step === n ? "active" : ""} ${
+                  n < step ? "completed" : ""
+                }`}
+                onClick={() => setStep(n)}
+              >
+                {n}
+              </div>
+              {step === n && (
+                <span className="step-label">{stepTitles[n - 1]}</span>
+              )}
             </div>
-            {index < 2 && <div className="step-line"></div>}
+            {index < 2 && <div className="step-line-horizontal"></div>}
           </React.Fragment>
         ))}
       </div>
@@ -212,7 +224,7 @@ export default function Booking() {
               onChange={handleChange}
             />
             <button className="booking-button" onClick={() => setStep(2)}>
-              Siguiente
+              Continuar
             </button>
           </section>
         )}
@@ -266,18 +278,18 @@ export default function Booking() {
                   onFocus={(e) => e.target.select()}
                   className="mb-2 form-input-styled"
                 />
-              </div> 
+              </div>
               <div className="grid-item">
                 <label className="form-label-styled">Menores</label>
                 <input
-                type="number"
-                min="0"
-                value={String(menores)}
-                onChange={(e) => handleNumericChange(e, setMenores)}
-                onFocus={(e) => e.target.select()}
-                className="mb-2 form-input-styled"
-              />
-              </div> 
+                  type="number"
+                  min="0"
+                  value={String(menores)}
+                  onChange={(e) => handleNumericChange(e, setMenores)}
+                  onFocus={(e) => e.target.select()}
+                  className="mb-2 form-input-styled"
+                />
+              </div>
               <div className="grid-item">
                 <label className="form-label-styled">Infantes</label>
                 <input
@@ -287,14 +299,17 @@ export default function Booking() {
                   onChange={handleChange}
                   className="mb-2 form-input-styled"
                 />
-              </div> 
+              </div>
             </div>
             <div className="grid-form mb-3">
-              <button className="booking-button-cancel" onClick={() => setStep(1)}>
+              <button
+                className="booking-button-cancel"
+                onClick={() => setStep(1)}
+              >
                 Atrás
               </button>
               <button className="booking-button" onClick={() => setStep(3)}>
-                Siguiente
+                Continuar
               </button>
             </div>
           </section>
@@ -302,14 +317,20 @@ export default function Booking() {
         {step === 3 && (
           <section className="booking-steps-content">
             <h3>Información de tarifa</h3>
-            <p>Tarifa de tipo {rate?.rate_title}</p>
+            <p style={{fontSize: 17}}>Tarifa de tipo {rate?.rate_title}</p>
             {ratesData && (
-              <p>
-                Total: <span className="rate-price">${parseFloat(ratesData.total).toFixed(2)} {rate?.moneda}</span> 
+              <p style={{fontSize: 17}}>
+                Total:{" "}
+                <span className="rate-price">
+                  ${parseFloat(ratesData.total).toFixed(2)} {rate?.moneda}
+                </span>
               </p>
             )}
             <div className="grid-form mb-3">
-              <button className="booking-button-cancel" onClick={() => setStep(2)}>
+              <button
+                className="booking-button-cancel"
+                onClick={() => setStep(2)}
+              >
                 Atrás
               </button>
               <button type="submit" className="booking-button">
@@ -318,7 +339,7 @@ export default function Booking() {
             </div>
           </section>
         )}
-        </form>
+      </form>
     </div>
   );
 }
