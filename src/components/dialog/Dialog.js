@@ -1,5 +1,11 @@
 import React from "react";
 
+const destinosMap = {
+  HX: "Huatulco",
+  PX: "Puerto Escondido",
+  OX: "Oaxaca",
+};
+
 const DialogComponent = ({
   tempDestino,
   setTempDestino,
@@ -14,7 +20,7 @@ const DialogComponent = ({
       aria-labelledby="filtroDestinoModalLabel"
       aria-hidden="true"
     >
-      <div className="modal-dialog modal-dialog-centered">
+      <div className="modal-dialog modal-dialog-centered p-5">
         <div className="modal-content">
           <div className="modal-header">
             <span className="modal-title dialog-title" id="filtroDestinoModalLabel">
@@ -29,7 +35,7 @@ const DialogComponent = ({
           </div>
           <div className="modal-body">
             {destinos.map((destino) => (
-              <div key={destino} className="form-check">
+              <div key={destino} className="form-check mb-3">
                 <input
                   className="form-check-input"
                   type="radio"
@@ -43,7 +49,7 @@ const DialogComponent = ({
                   className="form-check-label"
                   htmlFor={`destino-${destino}`}
                 >
-                  {destino}
+                  {destinosMap[destino] || destino}
                 </label>
               </div>
             ))}
@@ -62,17 +68,17 @@ const DialogComponent = ({
               </label>
             </div>
           </div>
-          <div className="modal-footer">
+          <div className="grid-form-dialog mb-3 px-3">
             <button
               type="button"
-              className="btn btn-secondary"
+              className="booking-button-cancel"
               data-bs-dismiss="modal"
             >
               Cancelar
             </button>
             <button
               type="button"
-              className="btn btn-primary"
+              className="booking-button"
               data-bs-dismiss="modal"
               onClick={onSave}
             >

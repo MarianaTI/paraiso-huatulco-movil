@@ -45,12 +45,12 @@ export default function RentsPage() {
   return (
     <div className="m-4">
       <h1 className="title">Renta de vehiculos</h1>
-      <section className="row my-3">
+      <section className="row my-3 pb-1">
         <div className="col-10 d-flex flex-column gap-1">
           <input
             className="search-input"
             type="text"
-            placeholder="Buscar por nombre del servicio..."
+            placeholder="Buscar por nombre del producto..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -60,28 +60,30 @@ export default function RentsPage() {
           data-bs-toggle="modal"
           data-bs-target="#filtroDestinoModal"
         >
-          {selectedDestination}
+          {selectedDestination ? selectedDestination : "Todos"}
         </button>
       </section>
-      <span className="products-filter-count">
-        Mostrando {filteredProducts.length} resultados
-      </span>
-      {filteredProducts.map((item, index) => (
-        <Product
-          key={index}
-          cat={item?.categoria_nombre}
-          title={item?.name}
-          price={Number(item.rates?.[0]?.ratePrices?.[0]?.price_day) || 0}
-          currency={item.rates?.[0]?.moneda || "MXN"}
-          description={item?.short_description}
-          img={
-            item.multimedias?.[0]?.path
-              ? `${apiUrl}/images/multimedia/${item.multimedias[0].path}`
-              : "/logo.png"
-          }
-          onClick={() => router.push(`/${item.product_code}`)}
-        />
-      ))}
+      <div className="mt-4">
+        <span className="all-services">
+          Mostrando {filteredProducts.length} resultados
+        </span>
+        {filteredProducts.map((item, index) => (
+          <Product
+            key={index}
+            cat={item?.categoria_nombre}
+            title={item?.name}
+            price={Number(item.rates?.[0]?.ratePrices?.[0]?.price_day) || 0}
+            currency={item.rates?.[0]?.moneda || "MXN"}
+            description={item?.short_description}
+            img={
+              item.multimedias?.[0]?.path
+                ? `${apiUrl}/images/multimedia/${item.multimedias[0].path}`
+                : "/logo.png"
+            }
+            onClick={() => router.push(`/${item.product_code}`)}
+          />
+        ))}
+      </div>
       <DialogComponent
         tempDestino={tempDestination}
         setTempDestino={setTempDestination}

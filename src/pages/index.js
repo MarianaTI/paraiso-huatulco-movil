@@ -72,10 +72,11 @@ export default function Home() {
   return (
     <section>
       <div className="container-main">
-        <h1 className="title text-light">Servicios</h1>
-        <span>Embárcate en una experiencia única y descubre Huatulco desde otra perspectiva.</span>
+        <h1 className="title">Selecciona el servicio</h1>
+        <span>Elige el servicio que necesitas para continuar con tu reserva y dar el siguiente paso.</span>
       </div>
       <div className="container-section">
+        <span className="all-services">Todos los servicios</span>
         {!isOnline && (
           <div className="alert alert-warning" role="alert">
             Estás en modo offline. Algunos datos pueden no estar actualizados.
