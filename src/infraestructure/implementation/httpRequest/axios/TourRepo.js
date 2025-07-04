@@ -5,7 +5,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 class TourRepo extends ITourRepo {
     constructor() {
         super();
-        this.url = `${apiUrl}/products/getProductsMovil`;
+        this.url = `${apiUrl}/pwa/getProductsMovil`;
     }
 
     async getAll() {
