@@ -1,8 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { HiBars3 } from "react-icons/hi2";
+import { useSelector } from "react-redux";
 
 export default function Navbar() {
+  const router = useRouter();
+  const user = useSelector((state) => state.user);
+
+  const LogOut = () => {
+    localStorage.removeItem('user');
+    router.push("/"); 
+  }
+  
   return (
     <nav className="navbar navbar-expand-lg bg-white shadow-sm">
       <div className="container-fluid">
@@ -47,7 +57,15 @@ export default function Navbar() {
               aria-label="Cerrar"
             ></button>
           </div>
-          <div className="offcanvas-body mx-2">
+          <div className="mt-4 mx-4 d-flex flex-column">
+            <span className="fw-bold">
+              {user?.nombre_comercial || "Cargando..."}
+            </span>
+            <span>
+              {user?.rol || "Cargando..."}
+            </span>
+          </div>
+          <div className="offcanvas-body mx-2 d-flex flex-column justify-content-between">
             <ul className="navbar-nav">
               <li className="nav-item">
                 <Link href="/home" className="nav-link">
@@ -85,6 +103,7 @@ export default function Navbar() {
                 </Link>
               </li>
             </ul>
+            <button className="log-out-button" onClick={LogOut}>Salir</button>
           </div>
         </div>
 
