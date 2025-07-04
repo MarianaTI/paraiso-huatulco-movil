@@ -24,6 +24,7 @@ const withPWA = require("next-pwa")({
     {url: '/transfer/', revision: null},
     {url: '/rent/', revision: null},
     {url: '/booking/', revision: null},
+    {url: '/sales/', revision: null},
     ...dynamicEntries
   ]
 });

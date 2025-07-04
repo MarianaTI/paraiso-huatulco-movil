@@ -6,7 +6,7 @@ export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg bg-white shadow-sm">
       <div className="container-fluid">
-        <Link href="/" className="navbar-brand">
+        <Link href="/home" className="navbar-brand">
           <Image
             src="https://www.2businesstravel.com/images/agencia_899/899_logo_agencia.webp"
             alt="Logo"
@@ -32,7 +32,7 @@ export default function Navbar() {
           aria-labelledby="offcanvasNavbarLabel"
         >
           <div className="offcanvas-header mt-3 mx-2">
-            <Link href="/" className="navbar-brand">
+            <Link href="/home" className="navbar-brand">
               <Image
                 src="https://www.2businesstravel.com/images/agencia_899/899_logo_agencia.webp"
                 alt="Logo"
@@ -50,7 +50,7 @@ export default function Navbar() {
           <div className="offcanvas-body mx-2">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link href="/" className="nav-link">
+                <Link href="/home" className="nav-link">
                   Inicio
                 </Link>
               </li>
@@ -75,6 +75,11 @@ export default function Navbar() {
                 </ul>
               </li>
               <li className="nav-item">
+                <Link href="/sales" className="nav-link">
+                  Ventas
+                </Link>
+              </li>
+              <li className="nav-item">
                 <Link href="/contact" className="nav-link">
                   Contacto
                 </Link>
@@ -86,7 +91,7 @@ export default function Navbar() {
         {/* Menú normal en desktop */}
         <ul className="navbar-nav d-none d-lg-flex ms-auto">
           <li className="nav-item">
-            <Link href="/" className="nav-link">
+            <Link href="/home" className="nav-link">
               Inicio
             </Link>
           </li>
