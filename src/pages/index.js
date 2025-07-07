@@ -2,13 +2,20 @@ import SignInUserUseCase from "@/application/usecases/SingInUseCase";
 import UserRepo from "@/infraestructure/implementation/httpRequest/axios/UserRepo";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/actions/userActions";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const [isShowPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!isShowPassword);
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +37,7 @@ const Login = () => {
         dispatch(setUser(response));
         router.push("/home");
       } else {
-        console.log("El nombre de usuario o contraseña son incorrectos");
+        toast.error("El correo o contraseña son incorrectos");
       }
 
     } catch (error) {
@@ -54,36 +61,41 @@ const Login = () => {
         </span>
         <form className="my-4 w-100" onSubmit={onSubmit}>
           <div className="form-container pb-3">
-            <label htmlFor="correo" className="form-label-login">
+            <label htmlFor="username" className="form-label-login">
               Nombre de usuario *
             </label>
             <input
               type="text"
-              id="correo"
+              id="username"
               name="username"
+              required
               placeholder="Ingresa tu email"
               className="form-input-styled"
             ></input>
           </div>
-          <p className="text-end m-0 label-pass">¿Olvidó su contraseña?</p>
+          {/* <p className="text-end m-0 label-pass">¿Olvidó su contraseña?</p> */}
           <div className="form-container pb-3">
             <label htmlFor="contraseña" className="form-label-login">
               Contraseña *
             </label>
             <input
-              type="text"
+              type={isShowPassword ? "text" : "password"}
               id="password"
               name="password"
+              required
               placeholder="Ingresa tu contraseña"
               className="form-input-styled"
             ></input>
+            <span onClick={togglePasswordVisibility} className="pass-icons">
+              {isShowPassword ? <FiEyeOff /> : <FiEye />}
+            </span>
           </div>
-          <div className="form-check">
+          {/* <div className="form-check">
             <input type="checkbox" id="check" className="form-check-input"></input>
             <label className="form-check-label" htmlFor="check">
               Recordarme la próxima vez
             </label>
-          </div>
+          </div> */}
           <button type="submit" className="button-login">Inicio de sesión</button>
         </form>
       </div>

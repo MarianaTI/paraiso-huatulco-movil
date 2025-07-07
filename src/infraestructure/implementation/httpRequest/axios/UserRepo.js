@@ -1,6 +1,5 @@
 import IUserRepo from "@/domain/repositories/IUserRepo";
 import axios from "axios";
-import { setUser } from "@/actions/userActions";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL_LOGIN;
 class UserRepo extends IUserRepo {
@@ -16,10 +15,21 @@ class UserRepo extends IUserRepo {
                     "Content-Type": "multipart/form-data",
                 },
             });
-            this.dispatch(setUser(response.data));
             return response.data;
         } catch (error) {
             console.error("Error signin in: ", error);
+            throw error;
+        }
+    }
+    async signOut() {
+        try {
+            await axios.post(`${apiUrl}/pwalogout`, null, {
+                withCredentials: true
+            });
+            this.dispatch(setUser(null));
+            return response.data;
+        } catch (error) {
+            console.error("Error signout in: ", error);
             throw error;
         }
     }

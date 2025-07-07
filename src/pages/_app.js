@@ -11,6 +11,8 @@ import useOnlineStatus from "@/hooks/useOnlineStatus";
 import { Provider, useDispatch } from "react-redux";
 import store from "@/store/store";
 import { setUser } from "@/actions/userActions";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function LoadUserFromLocalStorage() {
   const dispatch = useDispatch();
@@ -78,6 +80,19 @@ export default function App({ Component, pageProps }) {
         </Head>
         <LoadUserFromLocalStorage/>
         <Layout>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            style={{ fontSize: "18px", fontFamily: "Plus Jakarta Sans", margin: 24 }}
+          />
           <Component {...pageProps} />
         </Layout>
       </div>

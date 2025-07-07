@@ -52,9 +52,17 @@
     font-weight: 500;
     font-family: "Plus Jakarta Sans", sans-serif;
     font-size: 16px;
-    border-radius:
-        8px;
+    border-radius: 8px;
     border: none;
     margin-top: 24px;
     width: 100%;
+}
+
+.pass-icons {
+    position: absolute;
+    top: 38px;
+    right: 18px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #7e7e7e;
 }

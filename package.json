@@ -24,6 +24,7 @@
     "react-flatpickr": "^4.0.10",
     "react-icons": "^5.5.0",
     "react-redux": "^9.2.0",
+    "react-toastify": "^11.0.5",
     "workbox-cacheable-response": "^7.3.0",
     "workbox-precaching": "^7.3.0",
     "workbox-routing": "^7.3.0",

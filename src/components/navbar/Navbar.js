@@ -1,3 +1,5 @@
+import SignOutUserUseCase from "@/application/usecases/SingOutUseCase";
+import UserRepo from "@/infraestructure/implementation/httpRequest/axios/UserRepo";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -8,11 +10,24 @@ export default function Navbar() {
   const router = useRouter();
   const user = useSelector((state) => state.user);
 
+  // const LogOut = async () => {
+  //   const userRepo = new UserRepo();
+  //   const signOutUseCase = new SignOutUserUseCase(userRepo);
+
+  //   try {
+  //     const response = await signOutUseCase.run();
+  //     localStorage.removeItem("user");
+  //     router.push("/");
+  //   } catch (error) {
+  //     console.error("Fallo el cierre de sesión:", error);
+  //   }
+  // };
+
   const LogOut = () => {
     localStorage.removeItem('user');
     router.push("/"); 
   }
-  
+
   return (
     <nav className="navbar navbar-expand-lg bg-white shadow-sm">
       <div className="container-fluid">
@@ -61,9 +76,7 @@ export default function Navbar() {
             <span className="fw-bold">
               {user?.nombre_comercial || "Cargando..."}
             </span>
-            <span>
-              {user?.rol || "Cargando..."}
-            </span>
+            <span>{user?.rol || "Cargando..."}</span>
           </div>
           <div className="offcanvas-body mx-2 d-flex flex-column justify-content-between">
             <ul className="navbar-nav">
@@ -103,7 +116,9 @@ export default function Navbar() {
                 </Link>
               </li>
             </ul>
-            <button className="log-out-button" onClick={LogOut}>Salir</button>
+            <button className="log-out-button" onClick={LogOut}>
+              Salir
+            </button>
           </div>
         </div>
 
