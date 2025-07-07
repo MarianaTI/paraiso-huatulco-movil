@@ -5,7 +5,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 class RatesRepo extends IRateRepo {
   constructor() {
     super();
-    this.url = "https://admindemo.paraisohuatulco.com/admin/rates/SearchRatesAPI";
+    this.url = `${apiUrl}/rates/SearchRatesAPI`;
   }
 
   async createRate(rates) {
