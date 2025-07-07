@@ -537,3 +537,49 @@ a {
   font-size: 16px;
   font-weight: 600;
 }
+
+/* SALES PAGE */
+
+.sale-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin: 24px 0;
+}
+
+.sale-style {
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+}
+
+.sale-data-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.data-code {
+  border-bottom: 1px solid #cecece;
+  margin-bottom: 8px;
+}
+
+.sale-title {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.sale-title .code {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.status {
+  background-color: #e6edff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000f9f;
+}

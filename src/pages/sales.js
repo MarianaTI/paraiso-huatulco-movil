@@ -26,47 +26,47 @@ export default function Sales() {
     <div className='m-4'>
         <h1 className='title m-0'>Ventas</h1>
         <span className='description'>Aquí encontrarás el registro de tus ventas.</span>
-        <div className='mt-4'>
+        <div className='sale-container'>
           {sales.map((item, index) => (
-            <div key={index}>
-              <div className='d-flex justify-content-between align-items-center'>
-                <div>
-                  <h4>ID #{item.id_venta}</h4>
+            <div key={index} className='sale-style'>
+              <div className='sale-data-container data-code'>
+                <div className='sale-title'>
+                  <span className='code'>ID # {item.id_venta}</span>
                   <span>{item?.fecha}</span>
                 </div>
-                {item?.estatus}
+                <div className='status'>{item?.estatus}</div>
               </div>
-              <div className='d-flex justify-content-between align-items-center'>
-                <h5>Código de confirmación</h5>
-                <span>{item?.ventasServiciosPhs[0]?.codigo}</span>
+              <div className='sale-data-container'>
+                <span>Código de confirmación</span>
+                <h6>{item?.ventasServiciosPhs[0]?.codigo}</h6>
               </div>
-              <div className='d-flex justify-content-between align-items-center'>
-                <h5>Titular</h5>
-                <span>{item?.pasajero_titular}</span>
+              <div className='sale-data-container'>
+                <span>Titular</span>
+                <h6>{item?.pasajero_titular}</h6>
               </div>
-              <div className='d-flex justify-content-between align-items-center'>
-                <h5>Destino</h5>
-                <span>{item?.ventasServiciosPhs[0]?.destino ? item?.ventasServiciosPhs[0]?.destino : 'N/A'}</span>
+              <div className='sale-data-container'>
+                <span>Destino</span>
+                <h6>{item?.ventasServiciosPhs[0]?.destino ? item?.ventasServiciosPhs[0]?.destino : 'N/A'}</h6>
               </div>
-              <div className='d-flex justify-content-between align-items-center'>
-                <h5>Descripción</h5>
-                <span>{item?.descripcion ? item?.descripcion : 'N/A'}</span>
+              <div className='sale-data-container'>
+                <span>Descripción</span>
+                <h6>{item?.descripcion ? item?.descripcion : 'N/A'}</h6>
               </div>
-              <div className='d-flex justify-content-between align-items-center'>
-                <h5>Total</h5>
-                <span>{item?.ventasServiciosPhs[0]?.total}</span>
+              <div className='sale-data-container'>
+                <span>Total</span>
+                <h6>{item?.ventasServiciosPhs[0]?.total}</h6>
               </div>
-              <div className='d-flex justify-content-between align-items-center'>
-                <h5>Moneda</h5>
-                <span>{item?.moneda}</span>
+              <div className='sale-data-container'>
+                <span>Moneda</span>
+                <h6>{item?.moneda}</h6>
               </div>
-              <div className='d-flex justify-content-between align-items-center'>
-                <h5>Agente</h5>
-                <span>{item?.agente}</span>
+              <div className='sale-data-container'>
+                <span>Agente</span>
+                <h6>{item?.agente}</h6>
               </div>
-              <div className='d-flex justify-content-between align-items-center'>
-                <h5>Agencia</h5>
-                <span>{item?.dealerCode?.name ? item?.dealerCode?.name : 'N/A'}</span>
+              <div className='sale-data-container'>
+                <span>Agencia</span>
+                <h6>{item?.dealerCode?.name ? item?.dealerCode?.name : 'N/A'}</h6>
               </div>
             </div>
           ))}
