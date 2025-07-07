@@ -14,6 +14,7 @@ class UserRepo extends IUserRepo {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
+                withCredentials: true,
             });
             return response.data;
         } catch (error) {
@@ -21,11 +22,16 @@ class UserRepo extends IUserRepo {
             throw error;
         }
     }
+
     async signOut() {
         try {
-            await axios.post(`${apiUrl}/pwalogout`, null, {
-                withCredentials: true
-            });
+            const response = await axios.post(
+                `${apiUrl}/pwalogout`,
+                {},
+                {
+                    withCredentials: true,
+                }
+            );
             this.dispatch(setUser(null));
             return response.data;
         } catch (error) {
