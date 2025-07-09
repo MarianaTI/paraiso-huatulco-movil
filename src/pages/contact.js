@@ -2,6 +2,9 @@ import React from 'react'
 
 export default function Contact() {
   return (
-    <div className='d-flex justify-content-center'>Contact</div>
+    <iframe
+    src="https://admindemo.paraisohuatulco.com/apiParaisoHuatulco/rents/view/A2R48"
+    style={{ border: 'none', width: "100%", height: "90vh" }}
+  />
   )
 }

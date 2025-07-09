@@ -11,7 +11,6 @@ class Sale {
       estatus,
       agente,
       agencia,
-      estatus,
     ) {
       this.id_venta = id_venta;
       this.codigo_confirmación = codigo_confirmación;
@@ -24,7 +23,6 @@ class Sale {
       this.estatus = estatus;
       this.agente = agente;
       this.agencia = agencia;
-      this.estatus = estatus;
     }
   }
   

@@ -572,7 +572,14 @@ a {
 
 .sale-title .code {
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 500;
+  color: #5E5873;
+}
+
+.sale-title .link {
+  text-decoration: none;
+  font-weight: 700;
+  color: #000f9f;
 }
 
 .status {
@@ -582,4 +589,30 @@ a {
   font-size: 14px;
   font-weight: 500;
   color: #000f9f;
+}
+
+.copy-btn {
+  background-color: #e3e3e385;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: #3b3b3b;
+  font-size: 16px;
+}
+
+.download-btn {
+  background-color: #3B71FE;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
 }

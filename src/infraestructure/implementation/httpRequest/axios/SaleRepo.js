@@ -9,9 +9,9 @@ class SaleRepo extends ISaleRepo {
         this.url = `${apiUrl}/pwa/getVentas`;
     }
 
-    async getAll() {
+    async getAll(userId) {
         try {
-            const response = await axios.get(this.url);
+            const response = await axios.get(`${this.url}?id_usuario=${userId}`);
             return response.data;
         } catch (error) {
             console.error("Error fetching las ventas:", error.message);
