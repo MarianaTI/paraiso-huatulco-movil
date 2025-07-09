@@ -2,6 +2,7 @@ import GetAllSaleUseCase from '@/application/usecases/SaleUseCase/GetAllSaleUseC
 import SaleRepo from '@/infraestructure/implementation/httpRequest/axios/SaleRepo';
 import React, { useEffect, useState } from 'react';
 import { LuLink } from "react-icons/lu";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -10,7 +11,12 @@ const apiUrlPortal = process.env.NEXT_PUBLIC_API_URL_PORTAL;
 
 export default function Sales() {
   const [sales, setSales] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const userId = useSelector((state) => state.user._id);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(1);
   const saleRepo = new SaleRepo();
   const getAllSaleUseCase = new GetAllSaleUseCase(saleRepo);
 
@@ -25,19 +31,31 @@ export default function Sales() {
     }
   } 
 
-  const fetchSales = async () => {
+  const fetchSales = async (page = 1) => {
     try {
-      const response = await getAllSaleUseCase.run(userId);
-      setSales(response);
-      console.log("Respuesta de ventas: ", response);
+      setLoading(true);
+      const response = await getAllSaleUseCase.run(userId, page);
+      setSales(response.response);
+      setTotal(response.total);
+      setTotalPages(response.totalPages);
     } catch (error) {
       console.error("Error cargando las ventas: ", error);
+    } finally {
+      setLoading(false);
     }
   }
 
   useEffect(() => {
-    fetchSales();
-  }, []);
+    fetchSales(page);
+  }, [page]);
+
+  if (loading) {
+    return (
+      <div className='loader-container'>
+        <div class="loader"></div>
+      </div>
+    );
+  }
 
   return (
     <div className='m-4'>
@@ -87,12 +105,40 @@ export default function Sales() {
                   <h6>{item?.ventasServiciosPhs[0]?.referenciaOrigenCliente ? item?.ventasServiciosPhs[0]?.referenciaOrigenCliente : 'N/A'}</h6>
                 </div>
               </section>
-              <div className='pt-3 d-flex justify-content-end gap-3'>
-                <button onClick={() => copyLink(item.id_venta)} className='copy-btn'><LuLink /></button>
+              <div className='pt-4 d-flex gap-3'>
                 <a href={`${apiUrl}/pwa/view/${item.id_venta}`} className='download-btn'>Descargar</a>
+                <button onClick={() => copyLink(item.id_venta)} className='copy-btn'><LuLink /></button>
               </div>
             </div>
           ))}
+          <section className='d-flex flex-column justify-content-center align-items-center gap-3 my-4'>
+            <div className='pagination-container gap-4'>
+              <button
+                className='pagination-btn'
+                disabled={page === 1}
+                onClick={() => {
+                  setPage(page - 1);
+                  window.scrollTo({top: 0, behavior: 'smooth'});
+                }}
+              >
+                <MdKeyboardArrowLeft />
+              </button>
+              <span className='pagination-text'>Página {page}</span>
+              <button
+                className='pagination-btn'
+                disabled={page === totalPages}
+                onClick={() => {
+                  setPage(page + 1);
+                  window.scrollTo({top: 0, behavior: 'smooth'})
+                }}
+              >
+                <MdKeyboardArrowRight />
+              </button>
+            </div>
+            <span className="all-services">
+              {total} resultados
+            </span>
+          </section>
         </div>
     </div>
   )
