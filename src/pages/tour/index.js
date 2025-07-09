@@ -47,7 +47,7 @@ export default function ToursPage() {
   };
 
   return (
-    <div className="m-4">
+    <div className="p-4">
       <h1 className="title">Tours</h1>
       <section className="row my-3 pb-1">
         <div className="col-10 d-flex flex-column gap-1">

@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
   return (
     <div>
       {!noNavbar && <Navbar/>}
-      <main>{children}</main>
+      <div style={{backgroundColor: "#f8f8f8", minHeight: "calc(100vh - 72.75px)"}}>{children}</div>
     </div>
   );
 };

@@ -225,17 +225,18 @@ a {
   font-family: "Plus Jakarta Sans", sans-serif;
   height: 45px;
   border-radius: 8px;
-  border: 1px solid #3b71fe80;
-  background-color: #e6edff40;
+  border: 1px solid #c7c7c770;
+  background-color: #fff;
   padding-left: 12px;
   font-size: 14px;
+  width: 100%;
 }
 .search-input:focus, .search-input:active {
   font-family: "Plus Jakarta Sans", sans-serif;
   outline: none;
   padding-left: 12px;
   font-weight: 400;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .products-filter-count {
@@ -591,6 +592,7 @@ a {
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  background-color: #fff;
 }
 
 .sale-data-container {
@@ -599,19 +601,19 @@ a {
   align-items: center;
 }
 
-.data-code {
-  border-bottom: 1px solid #cecece;
-  margin-bottom: 8px;
-}
-
 .sale-title {
   display: flex;
   flex-direction: column;
   margin-bottom: 8px;
 }
 
-.sale-title .code {
+.code {
   font-size: 18px;
+  font-weight: 600;
+  color: #5E5873;
+}
+
+.date {
   font-weight: 500;
   color: #5E5873;
 }
@@ -623,12 +625,22 @@ a {
 }
 
 .status {
-  background-color: #e6edff;
-  padding: 4px 10px;
+  background-color: #fef9ea;
   border-radius: 4px;
   font-size: 14px;
-  font-weight: 500;
-  color: #000f9f;
+  font-weight: 600;
+  color: #d2a106;
+  text-align: center;
+}
+
+.status-confirmed {
+  background-color: #e4f3e8 !important;
+  color: #24A148 !important;
+}
+
+.status-cancelled {
+  background-color: #fae3e4 !important;
+  color: #da1e28 !important;
 }
 
 .copy-btn {
