@@ -111,11 +111,6 @@ export default function Navbar() {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link href="/pending-sales" className="nav-link">
-                  Ventas pendientes
-                </Link>
-              </li>
-              <li className="nav-item">
                 <Link href="/contact" className="nav-link">
                   Contacto
                 </Link>
