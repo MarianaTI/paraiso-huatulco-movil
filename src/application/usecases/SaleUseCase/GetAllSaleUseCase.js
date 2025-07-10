@@ -8,8 +8,8 @@ class GetAllSaleUseCase {
         this.saleRepo = saleRepo;
     }
 
-    async run(userId, page) {
-        const getSale = await this.saleRepo.getAll(userId, page);
+    async run(userId, page, search) {
+        const getSale = await this.saleRepo.getAll(userId, page, search);
         return getSale;
     }
 }

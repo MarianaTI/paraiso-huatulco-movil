@@ -111,6 +111,11 @@ export default function Navbar() {
                 </Link>
               </li>
               <li className="nav-item">
+                <Link href="/agency" className="nav-link">
+                  Agencias
+                </Link>
+              </li>
+              <li className="nav-item">
                 <Link href="/contact" className="nav-link">
                   Contacto
                 </Link>
