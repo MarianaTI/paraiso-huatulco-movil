@@ -28,3 +28,13 @@ export const saveOfflineBooking = async (bookingData) => {
     console.warn("SyncManager no soportado");
   }
 };
+
+export const getAllOfflineBookings = async () => {
+  const db = await getOfflineDB();
+  return await db.getAll("reservas");
+};
+
+export const deleteOfflineBookings = async () => {
+  const db = await getOfflineDB();
+  await db.delete("reservas", id);
+};

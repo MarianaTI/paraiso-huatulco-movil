@@ -127,7 +127,7 @@ export default function Booking() {
       alert(
         "Sin conexión. Tu reserva se guardó y se enviará al recuperar la conexión."
       );
-      router.push("/");
+      router.push("/home");
       return;
     }
 
@@ -145,7 +145,7 @@ export default function Booking() {
           icon: "/icon512_rounded.png",
         });
       }
-      router.push("/");
+      router.push("/home");
     } catch (error) {
       console.log("Error en submit", error);
     }
