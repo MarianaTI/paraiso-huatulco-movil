@@ -1,7 +1,7 @@
 .container-login {
     height: 100vh;
-    background: #3B71FE;
-    background: linear-gradient(15deg, rgba(59, 113, 254, 0.8) 0%, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 1) 82%, rgba(59, 113, 254, 0.65) 100%);
+    background: #fff
+    /* background: linear-gradient(15deg, rgba(59, 113, 254, 0.8) 0%, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 1) 82%, rgba(59, 113, 254, 0.65) 100%); */
 }
 
 .login-content {

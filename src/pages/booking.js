@@ -5,18 +5,20 @@ import { saveOfflineBooking } from "@/utils/offlineBooking";
 import { sendBooking } from "@/utils/sendBooking";
 import useRatesPrice from "@/hooks/useRatesPrice";
 import { useSelector } from "react-redux";
+import Select from "react-select";
 
 export default function Booking() {
   const router = useRouter();
   const isOnline = useOnlineStatus();
   const userId = useSelector((state) => state.user._id);
 
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
   const [rent, setRent] = useState([]);
   const [product, setProduct] = useState([]);
   const [rate, setRate] = useState(null);
   const [adultos, setAdultos] = useState(2);
   const [menores, setMenores] = useState(0);
+  const [editarTotal, setEditarTotal] = useState(false);
 
   const ratesData = useRatesPrice(rate, adultos, menores);
 
@@ -24,7 +26,7 @@ export default function Booking() {
 
   const [data, setData] = useState({
     alias: "",
-    categoria_transporte: "",
+    categoria_transporte: "1",
     categoria_traslado: "",
     client_lastname: "",
     client_mail: "",
@@ -34,8 +36,9 @@ export default function Booking() {
     comments: "",
     currency: "MXN",
     destino: "HX",
+    end_date: "",
     habitacion: "",
-    hora: "09:00:00",
+    hora: "",
     hora_llegada: "",
     hora_salida: "",
     hotel: "Bahía Huatulco",
@@ -57,9 +60,9 @@ export default function Booking() {
     plataforma: "movil",
     product_code: "",
     rate_code: "",
-    start_date: "2025-07-02",
-    tipo_viaje: "",
-    total: "0",
+    start_date: new Date().toISOString().split("T")[0],
+    tipo_viaje: "HA",
+    total: "",
     vendedor_referenciado: "",
     zona_hotel: "",
   });
@@ -147,8 +150,6 @@ export default function Booking() {
       ...data,
       categoria_traslado,
       product_code: product.product_code,
-      // id_producto: product.product_code,
-      // servicio: product.name,
       destino: product.codigo_destino,
       id_servicio: product.id_servicio,
       limit_payment,
@@ -157,6 +158,8 @@ export default function Booking() {
       pax_menor: String(menores),
       id_usuario: userId,
       rate_code: rate.rate_code,
+      hora: product.horario,
+      total: editarTotal ? String(data.total) : String(ratesData.total),
     };
 
     if ("Notification" in window && Notification.permission !== "granted") {
@@ -192,26 +195,31 @@ export default function Booking() {
     try {
       console.log("Reserva: ", bookingData);
 
-      // const response = await sendBooking(bookingData);
-      // setRent(response);
-      // if (
-      //   "serviceWorker" in navigator &&
-      //   "Notification" in window &&
-      //   Notification.permission === "granted"
-      // ) {
-      //   const reg = await navigator.serviceWorker.ready;
-      //   reg.showNotification("Reserva enviada", {
-      //     body: "Tu reserva fue registrada con éxito.",
-      //     icon: "/icon512_rounded.png",
-      //   });
-      // }
-      // router.push("/home");
+      const response = await sendBooking(bookingData);
+      setRent(response);
+      if (
+        "serviceWorker" in navigator &&
+        "Notification" in window &&
+        Notification.permission === "granted"
+      ) {
+        const reg = await navigator.serviceWorker.ready;
+        reg.showNotification("Reserva enviada", {
+          body: "Tu reserva fue registrada con éxito.",
+          icon: "/icon512_rounded.png",
+        });
+      }
+      router.push("/home");
     } catch (error) {
       console.log("Error en submit", error);
     }
   };
 
   const stepTitles = ["DATOS", "DETALLES", "PAGO"];
+
+  const options = [
+    { value: "HA", label: "Hotel - Aeropuerto/Terminal" },
+    { value: "AH", label: "Aeropuerto/Terminal - Hotel" },
+  ];
 
   return (
     <div className="pt-4">
@@ -310,8 +318,8 @@ export default function Booking() {
                     <label className="form-label-styled">Horario de tour</label>
                     <input
                       type="time"
-                      name="hora_llegada"
-                      value={data.hora_llegada}
+                      name="hora"
+                      value={data.hora}
                       onChange={handleChange}
                       className="mb-2 form-input-styled"
                     />
@@ -359,37 +367,306 @@ export default function Booking() {
                     />
                   </div>
                 </div>
-                <div className="grid-form mb-3">
-                  <button
-                    className="booking-button-cancel"
-                    onClick={() => setStep(1)}
-                  >
-                    Atrás
-                  </button>
-                  <button className="booking-button" onClick={() => setStep(3)}>
-                    Continuar
-                  </button>
-                </div>
               </>
             )}
             {product.id_servicio === "1" && (
               <>
-                <label>Traslado</label>
+                <div className="d-flex gap-3 mb-3 pt-2">
+                  <div class="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="categoria_transporte"
+                      id="sencillo"
+                      value="1"
+                      checked={data.categoria_transporte === "1"}
+                      onChange={handleChange}
+                    />
+                    <label className="form-check-label" htmlFor="sencillo">
+                      Sencillo
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="categoria_transporte"
+                      id="redondo"
+                      value="2"
+                      checked={data.categoria_transporte === "2"}
+                      onChange={handleChange}
+                    />
+                    <label className="form-check-label" htmlFor="redondo">
+                      Redondo
+                    </label>
+                  </div>
+                </div>
+                <label className="form-label-styled">
+                  Lugar del hospedaje *
+                </label>
+                <input
+                  type="text"
+                  name="hotel"
+                  value={data.hotel}
+                  onChange={handleChange}
+                  className="mb-3 form-input-styled"
+                />
+                {data.categoria_transporte === "1" && (
+                  <>
+                    <label className="form-label-styled">
+                      Fecha de inicio *
+                    </label>
+                    <input
+                      type="date"
+                      name="start_date"
+                      value={data.start_date}
+                      onChange={handleChange}
+                      className="mb-3 form-input-styled"
+                    />
+                    <label className="form-label-styled">Tipo de viaje *</label>
+                    <Select
+                      className="basic-single py-2 mb-2 select-height"
+                      classNamePrefix="select"
+                      name="tipo_viaje"
+                      value={options.find(
+                        (opt) => opt.value === data.tipo_viaje
+                      )}
+                      onChange={(selected) =>
+                        setData({ ...data, tipo_viaje: selected.value })
+                      }
+                      options={options}
+                    />
+                  </>
+                )}
+                {data.categoria_transporte === "2" && (
+                  <div className="grid-form">
+                    <div className="grid-item">
+                      <label className="form-label-styled">
+                        Fecha de inicio *
+                      </label>
+                      <input
+                        type="date"
+                        name="start_date"
+                        value={data.start_date}
+                        onChange={handleChange}
+                        className="mb-3 form-input-styled"
+                      />
+                    </div>
+                    <div className="grid-item">
+                      <label className="form-label-styled">
+                        Fecha de fin *
+                      </label>
+                      <input
+                        type="date"
+                        name="end_date"
+                        value={data.end_date}
+                        onChange={handleChange}
+                        className="mb-3 form-input-styled"
+                      />
+                    </div>
+                  </div>
+                )}
+                <h3 className="py-2">Información de viaje</h3>
+                {data.categoria_transporte === "1" && (
+                  <>
+                    <label className="form-label-styled">Número de vuelo</label>
+                    <input
+                      type="text"
+                      name="numero_vuelo"
+                      value={data.numero_vuelo}
+                      onChange={handleChange}
+                      className="mb-3 form-input-styled"
+                    />
+                    <div className="grid-form">
+                      <div className="grid-item">
+                        <label className="form-label-styled">
+                          Hora de llegada
+                        </label>
+                        <input
+                          type="time"
+                          name="hora_llegada"
+                          value={data.hora_llegada}
+                          onChange={handleChange}
+                          className="mb-2 form-input-styled"
+                        />
+                      </div>
+                      <div className="grid-item">
+                        <label className="form-label-styled">Pickup</label>
+                        <input
+                          type="time"
+                          name="pickup"
+                          value={data.pickup}
+                          onChange={handleChange}
+                          className="mb-2 form-input-styled"
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
+                {data.categoria_transporte === "2" && (
+                  <div className="grid-form">
+                    <div className="grid-item">
+                      <label className="form-label-styled">
+                        Número de vuelo
+                      </label>
+                      <input
+                        type="text"
+                        name="numero_vuelo"
+                        value={data.numero_vuelo}
+                        onChange={handleChange}
+                        className="mb-3 form-input-styled"
+                      />
+                    </div>
+                    <div className="grid-item">
+                      <label className="form-label-styled">
+                        Número de salida de vuelo
+                      </label>
+                      <input
+                        type="text"
+                        name="numero_vuelo_salida"
+                        value={data.numero_vuelo_salida}
+                        onChange={handleChange}
+                        className="mb-3 form-input-styled"
+                      />
+                    </div>
+                    <div className="grid-item">
+                      <label className="form-label-styled">
+                        Hora de llegada
+                      </label>
+                      <input
+                        type="time"
+                        name="hora_llegada"
+                        value={data.hora_llegada}
+                        onChange={handleChange}
+                        className="mb-2 form-input-styled"
+                      />
+                    </div>
+                    <div className="grid-item">
+                      <label className="form-label-styled">Pickup</label>
+                      <input
+                        type="time"
+                        name="pickup"
+                        value={data.pickup}
+                        onChange={handleChange}
+                        className="mb-2 form-input-styled"
+                      />
+                    </div>
+                    <div className="grid-item">
+                      <label className="form-label-styled">
+                        Hora de salida
+                      </label>
+                      <input
+                        type="time"
+                        name="hora_salida"
+                        value={data.hora_salida}
+                        onChange={handleChange}
+                        className="mb-2 form-input-styled"
+                      />
+                    </div>
+                    <div className="grid-item">
+                      <label className="form-label-styled">
+                        Pickup de salida
+                      </label>
+                      <input
+                        type="time"
+                        name="pickup_salida"
+                        value={data.pickup_salida}
+                        onChange={handleChange}
+                        className="mb-2 form-input-styled"
+                      />
+                    </div>
+                  </div>
+                )}
+                <div className="grid-form">
+                  <div className="grid-item">
+                    <label className="form-label-styled">Adultos</label>
+                    <input
+                      type="number"
+                      min="2"
+                      value={String(adultos)}
+                      onChange={(e) => handleNumericChange(e, setAdultos)}
+                      onFocus={(e) => e.target.select()}
+                      className="mb-2 form-input-styled"
+                    />
+                  </div>
+                  <div className="grid-item">
+                    <label className="form-label-styled">Menores</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={String(menores)}
+                      onChange={(e) => handleNumericChange(e, setMenores)}
+                      onFocus={(e) => e.target.select()}
+                      className="mb-2 form-input-styled"
+                    />
+                  </div>
+                  <div className="grid-item">
+                    <label className="form-label-styled">Infantes</label>
+                    <input
+                      type="number"
+                      name="infantes"
+                      value={data.infantes}
+                      onChange={handleChange}
+                      className="mb-2 form-input-styled"
+                    />
+                  </div>
+                </div>
               </>
             )}
+            <div className="grid-form mb-3">
+              <button
+                className="booking-button-cancel"
+                onClick={() => setStep(1)}
+              >
+                Atrás
+              </button>
+              <button className="booking-button" onClick={() => setStep(3)}>
+                Continuar
+              </button>
+            </div>
           </section>
         )}
         {step === 3 && (
           <section className="booking-steps-content">
             <h3>Información de tarifa</h3>
-            <p style={{ fontSize: 17 }}>Tarifa de tipo {rate?.rate_title}</p>
+            <p style={{ fontSize: 17 }}>Tarifa de tipo: {rate?.rate_title}</p>
             {ratesData && (
-              <p style={{ fontSize: 17 }}>
-                Total:{" "}
-                <span className="rate-price">
-                  ${parseFloat(ratesData.total).toFixed(2)} {rate?.moneda}
-                </span>
-              </p>
+              <>
+                <p style={{ fontSize: 17 }}>
+                  Total:{" "}
+                  <span className="rate-price">
+                    ${parseFloat(ratesData.total).toFixed(2)} {rate?.moneda}
+                  </span>
+                </p>
+                <div className="form-check mb-2">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="editarTotal"
+                    checked={editarTotal}
+                    onChange={(e) => setEditarTotal(e.target.checked)}
+                  />
+                  <label className="form-check-label" htmlFor="editarTotal">
+                    Editar total
+                  </label>
+                </div>
+                {editarTotal && (
+                  <div className="mb-2">
+                    <label className="form-label-styled">
+                      Total personalizado
+                    </label>
+                    <input
+                      type="number"
+                      name="total"
+                      value={data.total}
+                      onChange={handleChange}
+                      className="form-input-styled"
+                      min="0"
+                      step="0.01"
+                    />
+                  </div>
+                )}
+              </>
             )}
             <div className="grid-form mb-3">
               <button

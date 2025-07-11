@@ -44,15 +44,25 @@ class BookingRepo extends IBookingRepo {
       formData.append("codigo", booking.codigo);
       formData.append("hora", booking.hora);
       formData.append("plataforma", booking.plataforma);
+
+      formData.append("alias", booking.alias);
+      formData.append("habitacion", booking.habitacion);
+      formData.append("id_dealer", booking.id_dealer);
+      formData.append("id_proveedor", booking.id_proveedor);
+      formData.append("id_servicio", booking.id_servicio);
+      formData.append("nombre_producto", booking.nombre_producto);
+      formData.append("vendedor_referenciado", booking.vendedor_referenciado);
+      formData.append("zona_hotel", booking.zona_hotel);
+
       const response = await axios.post(`${this.url}`, formData, {
         headers: {
-            "Content-Type": "multipart/form-data",
+          "Content-Type": "multipart/form-data",
         },
       });
       return response.data;
     } catch (error) {
-        console.error("Error sending booking: ", error.message);
-        throw error;
+      console.error("Error sending booking: ", error.message);
+      throw error;
     }
   }
 }

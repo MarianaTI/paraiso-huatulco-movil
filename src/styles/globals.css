@@ -31,6 +31,10 @@ a {
   }
 }
 
+.select-height {
+  height: 45px !important;
+}
+
 .navbar-toggler {
   border: none !important;
 }
@@ -496,15 +500,22 @@ a {
 }
 
 .form-label-styled {
-  font-size: 17px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
+  overflow:
+    hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient:
+    vertical;
+  line-height: normal;
 }
 
 .form-input-styled {
   width: 100%;
-  height: 50px;
-  padding-left: 8px;
-  font-size: 16px;
+  height: 45px;
+  padding: 0 12px;
+  font-size: 15px;
   border-radius: 8px;
   border: 1px solid #ccc;
   margin-top: 8px;
@@ -762,3 +773,13 @@ a {
   font-weight: 600;
   color: #1f1f1f;
 }
+
+/* select {
+  width: 50px;
+ 
+}
+option {
+width: 50px;
+white-space:pre-wrap;
+word-wrap: break-word;
+} */
