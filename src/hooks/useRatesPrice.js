@@ -1,5 +1,5 @@
 export default function useRatesPrice(data, adultos, menores) {
-    console.log('🔁 Hook ejecutado con:', { adultos, menores, data });
+    // console.log('🔁 Hook ejecutado con:', { adultos, menores, data });
     if (!data) return null;
 
     const precios = data.ratePrices || [];

@@ -1,6 +1,8 @@
+import GetAllClientUseCase from "@/application/usecases/GetAllClientUseCase";
 import GetAllToursUseCase from "@/application/usecases/GetAllToursUseCase";
 import Categories from "@/components/categories/Categories";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
+import ClientRepo from "@/infraestructure/implementation/httpRequest/axios/ClientRepo";
 import TourRepo from "@/infraestructure/implementation/httpRequest/axios/TourRepo";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -8,19 +10,25 @@ import React, { useEffect, useState } from "react";
 export default function Home() {
   const router = useRouter();
   const [tours, setTours] = useState([]);
+  const [clients, setClients] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const isOnline = useOnlineStatus();
 
   const toursRepo = new TourRepo();
+  const clientsRepo = new ClientRepo();
   const getAllToursUseCase = new GetAllToursUseCase(toursRepo);
+  const getAllClientsUseCase = new GetAllClientUseCase(clientsRepo);
 
   const loadToursFromLocalStorage = () => {
     try {
       const cachedProducts = localStorage.getItem("products");
-      if (cachedProducts) {
+      const cachedClients = localStorage.getItem("clients");
+      if (cachedProducts && cachedClients) {
         const parsedProducts = JSON.parse(cachedProducts);
-        if (Array.isArray(parsedProducts)) {
+        const parsedClients = JSON.parse(cachedClients);
+        if (Array.isArray(parsedProducts) && Array.isArray(parsedClients)) {
           setTours(parsedProducts);
+          setClients(parsedClients);
           return true;
         } else {
         }
@@ -33,9 +41,12 @@ export default function Home() {
   const fetchAndCacheTours = async () => {
     try {
       const response = await getAllToursUseCase.run();
-      if (response && Array.isArray(response)) {
+      const responseClients = await getAllClientsUseCase.run();
+      if (response && Array.isArray(response) || responseClients && Array.isArray(responseClients)) {
         setTours(response); 
+        setClients(responseClients.response);
         localStorage.setItem("products", JSON.stringify(response)); 
+        localStorage.setItem("clients", JSON.stringify(responseClients.response)); 
         return true; 
       } else {
       }
@@ -54,6 +65,7 @@ export default function Home() {
 
         if (!fetchedOnline && !loadedFromCache) {
           setTours([]);
+          setClients([]);
         } else if (fetchedOnline) {
         } else if (loadedFromCache) {
         }
@@ -61,6 +73,7 @@ export default function Home() {
       } else {
         if (!loadedFromCache) {
           setTours([]);
+          setClients([]);
         } else {
         }
       }

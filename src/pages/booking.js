@@ -5,6 +5,7 @@ import { saveOfflineBooking } from "@/utils/offlineBooking";
 import { sendBooking } from "@/utils/sendBooking";
 import useRatesPrice from "@/hooks/useRatesPrice";
 import { useSelector } from "react-redux";
+import CreatableSelect from "react-select/creatable";
 import Select from "react-select";
 
 export default function Booking() {
@@ -19,10 +20,11 @@ export default function Booking() {
   const [adultos, setAdultos] = useState(2);
   const [menores, setMenores] = useState(0);
   const [editarTotal, setEditarTotal] = useState(false);
+  const [clients, setClients] = useState([]);
 
   const ratesData = useRatesPrice(rate, adultos, menores);
 
-  console.log("Código de producto", product);
+  // console.log("Código de producto", product);
 
   const [data, setData] = useState({
     alias: "",
@@ -49,6 +51,7 @@ export default function Booking() {
     infantes: "0",
     limit_customer: "2025-04-22",
     limit_payment: "INMEDIATO",
+    method_payment: "efectivo",
     nombre_producto: "",
     numero_vuelo: "",
     numero_vuelo_salida: "",
@@ -60,6 +63,7 @@ export default function Booking() {
     plataforma: "movil",
     product_code: "",
     rate_code: "",
+    referemcia: "",
     start_date: new Date().toISOString().split("T")[0],
     tipo_viaje: "HA",
     total: "",
@@ -70,9 +74,11 @@ export default function Booking() {
   useEffect(() => {
     const storedRate = localStorage.getItem("selectedRate");
     const storedProduct = localStorage.getItem("selectedProduct");
-    if (storedRate && storedProduct) {
+    const storedClients = localStorage.getItem("clients");
+    if (storedRate && storedProduct && storedClients) {
       setRate(JSON.parse(storedRate));
       setProduct(JSON.parse(storedProduct));
+      setClients(JSON.parse(storedClients));
     }
   }, []);
 
@@ -102,13 +108,13 @@ export default function Booking() {
 
   useEffect(() => {
     if (rate) {
-      console.log("Rate cargada desde localStorage ->", rate);
+      // console.log("Rate cargada desde localStorage ->", rate);
     }
   }, [rate]);
 
   useEffect(() => {
     if (ratesData) {
-      console.log("Resultado de tarifas ->", ratesData);
+      // console.log("Resultado de tarifas ->", ratesData);
     }
   }, [ratesData]);
 
@@ -195,20 +201,20 @@ export default function Booking() {
     try {
       console.log("Reserva: ", bookingData);
 
-      const response = await sendBooking(bookingData);
-      setRent(response);
-      if (
-        "serviceWorker" in navigator &&
-        "Notification" in window &&
-        Notification.permission === "granted"
-      ) {
-        const reg = await navigator.serviceWorker.ready;
-        reg.showNotification("Reserva enviada", {
-          body: "Tu reserva fue registrada con éxito.",
-          icon: "/icon512_rounded.png",
-        });
-      }
-      router.push("/home");
+      // const response = await sendBooking(bookingData);
+      // setRent(response);
+      // if (
+      //   "serviceWorker" in navigator &&
+      //   "Notification" in window &&
+      //   Notification.permission === "granted"
+      // ) {
+      //   const reg = await navigator.serviceWorker.ready;
+      //   reg.showNotification("Reserva enviada", {
+      //     body: "Tu reserva fue registrada con éxito.",
+      //     icon: "/icon512_rounded.png",
+      //   });
+      // }
+      // router.push("/home");
     } catch (error) {
       console.log("Error en submit", error);
     }
@@ -219,6 +225,16 @@ export default function Booking() {
   const options = [
     { value: "HA", label: "Hotel - Aeropuerto/Terminal" },
     { value: "AH", label: "Aeropuerto/Terminal - Hotel" },
+  ];
+
+  const optionsPayment = [
+    { value: "cheque", label: "Cheque" },
+    { value: "cortesía", label: "Cortesía" },
+    { value: "crédito", label: "Crédito" },
+    { value: "efectivo", label: "Efectivo" },
+    { value: "mixto", label: "Mixto" },
+    { value: "tarjeta", label: "Tarjeta" },
+    { value: "transferencia", label: "Transferencia" },
   ];
 
   return (
@@ -256,12 +272,54 @@ export default function Booking() {
           <section className="booking-steps-content">
             <h3>Información del cliente</h3>
             <label className="form-label-styled">Nombre completo</label>
-            <input
-              type="text"
-              name="client_name"
-              value={data.client_name}
-              onChange={handleChange}
-              className="mb-2 form-input-styled"
+            <CreatableSelect
+              classNamePrefix="select"
+              placeholder="Buscar o escribir cliente..."
+              options={clients.map((client) => ({
+                value: client.pasajero_titular,
+                label: client.pasajero_titular,
+                correo: client.correo,
+                telefono: client.telefono,
+                referencia: client.referenciaOrigenCliente,
+              }))}
+              value={
+                data.client_name
+                  ? {
+                      value: data.client_name,
+                      label: data.client_name,
+                    }
+                  : null
+              }
+              onChange={(selectedOption) => {
+                if (selectedOption) {
+                  setData((prev) => ({
+                    ...prev,
+                    client_name: selectedOption.value,
+                    client_mail: selectedOption.correo || "",
+                    client_phone: selectedOption.telefono || "",
+                    comments: selectedOption.referencia || "",
+                  }));
+                } else {
+                  setData((prev) => ({
+                    ...prev,
+                    client_name: "",
+                    client_mail: "",
+                    client_phone: "",
+                    referencia: "",
+                  }));
+                }
+              }}
+              onCreateOption={(inputValue) => {
+                // Cuando el usuario escribe un nombre nuevo
+                setData((prev) => ({
+                  ...prev,
+                  client_name: inputValue,
+                  client_mail: "",
+                  client_phone: "",
+                  referencia: "",
+                }));
+              }}
+              isClearable
             />
             <label className="form-label-styled">Teléfono</label>
             <input
@@ -668,6 +726,27 @@ export default function Booking() {
                 )}
               </>
             )}
+            <label className="form-label-styled">Método de pago *</label>
+            <Select
+              className="basic-single py-2 mb-2 select-height"
+              classNamePrefix="select"
+              name="tipo_viaje"
+              value={optionsPayment.find(
+                (opt) => opt.value === data.method_payment
+              )}
+              onChange={(selected) =>
+                setData({ ...data, method_payment: selected.value })
+              }
+              options={optionsPayment}
+            />
+            <label className="form-label-styled">Referencia *</label>
+            <input
+              type="number"
+              name="referencia"
+              value={data.referencia}
+              onChange={handleChange}
+              className="mb-2 form-input-styled"
+            />
             <div className="grid-form mb-3">
               <button
                 className="booking-button-cancel"
