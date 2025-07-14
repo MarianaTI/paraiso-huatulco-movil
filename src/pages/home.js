@@ -7,12 +7,18 @@ import ClientRepo from "@/infraestructure/implementation/httpRequest/axios/Clien
 import TourRepo from "@/infraestructure/implementation/httpRequest/axios/TourRepo";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { GoPlus } from "react-icons/go";
 
 export default function Home() {
   const router = useRouter();
   const [tours, setTours] = useState([]);
   const [clients, setClients] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState({
+    traslados: [],
+    tours: [],
+    rentas: [],
+  });
   const [searchTerm, setSearchTerm] = useState("");
   const isOnline = useOnlineStatus();
 
@@ -31,7 +37,11 @@ export default function Home() {
         const parsedProducts = JSON.parse(cachedProducts);
         const parsedClients = JSON.parse(cachedClients);
         const parsedTop = JSON.parse(cachedTop);
-        if (Array.isArray(parsedProducts) && Array.isArray(parsedClients) && Array.isArray(parsedTop)) {
+        if (
+          Array.isArray(parsedProducts) &&
+          Array.isArray(parsedClients) &&
+          Array.isArray(parsedTop)
+        ) {
           setTours(parsedProducts);
           setClients(parsedClients);
           setProducts(parsedTop);
@@ -39,9 +49,8 @@ export default function Home() {
         } else {
         }
       }
-    } catch (error) {
-    }
-    return false; 
+    } catch (error) {}
+    return false;
   };
 
   const fetchAndCacheTours = async () => {
@@ -49,28 +58,33 @@ export default function Home() {
       const response = await getAllToursUseCase.run();
       const responseClients = await getAllClientsUseCase.run();
       const responseTop = await getTopProducts.run();
-      if (response && Array.isArray(response) || responseClients && Array.isArray(responseClients) || responseTop && Array.isArray(responseTop)) {
-        setTours(response); 
+      if (
+        (response && Array.isArray(response)) ||
+        (responseClients && Array.isArray(responseClients)) ||
+        (responseTop && Array.isArray(responseTop))
+      ) {
+        setTours(response);
         setClients(responseClients.response);
         setProducts(responseTop);
-        localStorage.setItem("products", JSON.stringify(response)); 
-        localStorage.setItem("clients", JSON.stringify(responseClients.response)); 
-        localStorage.setItem("top", JSON.stringify(responseTop)); 
-        return true; 
+        localStorage.setItem("products", JSON.stringify(response));
+        localStorage.setItem(
+          "clients",
+          JSON.stringify(responseClients.response)
+        );
+        localStorage.setItem("top", JSON.stringify(responseTop));
+        return true;
       } else {
       }
-    } catch (error) {
-    }
-    return false; 
+    } catch (error) {}
+    return false;
   };
 
   useEffect(() => {
     const initializeData = async () => {
-
       const loadedFromCache = loadToursFromLocalStorage();
 
       if (isOnline) {
-        const fetchedOnline = await fetchAndCacheTours(); 
+        const fetchedOnline = await fetchAndCacheTours();
 
         if (!fetchedOnline && !loadedFromCache) {
           setTours([]);
@@ -79,7 +93,6 @@ export default function Home() {
         } else if (fetchedOnline) {
         } else if (loadedFromCache) {
         }
-
       } else {
         if (!loadedFromCache) {
           setTours([]);
@@ -91,13 +104,22 @@ export default function Home() {
     };
 
     initializeData();
-  }, [isOnline]); 
-  
+  }, [isOnline]);
+
+  const [openCategory, setOpenCategory] = useState(null);
+
+  const toggleCategory = (categoria) => {
+    setOpenCategory(openCategory === categoria ? null : categoria);
+  };
+
   return (
     <section>
       <div className="container-main">
         <h1 className="title">Selecciona el servicio</h1>
-        <span>Elige el servicio que necesitas para continuar con tu reserva y dar el siguiente paso.</span>
+        <span>
+          Elige el servicio que necesitas para continuar con tu reserva y dar el
+          siguiente paso.
+        </span>
       </div>
       <div className="container-section">
         <span className="all-services">Todos los servicios</span>
@@ -107,7 +129,40 @@ export default function Home() {
           </div>
         )}
         {/* Asegúrate de pasar 'tours' a 'Categories' si los necesita para filtrar o mostrar */}
-        <Categories tours={tours} searchTerm={searchTerm} setSearchTerm={setSearchTerm} /> 
+        <Categories
+          tours={tours}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
+      </div>
+      <div className="mx-4">
+        <h1 className="title">Top de productos</h1>
+        <div className="collapse-container">
+          {Object.entries(products).map(([categoria, items]) => (
+            <div key={categoria} className="collapse-line">
+              <div
+                onClick={() => toggleCategory(categoria)}
+                className="collapse-button"
+              >
+                <span className="collapse-title">{categoria}</span>
+                <span className="collapse-title">{openCategory === categoria ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}</span>
+              </div>
+              {openCategory === categoria && (
+                <div className="px-4 py-2 collapse-content">
+                  {items.map((item, idx) => (
+                    <div key={idx} className={`py-3 d-flex justify-content-between
+                      align-items-center ${
+                      idx !== items.length - 1 ? 'collapse-line' : ''
+                    }`}>
+                      <span className="font-medium">{item.nombre}</span>
+                      <button className="product-button" onClick={() => router.push(`/${item.product_code}`)}><GoPlus /></button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
