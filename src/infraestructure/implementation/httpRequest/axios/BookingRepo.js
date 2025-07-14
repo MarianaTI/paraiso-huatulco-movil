@@ -53,6 +53,7 @@ class BookingRepo extends IBookingRepo {
       formData.append("nombre_producto", booking.nombre_producto);
       formData.append("vendedor_referenciado", booking.vendedor_referenciado);
       formData.append("zona_hotel", booking.zona_hotel);
+      formData.append("notas", JSON.stringify(booking.notas));
 
       const response = await axios.post(`${this.url}`, formData, {
         headers: {

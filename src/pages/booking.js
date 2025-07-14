@@ -51,7 +51,6 @@ export default function Booking() {
     infantes: "0",
     limit_customer: "2025-04-22",
     limit_payment: "INMEDIATO",
-    method_payment: "efectivo",
     nombre_producto: "",
     numero_vuelo: "",
     numero_vuelo_salida: "",
@@ -63,7 +62,6 @@ export default function Booking() {
     plataforma: "movil",
     product_code: "",
     rate_code: "",
-    referemcia: "",
     start_date: new Date().toISOString().split("T")[0],
     tipo_viaje: "HA",
     total: "",
@@ -152,6 +150,12 @@ export default function Booking() {
       limit_customer = formatDate(tentativeLimit);
     }
 
+    let notas = {
+      metodo_pago: data.method_payment,
+      referencia_pago: data.referenciaPago,
+      referencia_ota: data.referencia_cliente
+    };
+
     const bookingData = {
       ...data,
       categoria_traslado,
@@ -166,6 +170,7 @@ export default function Booking() {
       rate_code: rate.rate_code,
       hora: product.horario,
       total: editarTotal ? String(data.total) : String(ratesData.total),
+      notas: notas,
     };
 
     if ("Notification" in window && Notification.permission !== "granted") {
@@ -201,19 +206,19 @@ export default function Booking() {
     try {
       console.log("Reserva: ", bookingData);
 
-      // const response = await sendBooking(bookingData);
-      // setRent(response);
-      // if (
-      //   "serviceWorker" in navigator &&
-      //   "Notification" in window &&
-      //   Notification.permission === "granted"
-      // ) {
-      //   const reg = await navigator.serviceWorker.ready;
-      //   reg.showNotification("Reserva enviada", {
-      //     body: "Tu reserva fue registrada con éxito.",
-      //     icon: "/icon512_rounded.png",
-      //   });
-      // }
+      const response = await sendBooking(bookingData);
+      setRent(response);
+      if (
+        "serviceWorker" in navigator &&
+        "Notification" in window &&
+        Notification.permission === "granted"
+      ) {
+        const reg = await navigator.serviceWorker.ready;
+        reg.showNotification("Reserva enviada", {
+          body: "Tu reserva fue registrada con éxito.",
+          icon: "/icon512_rounded.png",
+        });
+      }
       // router.push("/home");
     } catch (error) {
       console.log("Error en submit", error);
@@ -297,7 +302,7 @@ export default function Booking() {
                     client_name: selectedOption.value,
                     client_mail: selectedOption.correo || "",
                     client_phone: selectedOption.telefono || "",
-                    comments: selectedOption.referencia || "",
+                    referencia_cliente: selectedOption.referencia || "",
                   }));
                 } else {
                   setData((prev) => ({
@@ -305,7 +310,7 @@ export default function Booking() {
                     client_name: "",
                     client_mail: "",
                     client_phone: "",
-                    referencia: "",
+                    referencia_cliente: "",
                   }));
                 }
               }}
@@ -741,9 +746,9 @@ export default function Booking() {
             />
             <label className="form-label-styled">Referencia *</label>
             <input
-              type="number"
-              name="referencia"
-              value={data.referencia}
+              type="text"
+              name="referenciaPago"
+              value={data.referenciaPago}
               onChange={handleChange}
               className="mb-2 form-input-styled"
             />
