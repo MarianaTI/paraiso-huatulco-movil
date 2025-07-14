@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { GoPlus } from "react-icons/go";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const router = useRouter();
@@ -20,6 +21,7 @@ export default function Home() {
     rentas: [],
   });
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
   const isOnline = useOnlineStatus();
 
   const toursRepo = new TourRepo();
@@ -81,6 +83,7 @@ export default function Home() {
 
   useEffect(() => {
     const initializeData = async () => {
+      setLoading(true);
       const loadedFromCache = loadToursFromLocalStorage();
 
       if (isOnline) {
@@ -90,17 +93,15 @@ export default function Home() {
           setTours([]);
           setClients([]);
           setProducts([]);
-        } else if (fetchedOnline) {
-        } else if (loadedFromCache) {
         }
       } else {
         if (!loadedFromCache) {
           setTours([]);
           setClients([]);
           setProducts([]);
-        } else {
         }
       }
+      setLoading(false);
     };
 
     initializeData();
@@ -135,35 +136,64 @@ export default function Home() {
           setSearchTerm={setSearchTerm}
         />
       </div>
-      <div className="mx-4">
-        <h1 className="title">Top de productos</h1>
-        <div className="collapse-container">
-          {Object.entries(products).map(([categoria, items]) => (
-            <div key={categoria} className="collapse-line">
-              <div
-                onClick={() => toggleCategory(categoria)}
-                className="collapse-button"
-              >
-                <span className="collapse-title">{categoria}</span>
-                <span className="collapse-title">{openCategory === categoria ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}</span>
-              </div>
-              {openCategory === categoria && (
-                <div className="px-4 py-2 collapse-content">
-                  {items.map((item, idx) => (
-                    <div key={idx} className={`py-3 d-flex justify-content-between
-                      align-items-center ${
-                      idx !== items.length - 1 ? 'collapse-line' : ''
-                    }`}>
-                      <span className="font-medium">{item.nombre}</span>
-                      <button className="product-button" onClick={() => router.push(`/${item.product_code}`)}><GoPlus /></button>
-                    </div>
-                  ))}
-                </div>
-              )}
+      <motion.div
+        key="content"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="mx-4">
+          <h1 className="title">Top de productos</h1>
+          {loading ? (
+            <div className="loader-container">
+              <div class="loader"></div>
             </div>
-          ))}
+          ) : (
+            <div className="collapse-container">
+              {Object.entries(products).map(([categoria, items]) => (
+                <div key={categoria} className="collapse-line">
+                  <div
+                    onClick={() => toggleCategory(categoria)}
+                    className="collapse-button"
+                  >
+                    <span className="collapse-title">
+                      {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
+                    </span>
+                    <span className="collapse-title">
+                      {openCategory === categoria ? (
+                        <MdKeyboardArrowUp />
+                      ) : (
+                        <MdKeyboardArrowDown />
+                      )}
+                    </span>
+                  </div>
+                  {openCategory === categoria && (
+                    <div className="px-4 py-2 collapse-content">
+                      {items.map((item, idx) => (
+                        <div
+                          key={idx}
+                          className={`py-3 d-flex justify-content-between align-items-center ${
+                            idx !== items.length - 1 ? "collapse-line" : ""
+                          }`}
+                        >
+                          <span className="font-medium">{item.nombre}</span>
+                          <button
+                            className="product-button"
+                            onClick={() => router.push(`/${item.product_code}`)}
+                          >
+                            <GoPlus />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
