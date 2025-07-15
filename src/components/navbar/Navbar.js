@@ -9,24 +9,20 @@ import { useSelector } from "react-redux";
 import { TbLayoutDashboard, TbBuilding } from "react-icons/tb";
 import { LuTags, LuLogOut } from "react-icons/lu";
 import { MdOutlineTour } from "react-icons/md";
+import { useEffect } from "react";
 
 export default function Navbar() {
   const router = useRouter();
   const user = useSelector((state) => state.user);
 
-  // const LogOut = async () => {
-  //   const userRepo = new UserRepo();
-  //   const signOutUseCase = new SignOutUserUseCase(userRepo);
-
-  //   try {
-  //     const response = await signOutUseCase.run();
-  //     localStorage.removeItem("user");
-  //     router.push("/");
-  //   } catch (error) {
-  //     console.error("Fallo el cierre de sesión:", error);
-  //   }
-  // };
-
+  const closeOffcanvas = () => {
+    const offcanvasEl = document.getElementById("offcanvasNavbar");
+    const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+    if (bsOffcanvas) {
+      bsOffcanvas.hide();
+    }
+  };
+  
   const LogOut = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("clients");
@@ -56,7 +52,7 @@ export default function Navbar() {
             src="https://www.2businesstravel.com/images/agencia_899/899_logo_agencia.webp"
             alt="Logo"
             width={120}
-            height={50}
+            height={54}
             style={{ padding: 12 }}
           />
         </Link>
@@ -68,7 +64,7 @@ export default function Navbar() {
           aria-labelledby="offcanvasNavbarLabel"
         >
           <div className="offcanvas-header mt-3 mx-2">
-            <Link href="/home" className="navbar-brand">
+            <Link href="/home" className="navbar-brand" onClick={closeOffcanvas}>
               <Image
                 src="https://www.2businesstravel.com/images/agencia_899/899_logo_agencia.webp"
                 alt="Logo"
@@ -99,7 +95,7 @@ export default function Navbar() {
                 <TbLayoutDashboard
                   style={{ height: 18, width: 18, color: "#575757" }}
                 />
-                <Link href="/home" className="nav-link">
+                <Link href="/home" className="nav-link" onClick={closeOffcanvas}>
                   Inicio
                 </Link>
               </li>
@@ -120,17 +116,17 @@ export default function Navbar() {
 
                 <ul className="dropdown-menu navdrop-desing" aria-labelledby="navbarDropdown">
                   <li className="nav-item nav-item-design p-left">
-                    <Link href="/tour" className="dropdown-item">
+                    <Link href="/tour" className="dropdown-item" onClick={closeOffcanvas}>
                       Tours
                     </Link>
                   </li>
                   <li className="nav-item nav-item-design p-left">
-                    <Link href="/transfer" className="dropdown-item">
+                    <Link href="/transfer" className="dropdown-item" onClick={closeOffcanvas}>
                       Traslados
                     </Link>
                   </li>
                   <li className="nav-item nav-item-design p-left">
-                    <Link href="/rent" className="dropdown-item">
+                    <Link href="/rent" className="dropdown-item" onClick={closeOffcanvas}>
                       Rentas de vehículos
                     </Link>
                   </li>
@@ -139,7 +135,7 @@ export default function Navbar() {
 
               <li className="nav-item nav-item-design">
                 <LuTags style={{ height: 20, width: 18, color: "#575757" }} />
-                <Link href="/sales" className="nav-link">
+                <Link href="/sales" className="nav-link" onClick={closeOffcanvas}>
                   Ventas
                 </Link>
               </li>
@@ -147,7 +143,7 @@ export default function Navbar() {
                 <TbBuilding
                   style={{ height: 20, width: 18, color: "#575757" }}
                 />
-                <Link href="/agency" className="nav-link">
+                <Link href="/agency" className="nav-link" onClick={closeOffcanvas}>
                   Agencias
                 </Link>
               </li>
