@@ -10,6 +10,8 @@ import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { GoPlus } from "react-icons/go";
 import { motion } from "framer-motion";
+import HotelRepo from "@/infraestructure/implementation/httpRequest/axios/HotelRepo";
+import GetAllHotelUseCase from "@/application/usecases/GetAllHotelUseCase";
 
 export default function Home() {
   const router = useRouter();
@@ -20,33 +22,40 @@ export default function Home() {
     tours: [],
     rentas: [],
   });
+  const [hotel, setHotel] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const isOnline = useOnlineStatus();
 
   const toursRepo = new TourRepo();
   const clientsRepo = new ClientRepo();
+  const hotelRepo = new HotelRepo();
   const getAllToursUseCase = new GetAllToursUseCase(toursRepo);
   const getTopProducts = new GetTopProducts(toursRepo);
   const getAllClientsUseCase = new GetAllClientUseCase(clientsRepo);
+  const getAllHotelUseCase = new GetAllHotelUseCase(hotelRepo);
 
   const loadToursFromLocalStorage = () => {
     try {
       const cachedProducts = localStorage.getItem("products");
       const cachedClients = localStorage.getItem("clients");
       const cachedTop = localStorage.getItem("top");
+      const cachedHotel = localStorage.getItem("hoteles");
       if (cachedProducts && cachedClients) {
         const parsedProducts = JSON.parse(cachedProducts);
         const parsedClients = JSON.parse(cachedClients);
         const parsedTop = JSON.parse(cachedTop);
+        const parsedHotel = JSON.parse(cachedHotel);
         if (
           Array.isArray(parsedProducts) &&
           Array.isArray(parsedClients) &&
-          Array.isArray(parsedTop)
+          Array.isArray(parsedTop) &&
+          Array.isArray(parsedHotel)
         ) {
           setTours(parsedProducts);
           setClients(parsedClients);
           setProducts(parsedTop);
+          setHotel(parsedHotel);
           return true;
         } else {
         }
@@ -60,20 +69,24 @@ export default function Home() {
       const response = await getAllToursUseCase.run();
       const responseClients = await getAllClientsUseCase.run();
       const responseTop = await getTopProducts.run();
+      const responseHotel = await getAllHotelUseCase.run();
       if (
         (response && Array.isArray(response)) ||
         (responseClients && Array.isArray(responseClients)) ||
-        (responseTop && Array.isArray(responseTop))
+        (responseTop && Array.isArray(responseTop)) ||
+        (responseHotel && Array.isArray(responseHotel))
       ) {
         setTours(response);
         setClients(responseClients.response);
         setProducts(responseTop);
+        setHotel(responseHotel);
         localStorage.setItem("products", JSON.stringify(response));
         localStorage.setItem(
           "clients",
           JSON.stringify(responseClients.response)
         );
         localStorage.setItem("top", JSON.stringify(responseTop));
+        localStorage.setItem("hoteles", JSON.stringify(responseHotel.response));
         return true;
       } else {
       }
@@ -93,12 +106,14 @@ export default function Home() {
           setTours([]);
           setClients([]);
           setProducts([]);
+          setHotel([]);
         }
       } else {
         if (!loadedFromCache) {
           setTours([]);
           setClients([]);
           setProducts([]);
+          setHotel([]);
         }
       }
       setLoading(false);
@@ -147,7 +162,7 @@ export default function Home() {
           <h1 className="title">Top de productos</h1>
           {loading ? (
             <div className="loader-container">
-              <div class="loader"></div>
+              <div className="loader"></div>
             </div>
           ) : (
             <div className="collapse-container">
