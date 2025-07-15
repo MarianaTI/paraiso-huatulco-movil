@@ -58,7 +58,7 @@ export default function Booking() {
     pagado: "0",
     pax_adults: "2",
     pax_menor: "0",
-    pickup: "08:40",
+    pickup: "",
     pickup_salida: "",
     plataforma: "movil",
     product_code: "",
