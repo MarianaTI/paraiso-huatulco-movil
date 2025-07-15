@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "@/actions/userActions";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const router = useRouter();
@@ -34,6 +35,12 @@ const Login = () => {
       const response = await signInUseCase.run(formData);
 
       if (response && response.status !== 500) {
+
+        Cookies.set("user_session", JSON.stringify(response), {
+          expires: 10,
+          path: "/"
+        });
+
         dispatch(setUser(response));
         router.push("/home");
       } else {

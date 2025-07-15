@@ -1,5 +1,6 @@
 import SignOutUserUseCase from "@/application/usecases/SingOutUseCase";
 import UserRepo from "@/infraestructure/implementation/httpRequest/axios/UserRepo";
+import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -25,6 +26,13 @@ export default function Navbar() {
 
   const LogOut = () => {
     localStorage.removeItem('user');
+    localStorage.removeItem('clients');
+    localStorage.removeItem('hoteles');
+    localStorage.removeItem('products');
+    localStorage.removeItem('selectedProduct');
+    localStorage.removeItem('selectedRate');
+    localStorage.removeItem('top');
+    Cookies.remove("user_session");
     router.push("/"); 
   }
 
