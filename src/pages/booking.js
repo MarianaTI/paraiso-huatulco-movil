@@ -21,6 +21,7 @@ export default function Booking() {
   const [menores, setMenores] = useState(0);
   const [editarTotal, setEditarTotal] = useState(false);
   const [clients, setClients] = useState([]);
+  const [hotel, setHotel] = useState([]);
 
   const ratesData = useRatesPrice(rate, adultos, menores);
 
@@ -40,7 +41,7 @@ export default function Booking() {
     destino: "HX",
     end_date: "",
     habitacion: "",
-    hora: "",
+    hora: product?.horario ? product.horario.slice(0, 5) : '',
     hora_llegada: "",
     hora_salida: "",
     hotel: "Bahía Huatulco",
@@ -70,13 +71,24 @@ export default function Booking() {
   });
 
   useEffect(() => {
+    if (product?.horario) {
+      setData((prev) => ({
+        ...prev,
+        hora: product.horario.slice(0, 5),
+      }));
+    }
+  }, [product]);  
+
+  useEffect(() => {
     const storedRate = localStorage.getItem("selectedRate");
     const storedProduct = localStorage.getItem("selectedProduct");
     const storedClients = localStorage.getItem("clients");
-    if (storedRate && storedProduct && storedClients) {
+    const storedHotel = localStorage.getItem("hoteles");
+    if (storedRate && storedProduct && storedClients && storedHotel) {
       setRate(JSON.parse(storedRate));
       setProduct(JSON.parse(storedProduct));
       setClients(JSON.parse(storedClients));
+      setHotel(JSON.parse(storedHotel));
     }
   }, []);
 
@@ -153,7 +165,7 @@ export default function Booking() {
     let notas = {
       metodo_pago: data.method_payment,
       referencia_pago: data.referenciaPago,
-      referencia_ota: data.referencia_cliente
+      referencia_ota: data.referencia_cliente,
     };
 
     const bookingData = {
@@ -168,7 +180,7 @@ export default function Booking() {
       pax_menor: String(menores),
       id_usuario: userId,
       rate_code: rate.rate_code,
-      hora: product.horario,
+      hora: data.hora ? `${data.hora}:00` : product.horario,
       total: editarTotal ? String(data.total) : String(ratesData.total),
       notas: notas,
     };
@@ -206,19 +218,19 @@ export default function Booking() {
     try {
       console.log("Reserva: ", bookingData);
 
-      const response = await sendBooking(bookingData);
-      setRent(response);
-      if (
-        "serviceWorker" in navigator &&
-        "Notification" in window &&
-        Notification.permission === "granted"
-      ) {
-        const reg = await navigator.serviceWorker.ready;
-        reg.showNotification("Reserva enviada", {
-          body: "Tu reserva fue registrada con éxito.",
-          icon: "/icon512_rounded.png",
-        });
-      }
+      // const response = await sendBooking(bookingData);
+      // setRent(response);
+      // if (
+      //   "serviceWorker" in navigator &&
+      //   "Notification" in window &&
+      //   Notification.permission === "granted"
+      // ) {
+      //   const reg = await navigator.serviceWorker.ready;
+      //   reg.showNotification("Reserva enviada", {
+      //     body: "Tu reserva fue registrada con éxito.",
+      //     icon: "/icon512_rounded.png",
+      //   });
+      // }
       // router.push("/home");
     } catch (error) {
       console.log("Error en submit", error);
@@ -361,12 +373,42 @@ export default function Booking() {
             {(product.id_servicio === "2" || product.id_servicio === "3") && (
               <>
                 <label className="form-label-styled">Lugar del hospedaje</label>
-                <input
-                  type="text"
-                  name="hotel"
-                  value={data.hotel}
-                  onChange={handleChange}
-                  className="mb-3 form-input-styled"
+                <CreatableSelect
+                  classNamePrefix="select"
+                  placeholder="Buscar o escribir..."
+                  options={hotel.map((hotel) => ({
+                    value: hotel.nombre,
+                    label: hotel.nombre
+                  }))}
+                  value={
+                    data.hotel
+                      ? {
+                          value: data.hotel,
+                          label: data.hotel,
+                        }
+                      : null
+                  }
+                  onChange={(selectedOption) => {
+                    if (selectedOption) {
+                      setData((prev) => ({
+                        ...prev,
+                        hotel: selectedOption.value,
+                      }));
+                    } else {
+                      setData((prev) => ({
+                        ...prev,
+                        hotel: "",
+                      }));
+                    }
+                  }}
+                  onCreateOption={(inputValue) => {
+                    // Cuando el usuario escribe un nombre nuevo
+                    setData((prev) => ({
+                      ...prev,
+                      hotel: inputValue,
+                    }));
+                  }}
+                  isClearable
                 />
                 <label className="form-label-styled">Fecha de inicio</label>
                 <input
@@ -467,12 +509,41 @@ export default function Booking() {
                 <label className="form-label-styled">
                   Lugar del hospedaje *
                 </label>
-                <input
-                  type="text"
-                  name="hotel"
-                  value={data.hotel}
-                  onChange={handleChange}
-                  className="mb-3 form-input-styled"
+                <CreatableSelect
+                  classNamePrefix="select"
+                  placeholder="Buscar o escribir..."
+                  options={hotel.map((hotel) => ({
+                    value: hotel.nombre,
+                    label: hotel.nombre
+                  }))}
+                  value={
+                    data.hotel
+                      ? {
+                          value: data.hotel,
+                          label: data.hotel,
+                        }
+                      : null
+                  }
+                  onChange={(selectedOption) => {
+                    if (selectedOption) {
+                      setData((prev) => ({
+                        ...prev,
+                        hotel: selectedOption.value,
+                      }));
+                    } else {
+                      setData((prev) => ({
+                        ...prev,
+                        hotel: "",
+                      }));
+                    }
+                  }}
+                  onCreateOption={(inputValue) => {
+                    setData((prev) => ({
+                      ...prev,
+                      hotel: inputValue,
+                    }));
+                  }}
+                  isClearable
                 />
                 {data.categoria_transporte === "1" && (
                   <>
