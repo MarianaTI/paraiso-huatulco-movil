@@ -6,6 +6,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { HiBars3 } from "react-icons/hi2";
 import { useSelector } from "react-redux";
+import { TbLayoutDashboard, TbBuilding } from "react-icons/tb";
+import { LuTags, LuLogOut } from "react-icons/lu";
+import { MdOutlineTour } from "react-icons/md";
 
 export default function Navbar() {
   const router = useRouter();
@@ -25,29 +28,20 @@ export default function Navbar() {
   // };
 
   const LogOut = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('clients');
-    localStorage.removeItem('hoteles');
-    localStorage.removeItem('products');
-    localStorage.removeItem('selectedProduct');
-    localStorage.removeItem('selectedRate');
-    localStorage.removeItem('top');
+    localStorage.removeItem("user");
+    localStorage.removeItem("clients");
+    localStorage.removeItem("hoteles");
+    localStorage.removeItem("products");
+    localStorage.removeItem("selectedProduct");
+    localStorage.removeItem("selectedRate");
+    localStorage.removeItem("top");
     Cookies.remove("user_session");
-    router.push("/"); 
-  }
+    router.push("/");
+  };
 
   return (
     <nav className="navbar navbar-expand-lg bg-white shadow-sm">
       <div className="container-fluid">
-        <Link href="/home" className="navbar-brand">
-          <Image
-            src="https://www.2businesstravel.com/images/agencia_899/899_logo_agencia.webp"
-            alt="Logo"
-            width={120}
-            height={50}
-            style={{ padding: 12 }}
-          />
-        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -57,6 +51,15 @@ export default function Navbar() {
         >
           <HiBars3 style={{ fontSize: 28, color: "#3B71FE" }} />
         </button>
+        <Link href="/home" className="navbar-brand">
+          <Image
+            src="https://www.2businesstravel.com/images/agencia_899/899_logo_agencia.webp"
+            alt="Logo"
+            width={120}
+            height={50}
+            style={{ padding: 12 }}
+          />
+        </Link>
 
         <div
           className="offcanvas offcanvas-start offcanvas-custom d-lg-none"
@@ -69,8 +72,8 @@ export default function Navbar() {
               <Image
                 src="https://www.2businesstravel.com/images/agencia_899/899_logo_agencia.webp"
                 alt="Logo"
-                width={100}
-                height={25}
+                width={124}
+                height={36}
               />
             </Link>
             <button
@@ -80,59 +83,80 @@ export default function Navbar() {
               aria-label="Cerrar"
             ></button>
           </div>
-          <div className="mt-4 mx-4 d-flex flex-column">
-            <span className="fw-bold">
+          <div className="names-title">
+            <span className="title">
               {user?.nombre_comercial || "Cargando..."}
             </span>
-            <span>{user?.rol || "Cargando..."}</span>
+            <span className="rol">
+              {user?.rol
+                ? user.rol.charAt(0).toUpperCase() + user.rol.slice(1)
+                : "Cargando..."}
+            </span>
           </div>
-          <div className="offcanvas-body mx-2 d-flex flex-column justify-content-between">
+          <div className="offcanvas-body d-flex flex-column justify-content-between  nav-design">
             <ul className="navbar-nav">
-              <li className="nav-item">
+              <li className="nav-item nav-item-design">
+                <TbLayoutDashboard
+                  style={{ height: 18, width: 18, color: "#575757" }}
+                />
                 <Link href="/home" className="nav-link">
                   Inicio
                 </Link>
               </li>
-              <li className="nav-item">
-                <span className="nav-link">Servicios</span>
-                <ul className="navbar-nav ps-3">
-                  <li className="nav-item">
-                    <Link href="/tour" className="nav-link">
+              <li className="nav-item dropdown nav-item-design-drop">
+                <a
+                  className="nav-link dropdown-toggle"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <MdOutlineTour
+                    style={{ height: 18, width: 18, color: "#575757" }}
+                  />
+                  <span className="ms-2 span-nav">Servicios</span>
+                </a>
+
+                <ul className="dropdown-menu navdrop-desing" aria-labelledby="navbarDropdown">
+                  <li className="nav-item nav-item-design p-left">
+                    <Link href="/tour" className="dropdown-item">
                       Tours
                     </Link>
                   </li>
-                  <li className="nav-item">
-                    <Link href="/transfer" className="nav-link">
+                  <li className="nav-item nav-item-design p-left">
+                    <Link href="/transfer" className="dropdown-item">
                       Traslados
                     </Link>
                   </li>
-                  <li className="nav-item">
-                    <Link href="/rent" className="nav-link">
+                  <li className="nav-item nav-item-design p-left">
+                    <Link href="/rent" className="dropdown-item">
                       Rentas de vehículos
                     </Link>
                   </li>
                 </ul>
               </li>
-              <li className="nav-item">
+
+              <li className="nav-item nav-item-design">
+                <LuTags style={{ height: 20, width: 18, color: "#575757" }} />
                 <Link href="/sales" className="nav-link">
                   Ventas
                 </Link>
               </li>
-              <li className="nav-item">
+              <li className="nav-item nav-item-design">
+                <TbBuilding
+                  style={{ height: 20, width: 18, color: "#575757" }}
+                />
                 <Link href="/agency" className="nav-link">
                   Agencias
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link href="/contact" className="nav-link">
-                  Contacto
-                </Link>
-              </li>
             </ul>
-            <button className="log-out-button" onClick={LogOut}>
-              Salir
-            </button>
           </div>
+          <button className="log-out-button" onClick={LogOut}>
+            <LuLogOut style={{ height: 20, width: 18, color: "#575757" }} />
+            Salir
+          </button>
         </div>
 
         {/* Menú normal en desktop */}

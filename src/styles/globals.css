@@ -25,6 +25,79 @@ a {
 }
 
 /* Navbar styles */
+
+.names-title {
+  display: flex;
+  flex-direction: column;
+  padding: 32px 24px 18px 24px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.names-title .title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+}
+
+.names-title .rol {
+  font-size: 14px;
+}
+
+.nav-design {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.nav-item-design {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 8px !important;;
+  color: #1f1f1f;
+}
+
+.nav-item-design-drop {
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 8px !important;;
+  color: #1f1f1f;
+}
+
+.p-left {
+  padding-left: 16px !important;
+}
+
+.dropdown-toggle::after {
+  display: none !important;
+}
+
+.nav-item-design a, .nav-item-design span {
+  color: #1f1f1f;
+}
+
+.span-nav {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+
+.nav-item-design:hover {
+  background-color: #e6edff;
+  border-radius: 8px;
+  color: #000f9f;
+}
+
+.nav-item-design:hover a, .nav-item-design:hover  span{
+  color: #000f9f;
+}
+
+.navdrop-desing {
+  border: none !important;
+}
+
 @media (min-width: 992px) {
   #navbarNav {
     display: none !important;
@@ -563,9 +636,19 @@ a {
 .log-out-button {
   border: none;
   background: transparent;
-  text-align: start;
   font-size: 16px;
   font-weight: 600;
+  height: 80px;
+  padding: 8px 20px !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #1f1f1f;
+}
+
+.log-out-button:hover {
+  color: #000f9f;
+  background-color: #e6edff;
 }
 
 .empty-state-container {
