@@ -54,7 +54,7 @@ export default function ToursPage() {
           <input
             className="search-input"
             type="text"
-            placeholder="Buscar por nombre del producto..."
+            placeholder="Buscar..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />

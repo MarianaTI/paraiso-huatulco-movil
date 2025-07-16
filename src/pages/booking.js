@@ -7,6 +7,7 @@ import useRatesPrice from "@/hooks/useRatesPrice";
 import { useSelector } from "react-redux";
 import CreatableSelect from "react-select/creatable";
 import Select from "react-select";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 export default function Booking() {
   const router = useRouter();
@@ -41,10 +42,10 @@ export default function Booking() {
     destino: "HX",
     end_date: "",
     habitacion: "",
-    hora: product?.horario ? product.horario.slice(0, 5) : '',
+    hora: product?.horario ? product.horario.slice(0, 5) : "",
     hora_llegada: "",
     hora_salida: "",
-    hotel: "Bahía Huatulco",
+    hotel: "",
     id_dealer: "",
     id_proveedor: "",
     id_servicio: "",
@@ -77,7 +78,7 @@ export default function Booking() {
         hora: product.horario.slice(0, 5),
       }));
     }
-  }, [product]);  
+  }, [product]);
 
   useEffect(() => {
     const storedRate = localStorage.getItem("selectedRate");
@@ -255,428 +256,233 @@ export default function Booking() {
   ];
 
   return (
-    <div className="pt-4">
-      <div className="px-4 py-2">
-        <h1 className="booking-title">RESERVA</h1>
-        {/* <p className="booking-subtitle">Completa este formulario para crear una nueva reservación.</p> */}
-        <div className="d-flex flex-column mb-2">
-          <span className="booking-text-product">{product.name}</span>
-          <span className="booking-text-cat">{product.categoria_nombre}</span>
+    <div style={{ backgroundColor: "#fff" }}>
+      <header>
+        <div className="d-flex px-4 justify-content-between mb-3">
+          <button
+            className="button-back"
+            onClick={() => router.push(`/${product.product_code}`)}
+          >
+            <IoArrowBackOutline />
+          </button>
+          <h1 className="booking-title">RESERVA</h1>
+          <div></div>
         </div>
-      </div>
-      <div className="d-flex align-items-center justify-content-center mb-3 gap-4 step-dot-container">
-        {[1, 2, 3].map((n, index) => (
-          <React.Fragment key={n}>
-            <div className="d-flex align-items-center gap-2">
-              <div
-                className={`step-dot ${step === n ? "active" : ""} ${
-                  n < step ? "completed" : ""
-                }`}
-                onClick={() => setStep(n)}
-              >
-                {n}
+      </header>
+      <main>
+        <nav className="d-flex align-items-center justify-content-center my-4 gap-4 step-dot-container">
+          {[1, 2, 3].map((n, index) => (
+            <React.Fragment key={n}>
+              <div className="d-flex align-items-center gap-2">
+                <div
+                  className={`step-dot ${step === n ? "active" : ""} ${
+                    n < step ? "completed" : ""
+                  }`}
+                  onClick={() => setStep(n)}
+                >
+                  {n}
+                </div>
+                {step === n && (
+                  <span className="step-label">{stepTitles[n - 1]}</span>
+                )}
               </div>
-              {step === n && (
-                <span className="step-label">{stepTitles[n - 1]}</span>
-              )}
-            </div>
-            {index < 2 && <div className="step-line-horizontal"></div>}
-          </React.Fragment>
-        ))}
-      </div>
-      <form className="px-4 py-2" onSubmit={onSubmit}>
-        {step === 1 && (
-          <section className="booking-steps-content">
-            <h3>Información del cliente</h3>
-            <label className="form-label-styled">Nombre completo</label>
-            <CreatableSelect
-              classNamePrefix="select"
-              placeholder="Buscar o escribir cliente..."
-              options={clients.map((client) => ({
-                value: client.pasajero_titular,
-                label: client.pasajero_titular,
-                correo: client.correo,
-                telefono: client.telefono,
-                referencia: client.referenciaOrigenCliente,
-              }))}
-              value={
-                data.client_name
-                  ? {
-                      value: data.client_name,
-                      label: data.client_name,
-                    }
-                  : null
-              }
-              onChange={(selectedOption) => {
-                if (selectedOption) {
+              {index < 2 && <div className="step-line-horizontal"></div>}
+            </React.Fragment>
+          ))}
+        </nav>
+        <form onSubmit={onSubmit} className="m-4">
+          <section className="pt-3">
+            <h2 className="booking-text-product">{product.name}</h2>
+            <p className="booking-text-cat">"{product.categoria_nombre}"</p>
+          </section>
+          {step === 1 && (
+            <section className="py-2">
+              <h3 className="booking-form-title">Información del cliente</h3>
+              <label className="form-label-styled">Nombre completo</label>
+              <CreatableSelect
+                required
+                styles={{
+                  control: (provided) => ({
+                    ...provided,
+                    height: "45px",
+                    minHeight: "45px",
+                    borderRadius: "8px",
+                  }),
+                  valueContainer: (provided) => ({
+                    ...provided,
+                    height: "45px",
+                    padding: "0 8px",
+                  }),
+                  indicatorsContainer: (provided) => ({
+                    ...provided,
+                    height: "45px",
+                  }),
+                }}
+                classNamePrefix="select"
+                className="my-2"
+                placeholder="Buscar o escribir cliente..."
+                options={clients.map((client) => ({
+                  value: client.pasajero_titular,
+                  label: client.pasajero_titular,
+                  correo: client.correo,
+                  telefono: client.telefono,
+                  referencia: client.referenciaOrigenCliente,
+                }))}
+                value={
+                  data.client_name
+                    ? {
+                        value: data.client_name,
+                        label: data.client_name,
+                      }
+                    : null
+                }
+                onChange={(selectedOption) => {
+                  if (selectedOption) {
+                    setData((prev) => ({
+                      ...prev,
+                      client_name: selectedOption.value,
+                      client_mail: selectedOption.correo || "",
+                      client_phone: selectedOption.telefono || "",
+                      referencia_cliente: selectedOption.referencia || "",
+                    }));
+                  } else {
+                    setData((prev) => ({
+                      ...prev,
+                      client_name: "",
+                      client_mail: "",
+                      client_phone: "",
+                      referencia_cliente: "",
+                    }));
+                  }
+                }}
+                onCreateOption={(inputValue) => {
                   setData((prev) => ({
                     ...prev,
-                    client_name: selectedOption.value,
-                    client_mail: selectedOption.correo || "",
-                    client_phone: selectedOption.telefono || "",
-                    referencia_cliente: selectedOption.referencia || "",
-                  }));
-                } else {
-                  setData((prev) => ({
-                    ...prev,
-                    client_name: "",
+                    client_name: inputValue,
                     client_mail: "",
                     client_phone: "",
-                    referencia_cliente: "",
+                    referencia: "",
                   }));
-                }
-              }}
-              onCreateOption={(inputValue) => {
-                // Cuando el usuario escribe un nombre nuevo
-                setData((prev) => ({
-                  ...prev,
-                  client_name: inputValue,
-                  client_mail: "",
-                  client_phone: "",
-                  referencia: "",
-                }));
-              }}
-              isClearable
-            />
-            <label className="form-label-styled">Teléfono</label>
-            <input
-              type="text"
-              name="client_phone"
-              value={data.client_phone}
-              onChange={handleChange}
-              className="mb-2 form-input-styled"
-            />
-            <label className="form-label-styled">Correo electrónico</label>
-            <input
-              type="text"
-              name="client_mail"
-              value={data.client_mail}
-              onChange={handleChange}
-              className="mb-2 form-input-styled"
-            />
-            <label className="form-label-styled">Comentarios</label>
-            <input
-              type="text"
-              className="form-input-styled"
-              name="comments"
-              value={data.comments}
-              onChange={handleChange}
-            />
-            <button className="booking-button" onClick={() => setStep(2)}>
-              Continuar
-            </button>
-          </section>
-        )}
-        {step === 2 && (
-          <section className="booking-steps-content">
-            <h3>Información de servicio</h3>
-            {(product.id_servicio === "2" || product.id_servicio === "3") && (
-              <>
-                <label className="form-label-styled">Lugar del hospedaje</label>
-                <CreatableSelect
-                  classNamePrefix="select"
-                  placeholder="Buscar o escribir..."
-                  options={hotel.map((hotel) => ({
-                    value: hotel.nombre,
-                    label: hotel.nombre
-                  }))}
-                  value={
-                    data.hotel
-                      ? {
-                          value: data.hotel,
-                          label: data.hotel,
-                        }
-                      : null
-                  }
-                  onChange={(selectedOption) => {
-                    if (selectedOption) {
-                      setData((prev) => ({
-                        ...prev,
-                        hotel: selectedOption.value,
-                      }));
-                    } else {
-                      setData((prev) => ({
-                        ...prev,
-                        hotel: "",
-                      }));
+                }}
+                isClearable
+              />
+              <label className="form-label-styled">Teléfono</label>
+              <input
+                required
+                type="text"
+                name="client_phone"
+                value={data.client_phone}
+                onChange={handleChange}
+                className="mb-2 form-input-styled"
+              />
+              <label className="form-label-styled">Correo electrónico</label>
+              <input
+                type="text"
+                name="client_mail"
+                value={data.client_mail}
+                onChange={handleChange}
+                className="mb-2 form-input-styled"
+              />
+              <label className="form-label-styled">Comentarios</label>
+              <input
+                type="text"
+                name="comments"
+                value={data.comments}
+                onChange={handleChange}
+                className="mb-2 form-input-styled"
+              />
+              <button
+                className="booking-button"
+                type="button"
+                onClick={() => setStep(2)}
+              >
+                Continuar
+              </button>
+            </section>
+          )}
+          {step === 2 && (
+            <section>
+              <h3 className="booking-form-title">Información de servicio</h3>
+              {(product.id_servicio === "2" || product.id_servicio === "3") && (
+                <>
+                  <label className="form-label-styled">
+                    Lugar del hospedaje
+                  </label>
+                  <CreatableSelect
+                    classNamePrefix="select"
+                    placeholder="Buscar o escribir..."
+                    className="my-2"
+                    styles={{
+                      control: (provided) => ({
+                        ...provided,
+                        height: "45px",
+                        minHeight: "45px",
+                        borderRadius: "8px",
+                      }),
+                      valueContainer: (provided) => ({
+                        ...provided,
+                        height: "45px",
+                        padding: "0 8px",
+                      }),
+                      indicatorsContainer: (provided) => ({
+                        ...provided,
+                        height: "45px",
+                      }),
+                    }}
+                    options={hotel.map((hotel) => ({
+                      value: hotel.nombre,
+                      label: hotel.nombre,
+                    }))}
+                    value={
+                      data.hotel
+                        ? {
+                            value: data.hotel,
+                            label: data.hotel,
+                          }
+                        : null
                     }
-                  }}
-                  onCreateOption={(inputValue) => {
-                    // Cuando el usuario escribe un nombre nuevo
-                    setData((prev) => ({
-                      ...prev,
-                      hotel: inputValue,
-                    }));
-                  }}
-                  isClearable
-                />
-                <label className="form-label-styled">Fecha de inicio</label>
-                <input
-                  type="date"
-                  name="start_date"
-                  value={data.start_date}
-                  onChange={handleChange}
-                  className="mb-3 form-input-styled"
-                />
-                <div className="grid-form">
-                  <div className="grid-item">
-                    <label className="form-label-styled">Horario de tour</label>
-                    <input
-                      type="time"
-                      name="hora"
-                      value={data.hora}
-                      onChange={handleChange}
-                      className="mb-2 form-input-styled"
-                    />
-                  </div>
-                  <div className="grid-item">
-                    <label className="form-label-styled">Pickup</label>
-                    <input
-                      type="time"
-                      name="pickup"
-                      value={data.pickup}
-                      onChange={handleChange}
-                      className="mb-2 form-input-styled"
-                    />
-                  </div>
-                  <div className="grid-item">
-                    <label className="form-label-styled">Adultos</label>
-                    <input
-                      type="number"
-                      min="2"
-                      value={String(adultos)}
-                      onChange={(e) => handleNumericChange(e, setAdultos)}
-                      onFocus={(e) => e.target.select()}
-                      className="mb-2 form-input-styled"
-                    />
-                  </div>
-                  <div className="grid-item">
-                    <label className="form-label-styled">Menores</label>
-                    <input
-                      type="number"
-                      min="0"
-                      value={String(menores)}
-                      onChange={(e) => handleNumericChange(e, setMenores)}
-                      onFocus={(e) => e.target.select()}
-                      className="mb-2 form-input-styled"
-                    />
-                  </div>
-                  <div className="grid-item">
-                    <label className="form-label-styled">Infantes</label>
-                    <input
-                      type="number"
-                      name="infantes"
-                      value={data.infantes}
-                      onChange={handleChange}
-                      className="mb-2 form-input-styled"
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-            {product.id_servicio === "1" && (
-              <>
-                <div className="d-flex gap-3 mb-3 pt-2">
-                  <div class="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="categoria_transporte"
-                      id="sencillo"
-                      value="1"
-                      checked={data.categoria_transporte === "1"}
-                      onChange={handleChange}
-                    />
-                    <label className="form-check-label" htmlFor="sencillo">
-                      Sencillo
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="categoria_transporte"
-                      id="redondo"
-                      value="2"
-                      checked={data.categoria_transporte === "2"}
-                      onChange={handleChange}
-                    />
-                    <label className="form-check-label" htmlFor="redondo">
-                      Redondo
-                    </label>
-                  </div>
-                </div>
-                <label className="form-label-styled">
-                  Lugar del hospedaje *
-                </label>
-                <CreatableSelect
-                  classNamePrefix="select"
-                  placeholder="Buscar o escribir..."
-                  options={hotel.map((hotel) => ({
-                    value: hotel.nombre,
-                    label: hotel.nombre
-                  }))}
-                  value={
-                    data.hotel
-                      ? {
-                          value: data.hotel,
-                          label: data.hotel,
-                        }
-                      : null
-                  }
-                  onChange={(selectedOption) => {
-                    if (selectedOption) {
-                      setData((prev) => ({
-                        ...prev,
-                        hotel: selectedOption.value,
-                      }));
-                    } else {
-                      setData((prev) => ({
-                        ...prev,
-                        hotel: "",
-                      }));
-                    }
-                  }}
-                  onCreateOption={(inputValue) => {
-                    setData((prev) => ({
-                      ...prev,
-                      hotel: inputValue,
-                    }));
-                  }}
-                  isClearable
-                />
-                {data.categoria_transporte === "1" && (
-                  <>
-                    <label className="form-label-styled">
-                      Fecha de inicio *
-                    </label>
-                    <input
-                      type="date"
-                      name="start_date"
-                      value={data.start_date}
-                      onChange={handleChange}
-                      className="mb-3 form-input-styled"
-                    />
-                    <label className="form-label-styled">Tipo de viaje *</label>
-                    <Select
-                      className="basic-single py-2 mb-2 select-height"
-                      classNamePrefix="select"
-                      name="tipo_viaje"
-                      value={options.find(
-                        (opt) => opt.value === data.tipo_viaje
-                      )}
-                      onChange={(selected) =>
-                        setData({ ...data, tipo_viaje: selected.value })
+                    onChange={(selectedOption) => {
+                      if (selectedOption) {
+                        setData((prev) => ({
+                          ...prev,
+                          hotel: selectedOption.value,
+                        }));
+                      } else {
+                        setData((prev) => ({
+                          ...prev,
+                          hotel: "",
+                        }));
                       }
-                      options={options}
-                    />
-                  </>
-                )}
-                {data.categoria_transporte === "2" && (
+                    }}
+                    onCreateOption={(inputValue) => {
+                      setData((prev) => ({
+                        ...prev,
+                        hotel: inputValue,
+                      }));
+                    }}
+                    isClearable
+                  />
+                  <label className="form-label-styled">Fecha de inicio</label>
+                  <input
+                    type="date"
+                    name="start_date"
+                    value={data.start_date}
+                    onChange={handleChange}
+                    className="mb-3 form-input-styled"
+                  />
                   <div className="grid-form">
                     <div className="grid-item">
-                      <label className="form-label-styled">
-                        Fecha de inicio *
-                      </label>
-                      <input
-                        type="date"
-                        name="start_date"
-                        value={data.start_date}
-                        onChange={handleChange}
-                        className="mb-3 form-input-styled"
-                      />
-                    </div>
-                    <div className="grid-item">
-                      <label className="form-label-styled">
-                        Fecha de fin *
-                      </label>
-                      <input
-                        type="date"
-                        name="end_date"
-                        value={data.end_date}
-                        onChange={handleChange}
-                        className="mb-3 form-input-styled"
-                      />
-                    </div>
-                  </div>
-                )}
-                <h3 className="py-2">Información de viaje</h3>
-                {data.categoria_transporte === "1" && (
-                  <>
-                    <label className="form-label-styled">Número de vuelo</label>
-                    <input
-                      type="text"
-                      name="numero_vuelo"
-                      value={data.numero_vuelo}
-                      onChange={handleChange}
-                      className="mb-3 form-input-styled"
-                    />
-                    <div className="grid-form">
-                      <div className="grid-item">
-                        <label className="form-label-styled">
-                          Hora de llegada
-                        </label>
-                        <input
-                          type="time"
-                          name="hora_llegada"
-                          value={data.hora_llegada}
-                          onChange={handleChange}
-                          className="mb-2 form-input-styled"
-                        />
-                      </div>
-                      <div className="grid-item">
-                        <label className="form-label-styled">Pickup</label>
-                        <input
-                          type="time"
-                          name="pickup"
-                          value={data.pickup}
-                          onChange={handleChange}
-                          className="mb-2 form-input-styled"
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
-                {data.categoria_transporte === "2" && (
-                  <div className="grid-form">
-                    <div className="grid-item">
-                      <label className="form-label-styled">
-                        Número de vuelo
-                      </label>
-                      <input
-                        type="text"
-                        name="numero_vuelo"
-                        value={data.numero_vuelo}
-                        onChange={handleChange}
-                        className="mb-3 form-input-styled"
-                      />
-                    </div>
-                    <div className="grid-item">
-                      <label className="form-label-styled">
-                        Número de salida de vuelo
-                      </label>
-                      <input
-                        type="text"
-                        name="numero_vuelo_salida"
-                        value={data.numero_vuelo_salida}
-                        onChange={handleChange}
-                        className="mb-3 form-input-styled"
-                      />
-                    </div>
-                    <div className="grid-item">
-                      <label className="form-label-styled">
-                        Hora de llegada
-                      </label>
+                      <label>Horario de tour</label>
                       <input
                         type="time"
-                        name="hora_llegada"
-                        value={data.hora_llegada}
+                        name="hora"
+                        value={data.hora}
                         onChange={handleChange}
                         className="mb-2 form-input-styled"
                       />
                     </div>
                     <div className="grid-item">
-                      <label className="form-label-styled">Pickup</label>
+                      <label>Pickup</label>
                       <input
                         type="time"
                         name="pickup"
@@ -686,157 +492,302 @@ export default function Booking() {
                       />
                     </div>
                     <div className="grid-item">
-                      <label className="form-label-styled">
-                        Hora de salida
-                      </label>
+                      <label>Adultos</label>
                       <input
-                        type="time"
-                        name="hora_salida"
-                        value={data.hora_salida}
-                        onChange={handleChange}
+                        type="number"
+                        min="2"
+                        value={String(adultos)}
+                        onChange={(e) => handleNumericChange(e, setAdultos)}
                         className="mb-2 form-input-styled"
                       />
                     </div>
                     <div className="grid-item">
-                      <label className="form-label-styled">
-                        Pickup de salida
-                      </label>
+                      <label>Menores</label>
                       <input
-                        type="time"
-                        name="pickup_salida"
-                        value={data.pickup_salida}
+                        type="number"
+                        min="0"
+                        value={String(menores)}
+                        onChange={(e) => handleNumericChange(e, setMenores)}
+                        className="mb-2 form-input-styled"
+                      />
+                    </div>
+                    <div className="grid-item">
+                      <label>Infantes</label>
+                      <input
+                        type="number"
+                        name="infantes"
+                        value={data.infantes}
                         onChange={handleChange}
                         className="mb-2 form-input-styled"
                       />
                     </div>
                   </div>
-                )}
-                <div className="grid-form">
-                  <div className="grid-item">
-                    <label className="form-label-styled">Adultos</label>
-                    <input
-                      type="number"
-                      min="2"
-                      value={String(adultos)}
-                      onChange={(e) => handleNumericChange(e, setAdultos)}
-                      onFocus={(e) => e.target.select()}
-                      className="mb-2 form-input-styled"
-                    />
-                  </div>
-                  <div className="grid-item">
-                    <label className="form-label-styled">Menores</label>
-                    <input
-                      type="number"
-                      min="0"
-                      value={String(menores)}
-                      onChange={(e) => handleNumericChange(e, setMenores)}
-                      onFocus={(e) => e.target.select()}
-                      className="mb-2 form-input-styled"
-                    />
-                  </div>
-                  <div className="grid-item">
-                    <label className="form-label-styled">Infantes</label>
-                    <input
-                      type="number"
-                      name="infantes"
-                      value={data.infantes}
-                      onChange={handleChange}
-                      className="mb-2 form-input-styled"
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-            <div className="grid-form mb-3">
-              <button
-                className="booking-button-cancel"
-                onClick={() => setStep(1)}
-              >
-                Atrás
-              </button>
-              <button className="booking-button" onClick={() => setStep(3)}>
-                Continuar
-              </button>
-            </div>
-          </section>
-        )}
-        {step === 3 && (
-          <section className="booking-steps-content">
-            <h3>Información de tarifa</h3>
-            <p style={{ fontSize: 17 }}>Tarifa de tipo: {rate?.rate_title}</p>
-            {ratesData && (
-              <>
-                <p style={{ fontSize: 17 }}>
-                  Total:{" "}
-                  <span className="rate-price">
-                    ${parseFloat(ratesData.total).toFixed(2)} {rate?.moneda}
-                  </span>
-                </p>
-                <div className="form-check mb-2">
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    id="editarTotal"
-                    checked={editarTotal}
-                    onChange={(e) => setEditarTotal(e.target.checked)}
-                  />
-                  <label className="form-check-label" htmlFor="editarTotal">
-                    Editar total
-                  </label>
-                </div>
-                {editarTotal && (
-                  <div className="mb-2">
-                    <label className="form-label-styled">
-                      Total personalizado
-                    </label>
-                    <input
-                      type="number"
-                      name="total"
-                      value={data.total}
-                      onChange={handleChange}
-                      className="form-input-styled"
-                      min="0"
-                      step="0.01"
-                    />
-                  </div>
-                )}
-              </>
-            )}
-            <label className="form-label-styled">Método de pago *</label>
-            <Select
-              className="basic-single py-2 mb-2 select-height"
-              classNamePrefix="select"
-              name="tipo_viaje"
-              value={optionsPayment.find(
-                (opt) => opt.value === data.method_payment
+                </>
               )}
-              onChange={(selected) =>
-                setData({ ...data, method_payment: selected.value })
-              }
-              options={optionsPayment}
-            />
-            <label className="form-label-styled">Referencia *</label>
-            <input
-              type="text"
-              name="referenciaPago"
-              value={data.referenciaPago}
-              onChange={handleChange}
-              className="mb-2 form-input-styled"
-            />
-            <div className="grid-form mb-3">
-              <button
-                className="booking-button-cancel"
-                onClick={() => setStep(2)}
-              >
-                Atrás
-              </button>
-              <button type="submit" className="booking-button">
-                Confirmar
-              </button>
-            </div>
-          </section>
-        )}
-      </form>
+              {product.id_servicio === "1" && (
+                <>
+                  <fieldset>
+                    <legend>Tipo de transporte</legend>
+                    <label>
+                      <input
+                        type="radio"
+                        name="categoria_transporte"
+                        value="1"
+                        checked={data.categoria_transporte === "1"}
+                        onChange={handleChange}
+                      />
+                      Sencillo
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="categoria_transporte"
+                        value="2"
+                        checked={data.categoria_transporte === "2"}
+                        onChange={handleChange}
+                      />
+                      Redondo
+                    </label>
+                  </fieldset>
+
+                  <label>Lugar del hospedaje</label>
+                  <CreatableSelect /* props */ />
+                  {data.categoria_transporte === "1" && (
+                    <>
+                      <label>Fecha de inicio</label>
+                      <input
+                        type="date"
+                        name="start_date"
+                        value={data.start_date}
+                        onChange={handleChange}
+                      />
+
+                      <label>Tipo de viaje</label>
+                      <Select /* props */ />
+                    </>
+                  )}
+                  {data.categoria_transporte === "2" && (
+                    <div>
+                      <div>
+                        <label>Fecha de inicio</label>
+                        <input
+                          type="date"
+                          name="start_date"
+                          value={data.start_date}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div>
+                        <label>Fecha de fin</label>
+                        <input
+                          type="date"
+                          name="end_date"
+                          value={data.end_date}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                  )}
+                  <h4>Información de viaje</h4>
+                  <div>
+                    <label>Número de vuelo</label>
+                    <input
+                      type="text"
+                      name="numero_vuelo"
+                      value={data.numero_vuelo}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div>
+                    <label>Hora de llegada</label>
+                    <input
+                      type="time"
+                      name="hora_llegada"
+                      value={data.hora_llegada}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label>Pickup</label>
+                    <input
+                      type="time"
+                      name="pickup"
+                      value={data.pickup}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  {data.categoria_transporte === "2" && (
+                    <>
+                      <div>
+                        <label>Número de salida de vuelo</label>
+                        <input
+                          type="text"
+                          name="numero_vuelo_salida"
+                          value={data.numero_vuelo_salida}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div>
+                        <label>Hora de salida</label>
+                        <input
+                          type="time"
+                          name="hora_salida"
+                          value={data.hora_salida}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div>
+                        <label>Pickup de salida</label>
+                        <input
+                          type="time"
+                          name="pickup_salida"
+                          value={data.pickup_salida}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+              {/* <div>
+                <div>
+                  <label>Adultos</label>
+                  <input
+                    type="number"
+                    min="2"
+                    value={String(adultos)}
+                    onChange={(e) => handleNumericChange(e, setAdultos)}
+                  />
+                </div>
+                <div>
+                  <label>Menores</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={String(menores)}
+                    onChange={(e) => handleNumericChange(e, setMenores)}
+                  />
+                </div>
+                <div>
+                  <label>Infantes</label>
+                  <input
+                    type="number"
+                    name="infantes"
+                    value={data.infantes}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div> */}
+              <footer className="grid-form mb-3">
+                <button
+                  className="booking-button-cancel"
+                  type="button"
+                  onClick={() => setStep(1)}
+                >
+                  Atrás
+                </button>
+                <button
+                  className="booking-button"
+                  type="button"
+                  onClick={() => setStep(3)}
+                >
+                  Continuar
+                </button>
+              </footer>
+            </section>
+          )}
+          {step === 3 && (
+            <section className="py-2">
+              <h3 className="booking-form-title">Información de tarifa</h3>
+              <p>Tarifa de tipo: {rate?.rate_title}</p>
+              {ratesData && (
+                <>
+                  <p>
+                    Total:{" "}
+                    <span className="rate-price">
+                      ${parseFloat(ratesData.total).toFixed(2)} {rate?.moneda}
+                    </span>
+                  </p>
+                  <div className="form-check mb-2">
+                    <input
+                      type="checkbox"
+                      id="editarTotal"
+                      checked={editarTotal}
+                      onChange={(e) => setEditarTotal(e.target.checked)}
+                      className="form-check-input"
+                    />
+                    <label className="form-check-label" htmlFor="editarTotal">
+                      Editar total
+                    </label>
+                  </div>
+                  {editarTotal && (
+                    <div className="mb-2">
+                      <label className="form-label-styled">
+                        Total personalizado
+                      </label>
+                      <input
+                        type="number"
+                        name="total"
+                        value={data.total}
+                        onChange={handleChange}
+                        className="form-input-styled"
+                        min="0"
+                        step="0.01"
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+              <label className="form-label-styled">Método de pago</label>
+              <Select
+                required
+                className="basic-single py-2 my-2 select-height"
+                styles={{
+                  control: (provided) => ({
+                    ...provided,
+                    height: "45px",
+                    minHeight: "45px",
+                    borderRadius: "8px",
+                  }),
+                  valueContainer: (provided) => ({
+                    ...provided,
+                    height: "45px",
+                    padding: "0 8px",
+                  }),
+                  indicatorsContainer: (provided) => ({
+                    ...provided,
+                    height: "45px",
+                  }),
+                }}
+                classNamePrefix="select"
+                name="tipo_viaje"
+                value={optionsPayment.find(
+                  (opt) => opt.value === data.method_payment
+                )}
+                onChange={(selected) =>
+                  setData({ ...data, method_payment: selected.value })
+                }
+                options={optionsPayment}
+              />
+              <label className="form-label-styled">Referencia</label>
+              <input
+                type="text"
+                name="referenciaPago"
+                value={data.referenciaPago}
+                onChange={handleChange}
+                className="mb-2 form-input-styled"
+              />
+              <footer className="grid-form mb-3">
+                <button className="booking-button-cancel" type="button" onClick={() => setStep(2)}>
+                  Atrás
+                </button>
+                <button className="booking-button" type="submit">Confirmar</button>
+              </footer>
+            </section>
+          )}
+        </form>
+      </main>
     </div>
   );
 }

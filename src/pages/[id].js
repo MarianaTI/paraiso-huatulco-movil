@@ -40,7 +40,7 @@ export default function ProductDetail({ tour: tourProps }) {
   };
 
   return (
-    <section className="m-4">
+    <section className="p-4">
       <div>
         <h1 className="title mt-4">{tour.name}.</h1>
         <div className="my-4" style={{ width: "100%", height: 160 }}>

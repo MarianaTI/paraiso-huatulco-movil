@@ -38,7 +38,7 @@ const Layout = ({ children }) => {
       <div
         style={{
           backgroundColor: "#f8f8f8",
-          minHeight: "calc(100vh - 72.75px)",
+          // minHeight: "calc(100vh - 72.75px)",
         }}
       >
         {children}

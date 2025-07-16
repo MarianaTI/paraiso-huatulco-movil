@@ -449,8 +449,8 @@ a {
 
 .step-dot {
   border-radius: 50%;
-  height: 40px;
-  width: 40px;
+  height: 35px;
+  width: 35px;
   background-color: #e6edff;
   cursor: default;
   transition: background-color 0.3s ease;
@@ -458,14 +458,14 @@ a {
   justify-content: center;
   align-items: center;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 600;
   color: #000f9f;
 }
 
 .step-dot.active {
   background-color: #3B71FE;
   color: #fff;
-  font-weight: 800;
+  font-weight: 600;
   font-size: 18px;
 }
 
@@ -495,8 +495,21 @@ a {
 
 /* BOOKING STYLE */
 
+.button-back {
+  border: none;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 20px;
+  color: #1f1f1f;
+  background-color: #eee;
+}
+
 .booking-title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
 }
 
@@ -507,20 +520,24 @@ a {
 }
 
 .booking-text-product {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
 }
 
 .booking-text-cat {
   font-size: 18px;
   color: rgb(94, 111, 146);
   font-weight: 500;
+  text-align: center;
 }
 
 .booking-button {
   background-color: #000f9f;
   color: #fff;
-  height: 50px;
+  height: 55px;
+  width: 100%;
   border-radius: 8px;
   border: none;
   margin-top: 16px;
@@ -542,7 +559,7 @@ a {
 .booking-button-cancel {
   background-color: #dfe1f3;
   color: #000f9f;
-  height: 50px;
+  height: 55px;
   border-radius: 8px;
   border: none;
   margin-top: 16px;
@@ -572,14 +589,24 @@ a {
 .booking-steps-content {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   margin-top: 8px;
+  /* background-color: #012664; */
+  height: 100%;
 }
 
-.booking-steps-content h3 {
+.booking-form-title {
   font-size: 22px;
   font-weight: 700;
   color: rgb(90, 88, 101);
   margin-bottom: 16px;
+}
+
+.form-design {
+  background-color: #fff;
+  margin-top: 16px;
+  padding: 24px;
+  height: calc(100vh - 257px);
 }
 
 .form-label-styled {
@@ -592,6 +619,7 @@ a {
   -webkit-box-orient:
     vertical;
   line-height: normal;
+  padding-bottom: 4px;
 }
 
 .form-input-styled {
