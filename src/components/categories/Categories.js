@@ -3,7 +3,7 @@ import React from "react";
 
 const Categories = () => {
   return (
-    <div className="my-4">
+    <div className="container-styled mt-3">
       <Link href="/tour" className="w-100 cat-container-a">
         <div className="cat-container">
           Tours
@@ -15,7 +15,7 @@ const Categories = () => {
         </div>
       </Link>
       <Link href="/rent" className="w-100 cat-container-a">
-        <div className="col-12 cat-container">Rentas de vehículo</div>
+        <div className="col-12 cat-container">Rentas</div>
       </Link >
     </div>
   );

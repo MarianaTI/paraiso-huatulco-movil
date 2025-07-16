@@ -12,9 +12,11 @@ import { GoPlus } from "react-icons/go";
 import { motion } from "framer-motion";
 import HotelRepo from "@/infraestructure/implementation/httpRequest/axios/HotelRepo";
 import GetAllHotelUseCase from "@/application/usecases/GetAllHotelUseCase";
+import { useSelector } from "react-redux";
 
 export default function Home() {
   const router = useRouter();
+  const user = useSelector((state) => state.user);
   const [tours, setTours] = useState([]);
   const [clients, setClients] = useState([]);
   const [products, setProducts] = useState({
@@ -131,20 +133,23 @@ export default function Home() {
   return (
     <section>
       <div className="container-main">
-        <h1 className="title">Selecciona el servicio</h1>
+        <h1 className="title m-0 p-0">
+          Hola, {user?.nombre_comercial || "Cargando..."}
+        </h1>
+        <span>Bienvenido de vuelta</span>
+      </div>
+      <div className="container-section">
+        <h3>Selecciona el servicio</h3>
         <span>
           Elige el servicio que necesitas para continuar con tu reserva y dar el
           siguiente paso.
         </span>
-      </div>
-      <div className="container-section">
-        <span className="all-services">Todos los servicios</span>
+        {/* <p className="all-services mt-3">Todos los servicios</p> */}
         {!isOnline && (
           <div className="alert alert-warning" role="alert">
             Estás en modo offline. Algunos datos pueden no estar actualizados.
           </div>
         )}
-        {/* Asegúrate de pasar 'tours' a 'Categories' si los necesita para filtrar o mostrar */}
         <Categories
           tours={tours}
           searchTerm={searchTerm}
@@ -159,7 +164,7 @@ export default function Home() {
         transition={{ duration: 0.3 }}
       >
         <div className="mx-4">
-          <h1 className="title">Top de productos</h1>
+          <h3 className="mt-4">Top de productos</h3>
           {loading ? (
             <div className="loader-container">
               <div className="loader"></div>
