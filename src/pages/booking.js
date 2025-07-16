@@ -700,9 +700,48 @@ export default function Booking() {
           {step === 3 && (
             <section className="py-2">
               <h3 className="booking-form-title">Información de tarifa</h3>
-              <p>Tarifa de tipo: {rate?.rate_title}</p>
+              <p className="form-label-styled">Tarifa de tipo: <strong>{rate?.rate_title}</strong></p>
+              <label className="form-label-styled">Método de pago</label>
+              <Select
+                required
+                className="basic-single py-2 my-2 select-height"
+                styles={{
+                  control: (provided) => ({
+                    ...provided,
+                    height: "45px",
+                    minHeight: "45px",
+                    borderRadius: "8px",
+                  }),
+                  valueContainer: (provided) => ({
+                    ...provided,
+                    height: "45px",
+                    padding: "0 8px",
+                  }),
+                  indicatorsContainer: (provided) => ({
+                    ...provided,
+                    height: "45px",
+                  }),
+                }}
+                classNamePrefix="select"
+                name="tipo_viaje"
+                value={optionsPayment.find(
+                  (opt) => opt.value === data.method_payment
+                )}
+                onChange={(selected) =>
+                  setData({ ...data, method_payment: selected.value })
+                }
+                options={optionsPayment}
+              />
+              <label className="form-label-styled pt-3">Referencia</label>
+              <input
+                type="text"
+                name="referenciaPago"
+                value={data.referenciaPago}
+                onChange={handleChange}
+                className="mb-2 form-input-styled"
+              />
               {ratesData && (
-                <>
+                <div className="form-check-style">
                   <p>
                     Total:{" "}
                     <span className="rate-price">
@@ -737,52 +776,20 @@ export default function Booking() {
                       />
                     </div>
                   )}
-                </>
+                </div>
               )}
-              <label className="form-label-styled">Método de pago</label>
-              <Select
-                required
-                className="basic-single py-2 my-2 select-height"
-                styles={{
-                  control: (provided) => ({
-                    ...provided,
-                    height: "45px",
-                    minHeight: "45px",
-                    borderRadius: "8px",
-                  }),
-                  valueContainer: (provided) => ({
-                    ...provided,
-                    height: "45px",
-                    padding: "0 8px",
-                  }),
-                  indicatorsContainer: (provided) => ({
-                    ...provided,
-                    height: "45px",
-                  }),
-                }}
-                classNamePrefix="select"
-                name="tipo_viaje"
-                value={optionsPayment.find(
-                  (opt) => opt.value === data.method_payment
-                )}
-                onChange={(selected) =>
-                  setData({ ...data, method_payment: selected.value })
-                }
-                options={optionsPayment}
-              />
-              <label className="form-label-styled">Referencia</label>
-              <input
-                type="text"
-                name="referenciaPago"
-                value={data.referenciaPago}
-                onChange={handleChange}
-                className="mb-2 form-input-styled"
-              />
+
               <footer className="grid-form mb-3">
-                <button className="booking-button-cancel" type="button" onClick={() => setStep(2)}>
+                <button
+                  className="booking-button-cancel"
+                  type="button"
+                  onClick={() => setStep(2)}
+                >
                   Atrás
                 </button>
-                <button className="booking-button" type="submit">Confirmar</button>
+                <button className="booking-button" type="submit">
+                  Confirmar
+                </button>
               </footer>
             </section>
           )}
