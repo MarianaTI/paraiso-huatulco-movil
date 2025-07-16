@@ -51,7 +51,7 @@ export default function Navbar() {
           <Image
             src="https://www.2businesstravel.com/images/agencia_899/899_logo_agencia.webp"
             alt="Logo"
-            width={120}
+            width={126}
             height={54}
             style={{ padding: 12 }}
           />

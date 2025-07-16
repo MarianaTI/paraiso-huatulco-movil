@@ -13,8 +13,10 @@ import { motion } from "framer-motion";
 import HotelRepo from "@/infraestructure/implementation/httpRequest/axios/HotelRepo";
 import GetAllHotelUseCase from "@/application/usecases/GetAllHotelUseCase";
 import { useSelector } from "react-redux";
+import Product from "@/components/card/Product";
 
 export default function Home() {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const user = useSelector((state) => state.user);
   const [tours, setTours] = useState([]);
@@ -126,10 +128,6 @@ export default function Home() {
 
   const [openCategory, setOpenCategory] = useState(null);
 
-  const toggleCategory = (categoria) => {
-    setOpenCategory(openCategory === categoria ? null : categoria);
-  };
-
   return (
     <section>
       <div className="container-main">
@@ -141,8 +139,7 @@ export default function Home() {
       <div className="container-section">
         <h3>Selecciona el servicio</h3>
         <span>
-          Elige el servicio que necesitas para continuar con tu reserva y dar el
-          siguiente paso.
+          Elige el servicio que necesitas para continuar.
         </span>
         {/* <p className="all-services mt-3">Todos los servicios</p> */}
         {!isOnline && (
@@ -164,50 +161,33 @@ export default function Home() {
         transition={{ duration: 0.3 }}
       >
         <div className="mx-4">
-          <h3 className="mt-4">Top de productos</h3>
+          <h3 className="mt-4">Productos más vendidos</h3>
           {loading ? (
             <div className="loader-container">
               <div className="loader"></div>
             </div>
           ) : (
-            <div className="collapse-container">
+            <div>
               {Object.entries(products).map(([categoria, items]) => (
-                <div key={categoria} className="collapse-line">
-                  <div
-                    onClick={() => toggleCategory(categoria)}
-                    className="collapse-button"
-                  >
-                    <span className="collapse-title">
-                      {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
-                    </span>
-                    <span className="collapse-title">
-                      {openCategory === categoria ? (
-                        <MdKeyboardArrowUp />
-                      ) : (
-                        <MdKeyboardArrowDown />
-                      )}
-                    </span>
+                <div key={categoria}>
+                  <p className="collapse-title">{categoria}</p>
+                  <div>
+                    {items.map((item, index) => (
+                      <Product
+                        key={index}
+                        cat={item?.categoria_nombre}
+                        title={item?.nombre}
+                        price={item?.price_day}
+                        currency={item.rates?.[0]?.moneda || "MXN"}
+                        img={
+                          item.multimedias?.[0]?.path
+                            ? `${apiUrl}/images/multimedia/${item.multimedias[0].path}`
+                            : "/logo.png"
+                        }
+                        onClick={() => router.push(`/${item.product_code}`)}
+                      />
+                    ))}
                   </div>
-                  {openCategory === categoria && (
-                    <div className="px-4 py-2 collapse-content">
-                      {items.map((item, idx) => (
-                        <div
-                          key={idx}
-                          className={`py-3 d-flex justify-content-between align-items-center ${
-                            idx !== items.length - 1 ? "collapse-line" : ""
-                          }`}
-                        >
-                          <span className="font-medium">{item.nombre}</span>
-                          <button
-                            className="product-button"
-                            onClick={() => router.push(`/${item.product_code}`)}
-                          >
-                            <GoPlus />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
               ))}
             </div>

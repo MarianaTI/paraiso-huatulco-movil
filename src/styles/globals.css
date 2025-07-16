@@ -867,56 +867,12 @@ a {
   color: #1f1f1f;
 }
 
-/* select {
-  width: 50px;
- 
-}
-option {
-width: 50px;
-white-space:pre-wrap;
-word-wrap: break-word;
-} */
-
 /* TOP PRODUCTS */
-
-.collapse-container {
-  border: 1px solid #eee;
-  box-shadow: 1px 2px 7px #c3c3c360;
-  border-radius: 8px;
-  background-color: #fff;
-}
-
-.collapse-content {
-  background-color: #f8f8f8;
-}
-
-.collapse-line {
-  border-bottom: 1px solid #eee;
-}
 
 .collapse-title {
   font-size: 16px;
   font-weight: 600;
-  padding: 0 10px;
-}
-
-.collapse-button {
-  padding: 0 12px;
-  height: 55px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.product-button {
-  border: none;
-  background: #000f9f;
-  font-size: 15px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  height: 30px;
-  color: #fff;
+  text-transform: uppercase;
+  margin-top: 18px;
+  color: #000f9f;
 }
