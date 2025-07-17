@@ -22,7 +22,7 @@ export default function Navbar() {
       bsOffcanvas.hide();
     }
   };
-  
+
   const LogOut = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("clients");
@@ -64,11 +64,15 @@ export default function Navbar() {
           aria-labelledby="offcanvasNavbarLabel"
         >
           <div className="offcanvas-header mt-3 mx-2">
-            <Link href="/home" className="navbar-brand" onClick={closeOffcanvas}>
+            <Link
+              href="/home"
+              className="navbar-brand"
+              onClick={closeOffcanvas}
+            >
               <Image
                 src="https://www.2businesstravel.com/images/agencia_899/899_logo_agencia.webp"
                 alt="Logo"
-                width={124}
+                width={130}
                 height={36}
               />
             </Link>
@@ -92,10 +96,12 @@ export default function Navbar() {
           <div className="offcanvas-body d-flex flex-column justify-content-between  nav-design">
             <ul className="navbar-nav">
               <li className="nav-item nav-item-design">
-                <TbLayoutDashboard
-                  style={{ height: 18, width: 18, color: "#575757" }}
-                />
-                <Link href="/home" className="nav-link" onClick={closeOffcanvas}>
+                <Link
+                  href="/home"
+                  className="nav-link w-100 d-flex gap-2 align-items-center"
+                  onClick={closeOffcanvas}
+                >
+                  <TbLayoutDashboard className="nav-icon" />
                   Inicio
                 </Link>
               </li>
@@ -114,19 +120,34 @@ export default function Navbar() {
                   <span className="ms-2 span-nav">Servicios</span>
                 </a>
 
-                <ul className="dropdown-menu navdrop-desing" aria-labelledby="navbarDropdown">
+                <ul
+                  className="dropdown-menu navdrop-desing"
+                  aria-labelledby="navbarDropdown"
+                >
                   <li className="nav-item nav-item-design p-left">
-                    <Link href="/tour" className="dropdown-item" onClick={closeOffcanvas}>
+                    <Link
+                      href="/tour"
+                      className="dropdown-item"
+                      onClick={closeOffcanvas}
+                    >
                       Tours
                     </Link>
                   </li>
                   <li className="nav-item nav-item-design p-left">
-                    <Link href="/transfer" className="dropdown-item" onClick={closeOffcanvas}>
+                    <Link
+                      href="/transfer"
+                      className="dropdown-item"
+                      onClick={closeOffcanvas}
+                    >
                       Traslados
                     </Link>
                   </li>
                   <li className="nav-item nav-item-design p-left">
-                    <Link href="/rent" className="dropdown-item" onClick={closeOffcanvas}>
+                    <Link
+                      href="/rent"
+                      className="dropdown-item"
+                      onClick={closeOffcanvas}
+                    >
                       Rentas de vehículos
                     </Link>
                   </li>
@@ -134,16 +155,22 @@ export default function Navbar() {
               </li>
 
               <li className="nav-item nav-item-design">
-                <LuTags style={{ height: 20, width: 18, color: "#575757" }} />
-                <Link href="/sales" className="nav-link" onClick={closeOffcanvas}>
+                <Link
+                  href="/sales"
+                  className="nav-link w-100 d-flex gap-2 align-items-center"
+                  onClick={closeOffcanvas}
+                >
+                  <LuTags className="nav-icon" />
                   Ventas
                 </Link>
               </li>
               <li className="nav-item nav-item-design">
-                <TbBuilding
-                  style={{ height: 20, width: 18, color: "#575757" }}
-                />
-                <Link href="/agency" className="nav-link" onClick={closeOffcanvas}>
+                <Link
+                  href="/agency"
+                  className="nav-link w-100 d-flex gap-2 align-items-center"
+                  onClick={closeOffcanvas}
+                >
+                  <TbBuilding className="nav-icon" />
                   Agencias
                 </Link>
               </li>

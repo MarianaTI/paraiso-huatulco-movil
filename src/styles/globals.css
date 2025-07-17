@@ -90,7 +90,13 @@ a {
   color: #000f9f;
 }
 
-.nav-item-design:hover a, .nav-item-design:hover  span{
+.nav-icon {
+  color: #575757;
+}
+
+.nav-item-design:hover .nav-link,
+.nav-item-design:hover .nav-link .nav-icon,
+.nav-item-design:hover .nav-link span {
   color: #000f9f;
 }
 
@@ -271,6 +277,11 @@ a {
     1px solid hsla(200, 10%, 50%, 100);
   margin:
     0 0 0 8px;
+}
+
+.dropdown-item:hover {
+  background-color: transparent !important;
+  color: #000f9f !important;
 }
 
 .form-style {
