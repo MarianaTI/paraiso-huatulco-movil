@@ -323,7 +323,7 @@ export default function Booking() {
                   }),
                 }}
                 classNamePrefix="select"
-                className="my-2"
+                className="my-2 pb-2"
                 placeholder="Buscar o escribir cliente..."
                 options={clients.map((client) => ({
                   value: client.pasajero_titular,
@@ -415,7 +415,7 @@ export default function Booking() {
                   <CreatableSelect
                     classNamePrefix="select"
                     placeholder="Buscar o escribir..."
-                    className="my-2"
+                    className="my-2 pb-2"
                     styles={{
                       control: (provided) => ({
                         ...provided,
@@ -530,159 +530,317 @@ export default function Booking() {
               )}
               {product.id_servicio === "1" && (
                 <>
-                  <fieldset>
-                    <legend>Tipo de transporte</legend>
-                    <label>
+                  <div className="d-flex gap-3 mb-3 pt-2">
+                    <div class="form-check">
                       <input
+                        className="form-check-input"
                         type="radio"
                         name="categoria_transporte"
+                        id="sencillo"
                         value="1"
                         checked={data.categoria_transporte === "1"}
                         onChange={handleChange}
                       />
-                      Sencillo
-                    </label>
-                    <label>
+                      <label className="form-check-label" htmlFor="sencillo">
+                        Sencillo
+                      </label>
+                    </div>
+                    <div class="form-check">
                       <input
+                        className="form-check-input"
                         type="radio"
                         name="categoria_transporte"
+                        id="redondo"
                         value="2"
                         checked={data.categoria_transporte === "2"}
                         onChange={handleChange}
                       />
-                      Redondo
-                    </label>
-                  </fieldset>
-
-                  <label>Lugar del hospedaje</label>
-                  <CreatableSelect /* props */ />
+                      <label className="form-check-label" htmlFor="redondo">
+                        Redondo
+                      </label>
+                    </div>
+                  </div>
+                  <label className="form-label-styled">
+                    Lugar del hospedaje *
+                  </label>
+                  <CreatableSelect
+                    classNamePrefix="select"
+                    placeholder="Buscar o escribir..."
+                    className="my-2 pb-2"
+                    styles={{
+                      control: (provided) => ({
+                        ...provided,
+                        height: "45px",
+                        minHeight: "45px",
+                        borderRadius: "8px",
+                      }),
+                      valueContainer: (provided) => ({
+                        ...provided,
+                        height: "45px",
+                        padding: "0 8px",
+                      }),
+                      indicatorsContainer: (provided) => ({
+                        ...provided,
+                        height: "45px",
+                      }),
+                    }}
+                    options={hotel.map((hotel) => ({
+                      value: hotel.nombre,
+                      label: hotel.nombre,
+                    }))}
+                    value={
+                      data.hotel
+                        ? {
+                            value: data.hotel,
+                            label: data.hotel,
+                          }
+                        : null
+                    }
+                    onChange={(selectedOption) => {
+                      if (selectedOption) {
+                        setData((prev) => ({
+                          ...prev,
+                          hotel: selectedOption.value,
+                        }));
+                      } else {
+                        setData((prev) => ({
+                          ...prev,
+                          hotel: "",
+                        }));
+                      }
+                    }}
+                    onCreateOption={(inputValue) => {
+                      setData((prev) => ({
+                        ...prev,
+                        hotel: inputValue,
+                      }));
+                    }}
+                    isClearable
+                  />
                   {data.categoria_transporte === "1" && (
                     <>
-                      <label>Fecha de inicio</label>
+                      <label className="form-label-styled">
+                        Fecha de inicio *
+                      </label>
                       <input
                         type="date"
                         name="start_date"
                         value={data.start_date}
                         onChange={handleChange}
+                        className="mb-3 form-input-styled"
                       />
-
-                      <label>Tipo de viaje</label>
-                      <Select /* props */ />
+                      <label className="form-label-styled">
+                        Tipo de viaje *
+                      </label>
+                      <Select
+                        className="basic-single py-2 mb-2 select-height"
+                        classNamePrefix="select"
+                        styles={{
+                          control: (provided) => ({
+                            ...provided,
+                            height: "45px",
+                            minHeight: "45px",
+                            borderRadius: "8px",
+                          }),
+                          valueContainer: (provided) => ({
+                            ...provided,
+                            height: "45px",
+                            padding: "0 8px",
+                          }),
+                          indicatorsContainer: (provided) => ({
+                            ...provided,
+                            height: "45px",
+                          }),
+                        }}
+                        name="tipo_viaje"
+                        value={options.find(
+                          (opt) => opt.value === data.tipo_viaje
+                        )}
+                        onChange={(selected) =>
+                          setData({ ...data, tipo_viaje: selected.value })
+                        }
+                        options={options}
+                      />
                     </>
                   )}
                   {data.categoria_transporte === "2" && (
-                    <div>
-                      <div>
-                        <label>Fecha de inicio</label>
+                    <div className="grid-form">
+                      <div className="grid-item">
+                        <label className="form-label-styled">
+                          Fecha de inicio *
+                        </label>
                         <input
                           type="date"
                           name="start_date"
                           value={data.start_date}
                           onChange={handleChange}
+                          className="mb-3 form-input-styled"
                         />
                       </div>
-                      <div>
-                        <label>Fecha de fin</label>
+                      <div className="grid-item">
+                        <label className="form-label-styled">
+                          Fecha de fin *
+                        </label>
                         <input
                           type="date"
                           name="end_date"
                           value={data.end_date}
                           onChange={handleChange}
+                          className="mb-3 form-input-styled"
                         />
                       </div>
                     </div>
                   )}
-                  <h4>Información de viaje</h4>
-                  <div>
-                    <label>Número de vuelo</label>
-                    <input
-                      type="text"
-                      name="numero_vuelo"
-                      value={data.numero_vuelo}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <div>
-                    <label>Hora de llegada</label>
-                    <input
-                      type="time"
-                      name="hora_llegada"
-                      value={data.hora_llegada}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <label>Pickup</label>
-                    <input
-                      type="time"
-                      name="pickup"
-                      value={data.pickup}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  {data.categoria_transporte === "2" && (
+                  <h3 className="py-2">Información de viaje</h3>
+                  {data.categoria_transporte === "1" && (
                     <>
-                      <div>
-                        <label>Número de salida de vuelo</label>
+                      <label className="form-label-styled">
+                        Número de vuelo
+                      </label>
+                      <input
+                        type="text"
+                        name="numero_vuelo"
+                        value={data.numero_vuelo}
+                        onChange={handleChange}
+                        className="mb-3 form-input-styled"
+                      />
+                      <div className="grid-form">
+                        <div className="grid-item">
+                          <label className="form-label-styled">
+                            Hora de llegada
+                          </label>
+                          <input
+                            type="time"
+                            name="hora_llegada"
+                            value={data.hora_llegada}
+                            onChange={handleChange}
+                            className="mb-2 form-input-styled"
+                          />
+                        </div>
+                        <div className="grid-item">
+                          <label className="form-label-styled">Pickup</label>
+                          <input
+                            type="time"
+                            name="pickup"
+                            value={data.pickup}
+                            onChange={handleChange}
+                            className="mb-2 form-input-styled"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {data.categoria_transporte === "2" && (
+                    <div className="grid-form">
+                      <div className="grid-item">
+                        <label className="form-label-styled">
+                          Número de vuelo
+                        </label>
+                        <input
+                          type="text"
+                          name="numero_vuelo"
+                          value={data.numero_vuelo}
+                          onChange={handleChange}
+                          className="mb-3 form-input-styled"
+                        />
+                      </div>
+                      <div className="grid-item">
+                        <label className="form-label-styled">
+                          Número de salida de vuelo
+                        </label>
                         <input
                           type="text"
                           name="numero_vuelo_salida"
                           value={data.numero_vuelo_salida}
                           onChange={handleChange}
+                          className="mb-3 form-input-styled"
                         />
                       </div>
-                      <div>
-                        <label>Hora de salida</label>
+                      <div className="grid-item">
+                        <label className="form-label-styled">
+                          Hora de llegada
+                        </label>
+                        <input
+                          type="time"
+                          name="hora_llegada"
+                          value={data.hora_llegada}
+                          onChange={handleChange}
+                          className="mb-2 form-input-styled"
+                        />
+                      </div>
+                      <div className="grid-item">
+                        <label className="form-label-styled">Pickup</label>
+                        <input
+                          type="time"
+                          name="pickup"
+                          value={data.pickup}
+                          onChange={handleChange}
+                          className="mb-2 form-input-styled"
+                        />
+                      </div>
+                      <div className="grid-item">
+                        <label className="form-label-styled">
+                          Hora de salida
+                        </label>
                         <input
                           type="time"
                           name="hora_salida"
                           value={data.hora_salida}
                           onChange={handleChange}
+                          className="mb-2 form-input-styled"
                         />
                       </div>
-                      <div>
-                        <label>Pickup de salida</label>
+                      <div className="grid-item">
+                        <label className="form-label-styled">
+                          Pickup de salida
+                        </label>
                         <input
                           type="time"
                           name="pickup_salida"
                           value={data.pickup_salida}
                           onChange={handleChange}
+                          className="mb-2 form-input-styled"
                         />
                       </div>
-                    </>
+                    </div>
                   )}
+                  <div className="grid-form">
+                    <div className="grid-item">
+                      <label className="form-label-styled">Adultos</label>
+                      <input
+                        type="number"
+                        min="2"
+                        value={String(adultos)}
+                        onChange={(e) => handleNumericChange(e, setAdultos)}
+                        onFocus={(e) => e.target.select()}
+                        className="mb-2 form-input-styled"
+                      />
+                    </div>
+                    <div className="grid-item">
+                      <label className="form-label-styled">Menores</label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={String(menores)}
+                        onChange={(e) => handleNumericChange(e, setMenores)}
+                        onFocus={(e) => e.target.select()}
+                        className="mb-2 form-input-styled"
+                      />
+                    </div>
+                    <div className="grid-item">
+                      <label className="form-label-styled">Infantes</label>
+                      <input
+                        type="number"
+                        name="infantes"
+                        value={data.infantes}
+                        onChange={handleChange}
+                        className="mb-2 form-input-styled"
+                      />
+                    </div>
+                  </div>
                 </>
               )}
-              {/* <div>
-                <div>
-                  <label>Adultos</label>
-                  <input
-                    type="number"
-                    min="2"
-                    value={String(adultos)}
-                    onChange={(e) => handleNumericChange(e, setAdultos)}
-                  />
-                </div>
-                <div>
-                  <label>Menores</label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={String(menores)}
-                    onChange={(e) => handleNumericChange(e, setMenores)}
-                  />
-                </div>
-                <div>
-                  <label>Infantes</label>
-                  <input
-                    type="number"
-                    name="infantes"
-                    value={data.infantes}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div> */}
+
               <footer className="grid-form mb-3">
                 <button
                   className="booking-button-cancel"
@@ -704,7 +862,9 @@ export default function Booking() {
           {step === 3 && (
             <section className="py-2">
               <h3 className="booking-form-title">Información de tarifa</h3>
-              <p className="form-label-styled">Tarifa de tipo: <strong>{rate?.rate_title}</strong></p>
+              <p className="form-label-styled">
+                Tarifa de tipo: <strong>{rate?.rate_title}</strong>
+              </p>
               <label className="form-label-styled">Método de pago</label>
               <Select
                 required
