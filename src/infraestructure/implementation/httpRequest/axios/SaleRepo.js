@@ -7,6 +7,7 @@ class SaleRepo extends ISaleRepo {
     constructor() {
         super();
         this.url = `${apiUrl}/pwa/getVentas`;
+        this.urlById = `${apiUrl}/pwa/success/A2R`;
     }
 
     async getAll(userId, page, search) {
@@ -15,6 +16,16 @@ class SaleRepo extends ISaleRepo {
             return response.data;
         } catch (error) {
             console.error("Error fetching las ventas:", error.message);
+            throw error;
+        }
+    }
+
+    async getById(id) {
+        try {
+            const response = await axios.get(`${this.urlById}${id}`);
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching la venta: ", error.message);
             throw error;
         }
     }

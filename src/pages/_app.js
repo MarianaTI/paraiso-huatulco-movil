@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@/styles/globals.css";
 import "@/styles/sales_custom.css";
 import "@/styles/login_custom.css";
+import "@/styles/confirmation_custom.css";
 import { useEffect } from "react";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
 import { Provider, useDispatch } from "react-redux";

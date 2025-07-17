@@ -97,6 +97,20 @@ module.exports = {
       },
     },    
     {
+      urlPattern: /^\/confirmation\/.*$/,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "confirmation-pages",
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 60 * 60 * 24 * 3,
+        },
+        cacheableResponse: {
+          statuses: [0, 200],
+        },
+      },
+    },    
+    {
       urlPattern: ({ request }) => request.destination === "document",
       handler: "CacheFirst",
       options: {

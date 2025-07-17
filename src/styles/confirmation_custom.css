@@ -1,0 +1,41 @@
+.product-name {
+    color: #012053;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.text-title {
+    color: #1f1f1f;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.download-btn {
+    background-color: #dfe1f3;
+    color: #000f9f;
+    height: 55px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 17px;
+}
+
+.btn-container {
+    /* background-color: antiquewhite; */
+    /* margin-bottom: 32px; */
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.back-btn {
+    background-color: #000f9f;
+    color: #fff;
+    height: 55px;
+    width: 100%;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 17px;
+}
