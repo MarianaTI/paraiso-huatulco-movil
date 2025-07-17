@@ -297,7 +297,7 @@ export default function Booking() {
         <form onSubmit={onSubmit} className="m-4">
           <section className="pt-3">
             <h2 className="booking-text-product">{product.name}</h2>
-            <p className="booking-text-cat">"{product.categoria_nombre}"</p>
+            <p className="booking-text-cat">{product.categoria_nombre}</p>
           </section>
           {step === 1 && (
             <section className="py-2">

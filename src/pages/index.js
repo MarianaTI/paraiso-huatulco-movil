@@ -2,7 +2,7 @@ import SignInUserUseCase from "@/application/usecases/SingInUseCase";
 import UserRepo from "@/infraestructure/implementation/httpRequest/axios/UserRepo";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/actions/userActions";
 import { FiEye, FiEyeOff } from "react-icons/fi";
@@ -17,6 +17,15 @@ const Login = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!isShowPassword);
   };
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const cookieUser = Cookies.get("user_session");
+
+    if (storedUser || cookieUser) {
+      router.replace("/home"); 
+    }
+  }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -40,6 +49,8 @@ const Login = () => {
           expires: 10,
           path: "/"
         });
+
+        localStorage.setItem("user", JSON.stringify(response));
 
         dispatch(setUser(response));
         router.push("/home");
