@@ -22,9 +22,9 @@ export default function Home() {
   const [tours, setTours] = useState([]);
   const [clients, setClients] = useState([]);
   const [products, setProducts] = useState({
-    traslados: [],
-    tours: [],
-    rentas: [],
+    Traslados: [],
+    Tours: [],
+    Rentas: [],
   });
   const [hotel, setHotel] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");

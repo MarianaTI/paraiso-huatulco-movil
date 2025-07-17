@@ -21,7 +21,7 @@ export default function Confirmation() {
       setIsOfflineReservation(true);
       return;
     }
-  
+
     if (id) {
       const fetchSale = async (id) => {
         try {
@@ -31,11 +31,11 @@ export default function Confirmation() {
           console.error("Error cargando la venta: ", error);
         }
       };
-  
+
       fetchSale(id);
     }
   }, [id]);
-  
+
   useEffect(() => {
     if (confirmation) {
       console.log("confirmation actualizado:", confirmation);
@@ -50,10 +50,10 @@ export default function Confirmation() {
     return (
       <div
         className="d-flex flex-column justify-content-center align-items-center text-center"
-        style={{ height: "80vh", padding: "2rem" }}
+        style={{ height: "calc(100vh - 82px)", padding: "2rem" }}
       >
         <Image
-          src="https://2businesstravel.com/images/agencia_899/favicon.png"
+          src="/favicon-paraisohuatulco.png"
           width={80}
           height={80}
           alt="Logo"
@@ -72,7 +72,12 @@ export default function Confirmation() {
     );
   }
 
-  if (!confirmation) return <p className="p-4">Cargando información...</p>;
+  if (!confirmation)
+    return (
+      <div className="loader-container">
+        <div class="loader"></div>
+      </div>
+    );
 
   if (confirmation)
     return (
