@@ -209,30 +209,34 @@ export default function Booking() {
         console.error("❌ Error al registrar sync:", err);
       }
 
-      alert(
-        "Sin conexión. Tu reserva se guardó y se enviará al recuperar la conexión."
-      );
-      router.push("/home");
+      // alert(
+      //   "Sin conexión. Tu reserva se guardó y se enviará al recuperar la conexión."
+      // );
+      router.push("/confirmation");
       return;
     }
 
     try {
       console.log("Reserva: ", bookingData);
 
-      // const response = await sendBooking(bookingData);
-      // setRent(response);
-      // if (
-      //   "serviceWorker" in navigator &&
-      //   "Notification" in window &&
-      //   Notification.permission === "granted"
-      // ) {
-      //   const reg = await navigator.serviceWorker.ready;
-      //   reg.showNotification("Reserva enviada", {
-      //     body: "Tu reserva fue registrada con éxito.",
-      //     icon: "/icon512_rounded.png",
-      //   });
-      // }
-      // router.push("/home");
+      const response = await sendBooking(bookingData);
+      setRent(response);
+      if (
+        "serviceWorker" in navigator &&
+        "Notification" in window &&
+        Notification.permission === "granted"
+      ) {
+        const reg = await navigator.serviceWorker.ready;
+        reg.showNotification("Reserva enviada", {
+          body: "Tu reserva fue registrada con éxito.",
+          icon: "/icon512_rounded.png",
+        });
+      }
+      if (response?.id_venta) {
+        router.push(`/confirmation?id=${response.id_venta}`);
+      } else {
+        router.push("/home");
+      }
     } catch (error) {
       console.log("Error en submit", error);
     }

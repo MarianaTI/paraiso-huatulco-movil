@@ -5,28 +5,78 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 export default function Confirmation() {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
   const router = useRouter();
+  const { id } = router.query;
+
   const [confirmation, setConfirmation] = useState(null);
+  const [isOfflineReservation, setIsOfflineReservation] = useState(false);
 
   const saleRepo = new SaleRepo();
   const getById = new GetByIdSaleUseCase(saleRepo);
 
-  const fetchSale = async (id) => {
-    try {
-      const response = await getById.run(701);
-      setConfirmation(response);
-    } catch (error) {
-      console.error("Error cargando la venta: ", error);
+  useEffect(() => {
+    if (!id) {
+      setIsOfflineReservation(true);
+      return;
     }
+  
+    if (id) {
+      const fetchSale = async (id) => {
+        try {
+          const response = await getById.run(id);
+          setConfirmation(response);
+        } catch (error) {
+          console.error("Error cargando la venta: ", error);
+        }
+      };
+  
+      fetchSale(id);
+    }
+  }, [id]);
+  
+  useEffect(() => {
+    if (confirmation) {
+      console.log("confirmation actualizado:", confirmation);
+    }
+  }, [confirmation]);
+
+  const backToHome = () => {
+    router.push("/home");
   };
 
-  useEffect(() => {
-    fetchSale();
-  }, []);
+  if (isOfflineReservation) {
+    return (
+      <div
+        className="d-flex flex-column justify-content-center align-items-center text-center"
+        style={{ height: "80vh", padding: "2rem" }}
+      >
+        <Image
+          src="https://2businesstravel.com/images/agencia_899/favicon.png"
+          width={80}
+          height={80}
+          alt="Logo"
+          className="mb-3"
+        />
+        <h2 className="fw-bold">¡Gracias por tu reservación!</h2>
+        <p className="text-muted">
+          No pudimos confirmar tu folio porque no tienes conexión a internet.
+          <br />
+          Tu reserva se guardó y será enviada automáticamente al reconectarte.
+        </p>
+        <button className="back-btn mt-4" onClick={backToHome}>
+          Volver al inicio
+        </button>
+      </div>
+    );
+  }
 
-  return (
-    <div className="d-flex flex-column" style={{ height: "calc(90vh)" }}>
-      {confirmation && (
+  if (!confirmation) return <p className="p-4">Cargando información...</p>;
+
+  if (confirmation)
+    return (
+      <div className="d-flex flex-column" style={{ height: "calc(90vh)" }}>
         <div>
           <main className="container pt-2 flex-grow-1 my-2">
             <header className="text-center mb-4">
@@ -75,15 +125,10 @@ export default function Confirmation() {
                     </li>
                     <li>
                       Teléfono:{" "}
-                      <strong>
-                        {confirmation.telefono ? confirmation.telefono : "N/A"}
-                      </strong>
+                      <strong>{confirmation.telefono || "N/A"}</strong>
                     </li>
                     <li>
-                      Correo:{" "}
-                      <strong>
-                        {confirmation.correo ? confirmation.correo : "N/A"}
-                      </strong>
+                      Correo: <strong>{confirmation.correo || "N/A"}</strong>
                     </li>
                   </ul>
                 </div>
@@ -94,7 +139,7 @@ export default function Confirmation() {
                       Fecha de servicio:{" "}
                       <strong>{confirmation.fecha_servicio}</strong>
                     </li>
-                    {confirmation.fecha_salida != null && (
+                    {confirmation.fecha_salida && (
                       <li>
                         Fecha de salida:{" "}
                         <strong>{confirmation.fecha_salida}</strong>
@@ -116,7 +161,7 @@ export default function Confirmation() {
                     <li>
                       Lugar de hospedaje: <strong>{confirmation.hotel}</strong>
                     </li>
-                    {confirmation.vuelo != null && (
+                    {confirmation.vuelo && (
                       <li>
                         Vuelo: <strong>{confirmation.vuelo}</strong>
                       </li>
@@ -130,11 +175,17 @@ export default function Confirmation() {
             </section>
           </main>
           <footer className="btn-container">
-            <button className="download-btn">Descargar</button>
-            <button className="back-btn">Volver al inicio</button>
+            <a
+              className="download-btn"
+              href={`${apiUrl}/pwa/view/${confirmation.id_venta}`}
+            >
+              Descargar
+            </a>
+            <button className="back-btn" onClick={backToHome}>
+              Volver al inicio
+            </button>
           </footer>
         </div>
-      )}
-    </div>
-  );
+      </div>
+    );
 }

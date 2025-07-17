@@ -21,8 +21,6 @@
 }
 
 .btn-container {
-    /* background-color: antiquewhite; */
-    /* margin-bottom: 32px; */
     padding: 0 24px;
     display: flex;
     flex-direction: column;
