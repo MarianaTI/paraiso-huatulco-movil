@@ -381,6 +381,7 @@ export default function Booking() {
               />
               <label className="form-label-styled">Correo electrónico</label>
               <input
+                required
                 type="text"
                 name="client_mail"
                 value={data.client_mail}
@@ -413,6 +414,7 @@ export default function Booking() {
                     Lugar del hospedaje
                   </label>
                   <CreatableSelect
+                    required
                     classNamePrefix="select"
                     placeholder="Buscar o escribir..."
                     className="my-2 pb-2"
@@ -468,6 +470,7 @@ export default function Booking() {
                   />
                   <label className="form-label-styled">Fecha de inicio</label>
                   <input
+                    required
                     type="date"
                     name="start_date"
                     value={data.start_date}
@@ -478,6 +481,7 @@ export default function Booking() {
                     <div className="grid-item">
                       <label>Horario de tour</label>
                       <input
+                        required
                         type="time"
                         name="hora"
                         value={data.hora}
@@ -488,6 +492,7 @@ export default function Booking() {
                     <div className="grid-item">
                       <label>Pickup</label>
                       <input
+                        required
                         type="time"
                         name="pickup"
                         value={data.pickup}
@@ -564,6 +569,7 @@ export default function Booking() {
                     Lugar del hospedaje *
                   </label>
                   <CreatableSelect
+                    required
                     classNamePrefix="select"
                     placeholder="Buscar o escribir..."
                     className="my-2 pb-2"
@@ -623,6 +629,7 @@ export default function Booking() {
                         Fecha de inicio *
                       </label>
                       <input
+                        required
                         type="date"
                         name="start_date"
                         value={data.start_date}
@@ -633,6 +640,7 @@ export default function Booking() {
                         Tipo de viaje *
                       </label>
                       <Select
+                        required
                         className="basic-single py-2 mb-2 select-height"
                         classNamePrefix="select"
                         styles={{
@@ -670,6 +678,7 @@ export default function Booking() {
                           Fecha de inicio *
                         </label>
                         <input
+                          required
                           type="date"
                           name="start_date"
                           value={data.start_date}
@@ -682,6 +691,7 @@ export default function Booking() {
                           Fecha de fin *
                         </label>
                         <input
+                          required
                           type="date"
                           name="end_date"
                           value={data.end_date}
@@ -698,6 +708,7 @@ export default function Booking() {
                         Número de vuelo
                       </label>
                       <input
+                        required
                         type="text"
                         name="numero_vuelo"
                         value={data.numero_vuelo}
@@ -710,6 +721,7 @@ export default function Booking() {
                             Hora de llegada
                           </label>
                           <input
+                            required
                             type="time"
                             name="hora_llegada"
                             value={data.hora_llegada}
@@ -720,6 +732,7 @@ export default function Booking() {
                         <div className="grid-item">
                           <label className="form-label-styled">Pickup</label>
                           <input
+                            required
                             type="time"
                             name="pickup"
                             value={data.pickup}
@@ -737,6 +750,7 @@ export default function Booking() {
                           Número de vuelo
                         </label>
                         <input
+                          required
                           type="text"
                           name="numero_vuelo"
                           value={data.numero_vuelo}
@@ -749,6 +763,7 @@ export default function Booking() {
                           Número de salida de vuelo
                         </label>
                         <input
+                          required
                           type="text"
                           name="numero_vuelo_salida"
                           value={data.numero_vuelo_salida}
@@ -761,6 +776,7 @@ export default function Booking() {
                           Hora de llegada
                         </label>
                         <input
+                          required
                           type="time"
                           name="hora_llegada"
                           value={data.hora_llegada}
@@ -771,6 +787,7 @@ export default function Booking() {
                       <div className="grid-item">
                         <label className="form-label-styled">Pickup</label>
                         <input
+                          required
                           type="time"
                           name="pickup"
                           value={data.pickup}
@@ -783,6 +800,7 @@ export default function Booking() {
                           Hora de salida
                         </label>
                         <input
+                          required
                           type="time"
                           name="hora_salida"
                           value={data.hora_salida}
@@ -795,6 +813,7 @@ export default function Booking() {
                           Pickup de salida
                         </label>
                         <input
+                          required
                           type="time"
                           name="pickup_salida"
                           value={data.pickup_salida}
