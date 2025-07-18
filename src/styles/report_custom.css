@@ -1,0 +1,54 @@
+.card-container {
+  background-color: #fff;
+  margin-bottom: 24px;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.card-title p {
+  margin: 0;
+}
+
+.card-title p:first-child {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.card-title p:last-child {
+  font-weight: 600;
+  color: #5e6f92;
+}
+
+.card-title {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+}
+
+.card-content {
+  padding-bottom: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  row-gap: 2px;
+}
+
+.label {
+  font-weight: 500;
+  font-size: 12px;
+  color: #5e6f92;
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.title-grid-card {
+  font-size: 14px;
+  font-weight: 600;
+  /* color: #5e6f92; */
+  text-transform: uppercase;
+  color: #1f1f1f;
+  margin: 0;
+  padding-bottom: 6px;
+}

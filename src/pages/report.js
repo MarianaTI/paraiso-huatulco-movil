@@ -35,9 +35,20 @@ export default function Report() {
   }, []);
 
   return (
-    <div className="p-4" style={{ height: "calc(100vh - 82px)" }}>
-      <h1 className="title m-0">Ventas</h1>
+    <div className="p-4">
+      <h1 className="title m-0">Reportes</h1>
       <span className="description">Reporte de ventas por agente</span>
+      <form className="d-flex flex-column">
+        <label>Vendedor</label>
+        <input type="text" />
+        <label>Servicio</label>
+        <input type="text" />
+        <label>Fecha de servicio</label>
+        <input type="date" />
+      </form>
+      <main className="my-4">
+        <button>Descargar</button>
+      </main>
       <div className="my-4 pb-4">
         {report.map((item, index) => {
           const rate_es = item.rates?.find((rate) => rate.type == "1");
@@ -48,7 +59,6 @@ export default function Report() {
             ? parseFloat(rate_menor.price_day)
             : 0;
 
-          // Clasificación de pagos
           const pagos = item.pagos || [];
 
           const totalEfectivo = pagos
@@ -87,44 +97,59 @@ export default function Report() {
           const fechaServicio = item.fechaServicio
             ? new Date(item.fechaServicio).toLocaleDateString("es-MX")
             : "";
-
           return (
-            <section key={index}>
-              <div>
-                <h1>{item.agente}</h1>
-                <h2>{item.servicio}</h2>
+            <section className="card-container" key={index}>
+              <div className="card-title">
+                <p>{item.agente}</p>
+                <p>{item.servicio}</p>
               </div>
-              <div>
-                <h3>Pasajeros</h3>
-                <span>Adultos: {item.adultos}</span>
-                <span>Menores: {item.menores}</span>
-                <span>Infantes: {item.infantes}</span>
+              <h3 className="title-grid-card mt-3">Pasajeros</h3>
+              <div className="card-content">
+                <span className="label">Adultos:</span>
+                <span className="label">Menores:</span>
+                <span className="label">Infantes:</span>
+
+                <span className="value">{item.adultos}</span>
+                <span className="value">{item.menores}</span>
+                <span className="value">{item.infantes}</span>
               </div>
-              <div>
-                <h3>Tarifa</h3>
-                <span>Adultos: {formatter.format(rate_adult)}</span>
-                <span>Menores: {formatter.format(rate_menor_value)}</span>
+
+              <h3 className="title-grid-card">Tarifa</h3>
+              <div className="card-content">
+                <span className="label">Adultos:</span>
+                <span className="label">Menores:</span>
+                <span></span>
+                <span className="value">{formatter.format(rate_adult)}</span>
+                <span className="value">
+                  {formatter.format(rate_menor_value)}
+                </span>
               </div>
-              <div>
-                <h3>Forma de pago</h3>
-                <span>Efectivo: {formatter.format(totalEfectivo)}</span>
-                <span>Tarjeta: {formatter.format(totalTarjeta)}</span>
-                <span>Transferencia: {formatter.format(totalTransfer)}</span>
+              <h3 className="title-grid-card">Forma de pago</h3>
+              <div className="card-content">
+              <span className="label">Efectivo:</span>
+              <span className="label">Tarjeta:</span>
+              <span className="label">Transferencia:</span>
+                <span>{formatter.format(totalEfectivo)}</span>
+                <span>{formatter.format(totalTarjeta)}</span>
+                <span>{formatter.format(totalTransfer)}</span>
                 <span>Leisures: {formatter.format(totalLeisures)}</span>
                 <span>Cupones: {formatter.format(totalCupones)}</span>
                 <span>Otros: {formatter.format(totalOtros)}</span>
               </div>
+              <hr />
               <div>
-                <span>Total pagado: {formatter.format(totalPagado)}</span>
-              </div>
-              <div>
-                <span>Comisión: {formatter.format(comision)}</span>
-              </div>
-              <div>
-                <span>Fecha de servicio: {fechaServicio}</span>
-              </div>
-              <div>
-                <span>Observaciones: {item.observaciones}</span>
+                <div>
+                  <span>Total pagado: {formatter.format(totalPagado)}</span>
+                </div>
+                <div>
+                  <span>Comisión: {formatter.format(comision)}</span>
+                </div>
+                <div>
+                  <span>Fecha de servicio: {fechaServicio}</span>
+                </div>
+                <div>
+                  <span>Observaciones: {item.observaciones}</span>
+                </div>
               </div>
             </section>
           );
