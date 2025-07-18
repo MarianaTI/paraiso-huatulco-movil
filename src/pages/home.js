@@ -26,6 +26,7 @@ export default function Home() {
     Tours: [],
     Rentas: [],
   });
+  const [topProducts, setTopProducts] = useState([]);
   const [hotel, setHotel] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
@@ -128,6 +129,19 @@ export default function Home() {
 
   const [openCategory, setOpenCategory] = useState(null);
 
+  useEffect(() => {
+    const topData = localStorage.getItem("top");
+
+    if (topData) {
+      try {
+        const parsedTop = JSON.parse(topData);
+        setTopProducts(parsedTop);
+      } catch (error) {
+        console.error("Error al parsear productos top desde localStorage:", error);
+      }
+    }
+  }, []);
+
   return (
     <section>
       <div className="container-main">
@@ -168,7 +182,7 @@ export default function Home() {
             </div>
           ) : (
             <div>
-              {Object.entries(products).map(([categoria, items]) => (
+              {Object.entries(topProducts).map(([categoria, items]) => (
                 <div key={categoria}>
                   <p className="collapse-title">{categoria}</p>
                   <div>
