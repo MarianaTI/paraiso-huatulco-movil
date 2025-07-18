@@ -72,6 +72,7 @@ const Login = () => {
           width={158}
           height={60}
           style={{ padding: 12, marginBottom: 24 }}
+          priority
         />
         <h1 className="title p-0 text-center">Inicio de sesión</h1>
         <span className="description">

@@ -174,6 +174,16 @@ export default function Navbar() {
                   Agencias
                 </Link>
               </li>
+              <li className="nav-item nav-item-design">
+                <Link
+                  href="/report"
+                  className="nav-link w-100 d-flex gap-2 align-items-center"
+                  onClick={closeOffcanvas}
+                >
+                  <TbBuilding className="nav-icon" />
+                  Reportes
+                </Link>
+              </li>
             </ul>
           </div>
           <button className="log-out-button" onClick={LogOut}>
