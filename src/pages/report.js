@@ -9,6 +9,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 export default function Report() {
   const [report, setReport] = useState([]);
   const [vendedor, setVendedor] = useState([]);
+  const [services, setServices] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   const getToday = () => {
@@ -60,7 +61,21 @@ export default function Report() {
       }));
       setVendedor(optionMapped);
     } catch (error) {
-      console.error("Error fetching las ventas:", error.message);
+      console.error("Error fetching los vendedores:", error.message);
+      throw error;
+    }
+  };
+
+  const fetchServices = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/tipoServicios/serviciosapi/`);
+      const optionMapped = response.data.map((service) => ({
+        label: service.tipo_servicio,
+        value: service.id_servicio,
+      }));
+      setServices(optionMapped);
+    } catch (error) {
+      console.error("Error fetching los servicios:", error.message);
       throw error;
     }
   };
@@ -80,6 +95,7 @@ export default function Report() {
 
   useEffect(() => {
     fetchVendedores();
+    fetchServices();
     if (params.start) {
       fetchReports();
     }
@@ -94,11 +110,6 @@ export default function Report() {
     );
   });
 
-  const options = [
-    { value: "HA", label: "Hotel - Aeropuerto/Terminal" },
-    { value: "AH", label: "Aeropuerto/Terminal - Hotel" },
-  ];
-
   return (
     <div className="p-4">
       <h1 className="title m-0">Reportes</h1>
@@ -108,7 +119,7 @@ export default function Report() {
           {params.start &&
             (() => {
               const [year, month, day] = params.start.split("-").map(Number);
-              const date = new Date(year, month - 1, day); // mes empieza desde 0
+              const date = new Date(year, month - 1, day); 
               return date
                 .toLocaleDateString("es-MX", {
                   weekday: "long",
@@ -178,11 +189,12 @@ export default function Report() {
                 }),
               }}
               name="servicio"
-              value={options.find((opt) => opt.value === params.servicio)}
+              value={services.find((opt) => opt.value === params.servicio)}
               onChange={(selected) =>
-                setParams({ ...params, servicio: selected.value })
+                setParams({ ...params, servicio: selected ? selected.value : 0 })
               }
-              options={options}
+              options={services}
+              isClearable
             />
           </div>
         </div>
