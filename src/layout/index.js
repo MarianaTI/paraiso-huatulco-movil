@@ -26,7 +26,7 @@ const Layout = ({ children }) => {
     return (
       <div className="d-flex justify-content-center align-items-center">
         <div className="loader-container">
-          <div class="loader"></div>
+          <div className="loader"></div>
         </div>
       </div>
     );
@@ -38,7 +38,7 @@ const Layout = ({ children }) => {
       <div
         style={{
           backgroundColor: "#f8f8f8",
-          // minHeight: "calc(100vh - 72.75px)",
+          minHeight: "calc(100vh - 82px)",
         }}
       >
         {children}

@@ -536,7 +536,7 @@ export default function Booking() {
               {product.id_servicio === "1" && (
                 <>
                   <div className="d-flex gap-3 mb-3 pt-2">
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
                         className="form-check-input"
                         type="radio"
@@ -550,7 +550,7 @@ export default function Booking() {
                         Sencillo
                       </label>
                     </div>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
                         className="form-check-input"
                         type="radio"

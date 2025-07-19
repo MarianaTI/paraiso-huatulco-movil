@@ -135,7 +135,7 @@ export default function Sales() {
               <div className="sale-container">
                 {loading ? (
                   <div className="loader-container">
-                    <div class="loader"></div>
+                    <div className="loader"></div>
                   </div>
                 ) : (
                   sales.map((item, index) => (

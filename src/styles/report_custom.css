@@ -2,7 +2,6 @@
   background-color: #fff;
   margin-bottom: 24px;
   border-radius: 8px;
-  padding: 16px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
 }
 
@@ -21,38 +20,92 @@
 
 .card-title p:last-child {
   font-weight: 600;
-  color: #5e6f92;
+  /* color: #5e6f92; */
+  color: #3b71fe;
 }
 
 .card-title {
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-  padding: 8px 0;
+  padding: 12px;
 }
 
 .card-content {
-  padding-bottom: 12px;
+  padding: 0 12px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto auto;
-  row-gap: 2px;
 }
 
 .label {
-  font-weight: 500;
+  font-weight: 600;
   font-size: 12px;
-  color: #5e6f92;
+  color: #9f9f9f;
 }
 
 .value {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .title-grid-card {
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 700;
   color: #1f1f1f;
-  margin: 0;
-  padding-bottom: 6px;
+  margin: 12px 0 6px 0;
+}
+
+.footer-section-card {
+  background-color: #f3f6ff;
+  padding: 12px;
+  border-radius: 0 0 8px 8px;
+}
+
+.footer-section-card .title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1f1f1f;
+  padding: 0;
+  margin-bottom: 6px;
+}
+
+.footer-section-card .text {
+  font-size: 14px;
+  color: #1f1f1f;
+  padding: 0;
+  margin-bottom: 4px;
+  font-weight: 400;
+}
+
+.form-input-styled-report {
+  width: 100%;
+  height: 40px;
+  padding: 0 8px;
+  font-size: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-top: 6px;
+  outline: none;
+}
+
+.form-input-styled-report:active,
+.form-input-styled-report:focus {
+  border: 1px solid #000f9f;
+}
+
+.date-style {
+  color: #000f9f;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.booking-button-report {
+  background-color: #000f9f;
+  color: #fff;
+  height: 45px;
+  width: 60%;
+  border-radius: 8px;
+  border: none;
+  margin-top: 24px;
+  font-weight: 600;
+  font-size: 13px;
 }
