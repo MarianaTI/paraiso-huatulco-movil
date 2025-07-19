@@ -52,6 +52,10 @@ export default function Report() {
     console.log("response", response);
   };
 
+  const downloadReport = async () => {
+    return `${apiUrl}`;
+  }
+
   const fetchVendedores = async () => {
     try {
       const response = await axios.get(`${apiUrl}/ventas/getAgentesParaiso`);
@@ -220,7 +224,7 @@ export default function Report() {
             }}
           />
         </div>
-        <button className="booking-button-report">Descargar</button>
+        <a className="booking-button-report" href={`${apiUrl}/pwa/pdfVentasDiaAgente?start=${params.start}&end=${params.start}&servicio=${params.servicio}&idu=${params.vendedor}`}>Descargar</a>
       </main>
       <div className="my-4">
         {filteredReports.length === 0 ? (
