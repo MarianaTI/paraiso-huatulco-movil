@@ -1,11 +1,16 @@
 import GetAllReportUseCase from "@/application/usecases/ReportUseCase/GetAllReportUseCase";
 import ReportRepo from "@/infraestructure/implementation/httpRequest/axios/ReportRepo";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Report() {
   const [report, setReport] = useState([]);
+  const [vendedor, setVendedor] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+
   const getToday = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -16,8 +21,8 @@ export default function Report() {
   const [params, setParams] = useState({
     start: getToday(),
     end: getToday(),
-    servicio: "",
     vendedor: "",
+    servicio: "",
   });
 
   const formatter = new Intl.NumberFormat("es-MX", {
@@ -32,18 +37,32 @@ export default function Report() {
     const data = {
       start: params.start,
       end: params.end,
-      servicio: params.servicio || 0,
       idu: params.vendedor || 0,
+      servicio: params.servicio || 0,
     };
 
     const response = await getAllReportUseCase.run(
       data.start,
       data.end,
+      data.idu,
       data.servicio,
-      data.idu
     );
     setReport(response);
     console.log("response", response);
+  };
+
+  const fetchVendedores = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/ventas/getAgentesParaiso`);
+      const optionMapped = response.data.map((vendedor) => ({
+        label: vendedor.nombre_usuario,
+        value: vendedor.id_user,
+      }));
+      setVendedor(optionMapped);
+    } catch (error) {
+      console.error("Error fetching las ventas:", error.message);
+      throw error;
+    }
   };
 
   const handleChange = (e) => {
@@ -60,6 +79,7 @@ export default function Report() {
   };
 
   useEffect(() => {
+    fetchVendedores();
     if (params.start) {
       fetchReports();
     }
@@ -126,11 +146,12 @@ export default function Report() {
                 }),
               }}
               name="vendedor"
-              value={options.find((opt) => opt.value === params.vendedor)}
+              value={vendedor.find((opt) => opt.value === params.vendedor)}
               onChange={(selected) =>
-                setParams({ ...params, vendedor: selected.value })
+                setParams({ ...params, vendedor: selected ? selected.value : 0 })
               }
-              options={options}
+              options={vendedor}
+              isClearable
             />
           </div>
           <div className="grid-item">
@@ -191,7 +212,10 @@ export default function Report() {
       </main>
       <div className="my-4">
         {filteredReports.length === 0 ? (
-          <div className="text-center text-muted py-4" style={{height: "100%"}}>
+          <div
+            className="text-center text-muted py-4"
+            style={{ height: "100%" }}
+          >
             <p className="mb-0">No se encontraron reportes.</p>
           </div>
         ) : (
