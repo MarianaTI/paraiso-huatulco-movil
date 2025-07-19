@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { TbLayoutDashboard, TbBuilding } from "react-icons/tb";
 import { LuTags, LuLogOut } from "react-icons/lu";
 import { MdOutlineTour } from "react-icons/md";
+import { HiOutlineDocument } from "react-icons/hi2";
 import { useEffect } from "react";
 
 export default function Navbar() {
@@ -180,7 +181,7 @@ export default function Navbar() {
                   className="nav-link w-100 d-flex gap-2 align-items-center"
                   onClick={closeOffcanvas}
                 >
-                  <TbBuilding className="nav-icon" />
+                  <HiOutlineDocument className="nav-icon" />
                   Reportes
                 </Link>
               </li>
