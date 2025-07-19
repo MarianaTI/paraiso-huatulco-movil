@@ -3,6 +3,11 @@
   margin-bottom: 24px;
   border-radius: 8px;
   padding: 16px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+}
+
+.card-container hr {
+  color: rgba(0, 0, 0, 0.3);
 }
 
 .card-title p {
@@ -46,7 +51,6 @@
 .title-grid-card {
   font-size: 14px;
   font-weight: 600;
-  /* color: #5e6f92; */
   text-transform: uppercase;
   color: #1f1f1f;
   margin: 0;

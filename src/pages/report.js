@@ -126,29 +126,35 @@ export default function Report() {
               </div>
               <h3 className="title-grid-card">Forma de pago</h3>
               <div className="card-content">
-              <span className="label">Efectivo:</span>
-              <span className="label">Tarjeta:</span>
-              <span className="label">Transferencia:</span>
-                <span>{formatter.format(totalEfectivo)}</span>
-                <span>{formatter.format(totalTarjeta)}</span>
-                <span>{formatter.format(totalTransfer)}</span>
-                <span>Leisures: {formatter.format(totalLeisures)}</span>
-                <span>Cupones: {formatter.format(totalCupones)}</span>
-                <span>Otros: {formatter.format(totalOtros)}</span>
+                <span className="label">Efectivo:</span>
+                <span className="label">Tarjeta:</span>
+                <span className="label">Transferencia:</span>
+                <span className="value">{formatter.format(totalEfectivo)}</span>
+                <span className="value">{formatter.format(totalTarjeta)}</span>
+                <span className="value">{formatter.format(totalTransfer)}</span>
+                <span className="label pt-2">Leisures:</span>
+                <span className="label pt-2">Cupones:</span>
+                <span className="label pt-2">Otros:</span>
+                <span className="value">{formatter.format(totalLeisures)}</span>
+                <span className="value">{formatter.format(totalCupones)}</span>
+                <span className="value">{formatter.format(totalOtros)}</span>
               </div>
-              <hr />
-              <div>
-                <div>
-                  <span>Total pagado: {formatter.format(totalPagado)}</span>
+              <hr className="m-0"/>
+              <div className="mt-2">
+                <div className="d-flex justify-content-between">
+                  <span className="title-grid-card">Total pagado:</span>
+                  <span>{formatter.format(totalPagado)}</span>
                 </div>
-                <div>
-                  <span>Comisión: {formatter.format(comision)}</span>
+                <div className="d-flex justify-content-between">
+                  <span className="title-grid-card">Comisión:</span>
+                  <span>{formatter.format(comision)}</span>
                 </div>
-                <div>
+                {/* <div>
                   <span>Fecha de servicio: {fechaServicio}</span>
-                </div>
-                <div>
-                  <span>Observaciones: {item.observaciones}</span>
+                </div> */}
+                <div className="d-flex justify-content-between">
+                  <span className="title-grid-card">Observaciones:</span>
+                  <span>{item.observaciones}</span>
                 </div>
               </div>
             </section>
