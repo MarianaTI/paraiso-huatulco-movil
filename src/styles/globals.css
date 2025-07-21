@@ -759,10 +759,18 @@ a {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding: 24px;
+}
+
+.offline-page-title {
+  font-weight: 700;
+  color: #1f1f1f;
 }
 
 .offline-page-description {
   text-align: center;
+  line-height: normal;
+  color: #575757;
 }
 
 /* SALES PAGE */
