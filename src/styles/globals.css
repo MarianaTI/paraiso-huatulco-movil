@@ -751,6 +751,20 @@ a {
   }
 }
 
+/* OFFLINE PAGE */
+
+.offline-page-container {
+  height: calc(100vh - 82px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.offline-page-description {
+  text-align: center;
+}
+
 /* SALES PAGE */
 
 .sale-container {
