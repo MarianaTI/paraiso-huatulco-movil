@@ -762,7 +762,7 @@ a {
 
 .sale-style {
   border-radius: 8px;
-  padding: 16px;
+  padding: 12px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
   background-color: #fff;
 }
@@ -900,11 +900,11 @@ a {
 }
 
 .agency-container h6 {
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .agency-name {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: #1f1f1f;
 }

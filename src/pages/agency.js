@@ -24,7 +24,7 @@ export default function Agency() {
   return (
     <div className="p-4">
       <h1 className="title m-0">Agencias</h1>
-      <div className="mt-3">
+      <div className="mt-1">
         <span className="all-services">
           Mostrando {agency.length} resultados
         </span>
@@ -34,18 +34,18 @@ export default function Agency() {
               <section>
                 <div className="sale-data-container">
                   <h6 className="agency-name">{item?.name}</h6>
-                  <span style={{color: "#5E5873"}}># {index + 1}</span>
+                  {/* <span style={{color: "#5E5873"}}># {index + 1}</span> */}
                 </div>
                 <div className="agency-container">
                   <div>
                     <span className="all-services">Margen de venta</span>
-                    <h6 className="pt-2">
+                    <h6>
                       {item?.sales_margin ? item?.sales_margin : "N/A"} %
                     </h6>
                   </div>
                   <div>
                     <span className="all-services">Margen de venta pesos</span>
-                    <h6 className="pt-2">
+                    <h6>
                       {item?.sales_margin_pesos &&
                       item?.sales_margin_pesos !== "N/A"
                         ? `$ ${item.sales_margin_pesos}`
