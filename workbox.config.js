@@ -97,6 +97,34 @@ module.exports = {
       },
     },    
     {
+      urlPattern: /^\/report\/.*$/,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "report-pages",
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 60 * 60 * 24 * 3,
+        },
+        cacheableResponse: {
+          statuses: [0, 200],
+        },
+      },
+    },    
+    {
+      urlPattern: /^\/agency\/.*$/,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "agency-pages",
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 60 * 60 * 24 * 3,
+        },
+        cacheableResponse: {
+          statuses: [0, 200],
+        },
+      },
+    },    
+    {
       urlPattern: /^\/confirmation\/.*$/,
       handler: "CacheFirst",
       options: {
