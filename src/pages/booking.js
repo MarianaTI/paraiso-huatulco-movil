@@ -69,6 +69,9 @@ export default function Booking() {
     total: "",
     vendedor_referenciado: "",
     zona_hotel: "",
+    metodo_pago: "",
+    referencia_pago: "",
+    referencia_ota: ""
   });
 
   useEffect(() => {
@@ -183,7 +186,7 @@ export default function Booking() {
       rate_code: rate.rate_code,
       hora: data.hora ? `${data.hora}:00` : product.horario,
       total: editarTotal ? String(data.total) : String(ratesData.total),
-      notas: notas,
+      notas: JSON.stringify(notas),
     };
 
     if ("Notification" in window && Notification.permission !== "granted") {
@@ -192,6 +195,9 @@ export default function Booking() {
         console.warn("❌ Usuario no permitió las notificaciones.");
       }
     }
+    
+    console.log("Datos antes de guardar offline:", JSON.stringify(bookingData));
+    console.log("¿Hay internet?", navigator.onLine);
 
     if (!navigator.onLine) {
       console.log("Estado de conexión en navigator.onLine:", navigator.onLine);

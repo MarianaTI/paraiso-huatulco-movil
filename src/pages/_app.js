@@ -41,21 +41,21 @@ export default function App({ Component, pageProps }) {
   }, []);
 
   // Escuchar mensajes del service worker (opcional)
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      const handleMessage = async (event) => {
-        if (event.data?.type === "SYNC_BOOKINGS") {
-          await sendOfflineBookingsToServer(); // Implementa esta función si no existe
-        }
-      };
+  // useEffect(() => {
+  //   if ("serviceWorker" in navigator) {
+  //     const handleMessage = async (event) => {
+  //       if (event.data?.type === "SYNC_BOOKINGS") {
+  //         await sendOfflineBookingsToServer(); // Implementa esta función si no existe
+  //       }
+  //     };
 
-      navigator.serviceWorker.addEventListener("message", handleMessage);
+  //     navigator.serviceWorker.addEventListener("message", handleMessage);
 
-      return () => {
-        navigator.serviceWorker.removeEventListener("message", handleMessage);
-      };
-    }
-  }, []);
+  //     return () => {
+  //       navigator.serviceWorker.removeEventListener("message", handleMessage);
+  //     };
+  //   }
+  // }, []);
 
   // 🔄 Forzar sincronización cuando vuelves a estar online
   useEffect(() => {
