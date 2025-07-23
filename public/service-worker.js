@@ -5,6 +5,27 @@ importScripts(
 workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
 
 workbox.routing.registerRoute(
+  ({ request }) => request.mode === "navigate",
+  new workbox.strategies.NetworkFirst({
+    cacheName: "spa-pages",
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 20,
+        maxAgeSeconds: 7 * 24 * 60 * 60,
+      }),
+    ],
+  })
+);
+
+self.addEventListener("fetch", (event) => {
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match("/index.html"))
+    );
+  }
+});
+
+workbox.routing.registerRoute(
   /^https:\/\/admindemo\.paraisohuatulco\.com\/admin\/products\/getProductsMovil/,
   new workbox.strategies.CacheFirst({
     cacheName: "products-cache",
