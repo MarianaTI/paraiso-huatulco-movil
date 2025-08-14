@@ -71,7 +71,9 @@ export default function Booking() {
     zona_hotel: "",
     metodo_pago: "",
     referencia_pago: "",
-    referencia_ota: ""
+    referencia_ota: "",
+    aerolinea: "",
+    // aeropuerto: "",
   });
 
   useEffect(() => {
@@ -195,7 +197,7 @@ export default function Booking() {
         console.warn("❌ Usuario no permitió las notificaciones.");
       }
     }
-    
+
     console.log("Datos antes de guardar offline:", JSON.stringify(bookingData));
     console.log("¿Hay internet?", navigator.onLine);
 
@@ -708,6 +710,24 @@ export default function Booking() {
                     </div>
                   )}
                   <h3 className="py-2">Información de viaje</h3>
+                  <label className="form-label-styled">Aerolinea</label>
+                  <input
+                    required
+                    type="text"
+                    name="aerolinea"
+                    value={data.aerolinea}
+                    onChange={handleChange}
+                    className="mb-3 form-input-styled"
+                  />
+                  {/* <label className="form-label-styled">Aeropuerto</label>
+                  <input
+                    required
+                    type="text"
+                    name="aeropuerto"
+                    value={data.aeropuerto}
+                    onChange={handleChange}
+                    className="mb-3 form-input-styled"
+                  /> */}
                   {data.categoria_transporte === "1" && (
                     <>
                       <label className="form-label-styled">
@@ -937,7 +957,7 @@ export default function Booking() {
                       ${parseFloat(ratesData.total).toFixed(2)} {rate?.moneda}
                     </span>
                   </p>
-                  <div className="form-check mb-2">
+                  {/* <div className="form-check mb-2">
                     <input
                       type="checkbox"
                       id="editarTotal"
@@ -964,7 +984,7 @@ export default function Booking() {
                         step="0.01"
                       />
                     </div>
-                  )}
+                  )} */}
                 </div>
               )}
 

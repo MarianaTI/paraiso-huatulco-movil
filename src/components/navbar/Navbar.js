@@ -185,6 +185,18 @@ export default function Navbar() {
                   Reportes
                 </Link>
               </li>
+              <li className="nav-item nav-item-design">
+                <Link
+                  href="/disponibilidad"
+                  className="nav-link w-100 d-flex gap-2 align-items-center"
+                  onClick={closeOffcanvas}
+                >
+                  <MdOutlineTour
+                    style={{ height: 18, width: 18, color: "#575757" }}
+                  />
+                  Disponibilidad
+                </Link>
+              </li>
             </ul>
           </div>
           <button className="log-out-button" onClick={LogOut}>

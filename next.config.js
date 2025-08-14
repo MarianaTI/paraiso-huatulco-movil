@@ -29,6 +29,7 @@ const withPWA = require("next-pwa")({
     {url: '/confirmation/', revision: null},
     {url: '/report/', revision: null},
     {url: '/agency/', revision: null},
+    {url: '/disponibilidad/', revision: null},
     ...dynamicEntries
   ]
 });
