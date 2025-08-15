@@ -113,8 +113,8 @@ export default function Embarcaciones() {
                   <div className="modal-body">
                     <h5 className="mb-1">{selectedEvent.extendedProps.tour}</h5>
                     <span>
-                      Embarcación a usar "
-                      {selectedEvent.extendedProps.embarcacion}"
+                      Embarcación a usar 
+                      {selectedEvent.extendedProps.embarcacion}
                     </span>
                     <div className="mt-2">
                       <p class="m-0">

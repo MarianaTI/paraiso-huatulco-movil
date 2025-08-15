@@ -139,6 +139,20 @@ module.exports = {
       },
     },    
     {
+      urlPattern: /^\/calendar\/.*$/,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "calendar-pages",
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 60 * 60 * 24 * 3,
+        },
+        cacheableResponse: {
+          statuses: [0, 200],
+        },
+      },
+    },    
+    {
       urlPattern: /^\/confirmation\/.*$/,
       handler: "CacheFirst",
       options: {
