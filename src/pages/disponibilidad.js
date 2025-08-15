@@ -1,4 +1,3 @@
-import GetDisponibildadEmbarcaciones from "@/application/usecases/SaleUseCase/GetDisponibilidadEmbarcaciones";
 import GetDisponibilidadTour from "@/application/usecases/SaleUseCase/GetDisponibilidadTour";
 import GetDisponibildadTraslado from "@/application/usecases/SaleUseCase/GetDisponibilidadTraslado";
 import GetDisponibildadUnidad from "@/application/usecases/SaleUseCase/GetDisponibilidadUnidad";
@@ -25,16 +24,12 @@ export default function Disponibilidad() {
   const [traslado, setTraslado] = useState([]);
   const [renta, setRenta] = useState([]);
   const [unidad, setUnidad] = useState([]);
-  const [embarcaciones, setEmbarcaciones] = useState([]);
 
   const saleRepo = new SaleRepo();
   const getDisponibilidadTour = new GetDisponibilidadTour(saleRepo);
   const getDisponibildadTraslado = new GetDisponibildadTraslado(saleRepo);
   const getDisponibildadUnidad = new GetDisponibildadUnidad(saleRepo);
   const getUnidades = new GetUnidades(saleRepo);
-  const getDisponibildadEmbarcaciones = new GetDisponibildadEmbarcaciones(
-    saleRepo
-  );
 
   const getToday = () => {
     const today = new Date();
@@ -112,15 +107,6 @@ export default function Disponibilidad() {
     }
   };
 
-  const fetchDisponibilidadEmbarcaciones = async (fecha, destino) => {
-    try {
-      const response = await getDisponibildadEmbarcaciones.run(fecha, destino);
-      setEmbarcaciones(response.response);
-    } catch (error) {
-      console.error("Error cargando las embarcaciones: ", error);
-    }
-  };
-
   const buscador = (servicio, termino, mostrarTodos = false) => {
     if (!servicio) return [];
     const term = (termino || "").toLowerCase();
@@ -175,7 +161,6 @@ export default function Disponibilidad() {
     fetchDisponibilidadTraslado(params.fecha, params.destino);
     fetchDisponibilidadUnidad(params.fecha, params.destino);
     fetchUnidades(params.fecha, params.destino);
-    fetchDisponibilidadEmbarcaciones();
   }, [params]);
 
   return (

@@ -10,6 +10,7 @@ import { TbLayoutDashboard, TbBuilding } from "react-icons/tb";
 import { LuTags, LuLogOut } from "react-icons/lu";
 import { MdOutlineTour } from "react-icons/md";
 import { HiOutlineDocument } from "react-icons/hi2";
+import { IoCalendarOutline } from "react-icons/io5";
 import { useEffect } from "react";
 
 export default function Navbar() {
@@ -195,6 +196,18 @@ export default function Navbar() {
                     style={{ height: 18, width: 18, color: "#575757" }}
                   />
                   Disponibilidad
+                </Link>
+              </li>
+              <li className="nav-item nav-item-design">
+                <Link
+                  href="/calendar"
+                  className="nav-link w-100 d-flex gap-2 align-items-center"
+                  onClick={closeOffcanvas}
+                >
+                  <IoCalendarOutline 
+                    style={{ height: 18, width: 15, color: "#575757" }}
+                  />
+                  Embarcaciones
                 </Link>
               </li>
             </ul>
