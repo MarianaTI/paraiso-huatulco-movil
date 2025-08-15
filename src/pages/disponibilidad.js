@@ -5,6 +5,7 @@ import GetDisponibildadUnidad from "@/application/usecases/SaleUseCase/GetDispon
 import GetUnidades from "@/application/usecases/SaleUseCase/GetUnidades";
 import Renta from "@/components/card/Renta";
 import Tour from "@/components/card/Tour";
+import Traslado from "@/components/card/Traslado";
 import OfflinePage from "@/components/OfflinePage";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
 import SaleRepo from "@/infraestructure/implementation/httpRequest/axios/SaleRepo";
@@ -14,9 +15,11 @@ export default function Disponibilidad() {
   const isOnline = useOnlineStatus();
   const [activeTab, setActiveTab] = useState("tour");
   const [searchTours, setSearchTours] = useState("");
+  const [searchTraslados, setSearchTraslados] = useState("");
   const [searchRentas, setSearchRentas] = useState("");
   const [searchUnidades, setSearchUnidades] = useState("");
   const [mostrarTodosTours, setMostrarTodosTours] = useState(false);
+  const [mostrarTodosTraslados, setMostrarTodosTraslados] = useState(false);
 
   const [tour, setTour] = useState([]);
   const [traslado, setTraslado] = useState([]);
@@ -85,7 +88,7 @@ export default function Disponibilidad() {
   const fetchDisponibilidadTraslado = async (fecha, destino) => {
     try {
       const response = await getDisponibildadTraslado.run(fecha, destino);
-      setTraslado(response.response);
+      setTraslado(response.productos);
     } catch (error) {
       console.error("Error cargando los traslados: ", error);
     }
@@ -138,6 +141,10 @@ export default function Disponibilidad() {
   const toursDisponibilidad = useMemo(() => {
     return buscador(tour, searchTours, mostrarTodosTours);
   }, [tour, searchTours, mostrarTodosTours]);
+
+  const trasladosDisponibilidad = useMemo(() => {
+    return buscador(traslado, searchTraslados, mostrarTodosTraslados);
+  }, [traslado, searchTraslados, mostrarTodosTraslados]);
 
   const rentaDisponibilidad = useMemo(() => {
     if (!renta) return [];
@@ -305,7 +312,45 @@ export default function Disponibilidad() {
                   </div>
                 </div>
               )}
-              {activeTab === "traslado" && <div></div>}
+              {activeTab === "traslado" && (
+                <div>
+                  <div className="d-flex gap-2">
+                    <input
+                      type="text"
+                      className="search-input"
+                      placeholder="Buscar"
+                      value={searchTraslados}
+                      onChange={(e) => setSearchTraslados(e.target.value)}
+                    />
+                    <button
+                      className="show-button"
+                      onClick={() => setMostrarTodosTraslados((prev) => !prev)}
+                    >
+                      {mostrarTodosTraslados ? "Top" : "Todos"}
+                    </button>
+                  </div>
+                  <div className="mt-3">
+                    {trasladosDisponibilidad.map((traslado, index) => (
+                      <div key={index}>
+                        <Traslado
+                          code={traslado.codigo}
+                          name={traslado.nombre}
+                          service={traslado.tipo_servicio}
+                          rate={traslado.tarifa}
+                          type={traslado.x_unidad}
+                          availability={traslado.disponible}
+                          count={traslado.disponibles}
+                          fill={traslado.ocupadas}
+                          max={traslado.max_pasajeros}
+                          adults={traslado.adultos_totales}
+                          kids={traslado.menores_totales}
+                          babies={traslado.infantes_totales}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               {activeTab === "renta" && (
                 <div>
                   <input
@@ -352,15 +397,15 @@ export default function Disponibilidad() {
                         key={index}
                         name={unidad.nombre}
                         code={unidad.codigo}
-                        date={unidad.fecha_inicio}
-                        date2={unidad.fecha_final}
+                        date={unidad.ventas[0]?.fecha_inicio || ""}
+                        date2={unidad.ventas[0]?.fecha_final || ""}
                         availability={unidad.disponible}
                         count={unidad.disponibles}
                         max={unidad.max_personas}
                         adults={unidad.adultos}
                         kids={unidad.menores}
                         babies={unidad.infantes}
-                        service={unidad.servicio}
+                        service={unidad.servicio_renta}
                         fill={unidad.ocupados}
                         min={unidad.min_personas}
                         type={unidad.servicio_renta}

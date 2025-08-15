@@ -19,21 +19,10 @@ const Renta = ({
 }) => {
   return (
     <div className="mt-3 tour-card">
-      <div className="d-flex flex-column">
+      <div className="d-flex justify-content-between align-items-center mb-1">
         <span className="tour-title">
           {code} - {name}
-        </span>{" "}
-        <span>Servicio: {service}</span>
-        {date2 ? (
-          <span style={{ fontSize: 12 }}>
-            Fechas: {date} a {date2}
-          </span>
-        ) : (
-          <span style={{ fontSize: 12 }}>Fecha: {date}</span>
-        )}
-      </div>
-      <div className="d-flex justify-content-between mt-1">
-        <span style={{ fontSize: 12, fontWeight: 600 }}>Estado: </span>
+        </span>
         {type ? (
           <div className="badge text-bg-danger">Ocupado</div>
         ) : (
@@ -44,6 +33,22 @@ const Renta = ({
           >
             {availability ? "Disponible" : "Ocupado"}
           </div>
+        )}
+      </div>
+      <div className="d-flex flex-column">
+        { service ? (
+          <span style={{ fontSize: 12 }}>Servicio: {service}</span>
+        ) : (
+          <></>
+        )}
+        {(date || date2) && (
+          date2 ? (
+            <span style={{ fontSize: 12 }}>
+              Fechas: {date} a {date2}
+            </span>
+          ) : (
+            <span style={{ fontSize: 12 }}>Fecha: {date}</span>
+          )
         )}
       </div>
       <div className="d-flex justify-content-between">
