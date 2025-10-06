@@ -38,7 +38,7 @@ const withPWA = require("next-pwa")({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: "export",
+  // output: "export",
   trailingSlash: true, //Esta opción genera las carpetas index.html de cada ruta dinamica
   images: {
     unoptimized: true,

@@ -80,6 +80,7 @@ export default function App({ Component, pageProps }) {
           <meta name="theme-color" content="#fff" />
           <link rel="apple-touch-icon" href="/icon512_rounded.png" />
           <link rel="icon" href="/icon512_rounded.png" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
         <LoadUserFromLocalStorage/>
         <Layout>

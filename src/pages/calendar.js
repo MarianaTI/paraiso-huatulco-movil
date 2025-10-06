@@ -76,8 +76,8 @@ export default function Embarcaciones() {
               center: "",
               right: "prev,next",
             }}
-            slotMinTime="06:00:00"
-            slotMaxTime="22:00:00"
+            slotMinTime="00:00:00"
+            slotMaxTime="24:00:00"
             events={events}
             eventContent={renderEventContent}
             eventClick={handleEventClick}
@@ -113,8 +113,8 @@ export default function Embarcaciones() {
                   <div className="modal-body">
                     <h5 className="mb-1">{selectedEvent.extendedProps.tour}</h5>
                     <span>
-                      Embarcación a usar 
-                      {selectedEvent.extendedProps.embarcacion}
+                      Embarcación a usar {""}
+                       {selectedEvent.extendedProps.embarcacion}
                     </span>
                     <div className="mt-2">
                       <p class="m-0">
