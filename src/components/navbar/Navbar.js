@@ -1,5 +1,3 @@
-import SignOutUserUseCase from "@/application/usecases/SingOutUseCase";
-import UserRepo from "@/infraestructure/implementation/httpRequest/axios/UserRepo";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,7 +9,6 @@ import { LuTags, LuLogOut } from "react-icons/lu";
 import { MdOutlineTour } from "react-icons/md";
 import { HiOutlineDocument } from "react-icons/hi2";
 import { IoCalendarOutline } from "react-icons/io5";
-import { useEffect } from "react";
 
 export default function Navbar() {
   const router = useRouter();
@@ -87,7 +84,7 @@ export default function Navbar() {
           </div>
           <div className="names-title">
             <span className="title">
-              {user?.nombre_comercial || "Cargando..."}
+              {user?.cuenta || "Cargando..."}
             </span>
             <span className="rol">
               {user?.rol

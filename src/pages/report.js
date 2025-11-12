@@ -4,6 +4,7 @@ import useOnlineStatus from "@/hooks/useOnlineStatus";
 import ReportRepo from "@/infraestructure/implementation/httpRequest/axios/ReportRepo";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import Select from "react-select";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -14,6 +15,7 @@ export default function Report() {
   const [vendedor, setVendedor] = useState([]);
   const [services, setServices] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const user = useSelector((state) => state.user);
 
   const getToday = () => {
     const today = new Date();
@@ -38,10 +40,13 @@ export default function Report() {
   const getAllReportUseCase = new GetAllReportUseCase(reportRepo);
 
   const fetchReports = async () => {
+    const isAdminOrOwner = user.rol === "admin" || user.rol === "owner";
     const data = {
       start: params.start,
       end: params.end,
-      idu: params.vendedor || 0,
+      idu: isAdminOrOwner 
+        ? (params.vendedor || 0) 
+        : user._id,
       servicio: params.servicio || 0,
     };
 
@@ -106,6 +111,7 @@ export default function Report() {
     if (params.start) {
       fetchReports();
     }
+    console.log(user.rol);
   }, [params]);
 
   const filteredReports = report.filter((item) => {
@@ -147,86 +153,146 @@ export default function Report() {
             </p>
           </div>
           <form className="d-flex flex-column mt-3">
-            <div className="grid-form">
-              <div className="grid-item">
-                <label className="form-label-styled">Vendedor</label>
-                <Select
-                  required
-                  className="basic-single py-2 mb-2 select-height"
-                  classNamePrefix="select"
-                  styles={{
-                    control: (provided) => ({
-                      ...provided,
-                      height: "40px",
-                      minHeight: "40px",
-                      borderRadius: "8px",
-                    }),
-                    valueContainer: (provided) => ({
-                      ...provided,
-                      height: "40px",
-                      padding: "0 8px",
-                    }),
-                    indicatorsContainer: (provided) => ({
-                      ...provided,
-                      height: "40px",
-                    }),
-                  }}
-                  name="vendedor"
-                  value={vendedor.find((opt) => opt.value === params.vendedor)}
-                  onChange={(selected) =>
-                    setParams({
-                      ...params,
-                      vendedor: selected ? selected.value : 0,
-                    })
-                  }
-                  options={vendedor}
-                  isClearable
+            {user.rol === "admin" || user.rol === "owner" ? (
+              <>
+                <div className="grid-form">
+                  <div className="grid-item">
+                    <label className="form-label-styled">Vendedor</label>
+                    <Select
+                      required
+                      className="basic-single py-2 mb-2 select-height"
+                      classNamePrefix="select"
+                      styles={{
+                        control: (provided) => ({
+                          ...provided,
+                          height: "40px",
+                          minHeight: "40px",
+                          borderRadius: "8px",
+                        }),
+                        valueContainer: (provided) => ({
+                          ...provided,
+                          height: "40px",
+                          padding: "0 8px",
+                        }),
+                        indicatorsContainer: (provided) => ({
+                          ...provided,
+                          height: "40px",
+                        }),
+                      }}
+                      name="vendedor"
+                      value={vendedor.find(
+                        (opt) => opt.value === params.vendedor
+                      )}
+                      onChange={(selected) =>
+                        setParams({
+                          ...params,
+                          vendedor: selected ? selected.value : 0,
+                        })
+                      }
+                      options={vendedor}
+                      isClearable
+                    />
+                  </div>
+                  <div className="grid-item">
+                    <label className="form-label-styled">Servicio</label>
+                    <Select
+                      required
+                      className="basic-single py-2 mb-2 select-height"
+                      classNamePrefix="select"
+                      styles={{
+                        control: (provided) => ({
+                          ...provided,
+                          height: "40px",
+                          minHeight: "40px",
+                          borderRadius: "8px",
+                        }),
+                        valueContainer: (provided) => ({
+                          ...provided,
+                          height: "40px",
+                          padding: "0 8px",
+                        }),
+                        indicatorsContainer: (provided) => ({
+                          ...provided,
+                          height: "40px",
+                        }),
+                      }}
+                      name="servicio"
+                      value={services.find(
+                        (opt) => opt.value === params.servicio
+                      )}
+                      onChange={(selected) =>
+                        setParams({
+                          ...params,
+                          servicio: selected ? selected.value : 0,
+                        })
+                      }
+                      options={services}
+                      isClearable
+                    />
+                  </div>
+                </div>
+                <label className="form-label-styled mt-2">
+                  Fecha de servicio
+                </label>
+                <input
+                  type="date"
+                  name="start"
+                  value={params.start}
+                  onChange={handleChange}
+                  className="mb-2 form-input-styled-report"
                 />
+              </>
+            ) : (
+              <div className="grid-form">
+                <div className="grid-item">
+                  <label className="form-label-styled">Servicio</label>
+                  <Select
+                    required
+                    className="basic-single py-2 mb-2 select-height"
+                    classNamePrefix="select"
+                    styles={{
+                      control: (provided) => ({
+                        ...provided,
+                        height: "40px",
+                        minHeight: "40px",
+                        borderRadius: "8px",
+                      }),
+                      valueContainer: (provided) => ({
+                        ...provided,
+                        height: "40px",
+                        padding: "0 8px",
+                      }),
+                      indicatorsContainer: (provided) => ({
+                        ...provided,
+                        height: "40px",
+                      }),
+                    }}
+                    name="servicio"
+                    value={services.find(
+                      (opt) => opt.value === params.servicio
+                    )}
+                    onChange={(selected) =>
+                      setParams({
+                        ...params,
+                        servicio: selected ? selected.value : 0,
+                      })
+                    }
+                    options={services}
+                    isClearable
+                  />
+                </div>
+                <div className="grid-item">
+                  <label className="form-label-styled">Fecha de servicio</label>
+                  <input
+                    type="date"
+                    name="start"
+                    value={params.start}
+                    onChange={handleChange}
+                    className="mb-2 form-input-styled-report"
+                  />
+                </div>
               </div>
-              <div className="grid-item">
-                <label className="form-label-styled">Servicio</label>
-                <Select
-                  required
-                  className="basic-single py-2 mb-2 select-height"
-                  classNamePrefix="select"
-                  styles={{
-                    control: (provided) => ({
-                      ...provided,
-                      height: "40px",
-                      minHeight: "40px",
-                      borderRadius: "8px",
-                    }),
-                    valueContainer: (provided) => ({
-                      ...provided,
-                      height: "40px",
-                      padding: "0 8px",
-                    }),
-                    indicatorsContainer: (provided) => ({
-                      ...provided,
-                      height: "40px",
-                    }),
-                  }}
-                  name="servicio"
-                  value={services.find((opt) => opt.value === params.servicio)}
-                  onChange={(selected) =>
-                    setParams({
-                      ...params,
-                      servicio: selected ? selected.value : 0,
-                    })
-                  }
-                  options={services}
-                  isClearable
-                />
-              </div>
-            </div>
-            <label className="form-label-styled mt-2">Fecha de servicio</label>
-            <input
-              type="date"
-              name="start"
-              value={params.start}
-              onChange={handleChange}
-              className="mb-2 form-input-styled-report"
-            />
+            )}
           </form>
           <main className="d-flex align-items-center gap-2">
             <div className="w-100">

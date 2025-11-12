@@ -15,6 +15,7 @@ const initialState = {
   nombre_comercial: userFromCookie?.nombre_comercial || null,
   rol: userFromCookie?.rol || null,
   correo: userFromCookie?.correo || null,
+  cuenta: userFromCookie?.cuenta || null,
 };
 
 const userReducer = (state = initialState, action) => {

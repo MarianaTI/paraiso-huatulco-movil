@@ -146,7 +146,7 @@ export default function Home() {
     <section>
       <div className="container-main">
         <h1 className="title m-0 p-0">
-          Hola, {user?.nombre_comercial || "Cargando..."}
+          Hola, {user?.cuenta || "Cargando..."}
         </h1>
         <span>Bienvenido de vuelta</span>
       </div>
