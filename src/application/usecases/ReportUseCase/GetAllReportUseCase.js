@@ -8,8 +8,8 @@ class GetAllReportUseCase {
         this.reportRepo =  reportRepo;
     }
 
-    async run(start, end, idu, servicio) {
-        const getReport = await this.reportRepo.getAll(start, end, idu, servicio);
+    async run(start, end, idu, servicio, destino) {
+        const getReport = await this.reportRepo.getAll(start, end, idu, servicio, destino);
         return getReport;
     }
 }

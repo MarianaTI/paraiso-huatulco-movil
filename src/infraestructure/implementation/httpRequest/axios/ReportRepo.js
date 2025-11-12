@@ -9,9 +9,9 @@ class ReportRepo extends IReportRepo {
         this.url = `${apiUrl}/pwa`;
     }
 
-    async getAll(start, end, idu, servicio) {
+    async getAll(start, end, idu, servicio, destino) {
         try {
-            const response = await axios.get(`${this.url}/reporteVentasDiaAgente?start=${start}&end=${end}&servicio=${servicio}&idu=${idu}`);
+            const response = await axios.get(`${this.url}/reporteVentasDiaAgente?start=${start}&end=${end}&servicio=${servicio}&idu=${idu}&destino=${destino}`);
             return response.data;
         } catch (error) {
             console.error("Error fetching los reportes: ", error.message);

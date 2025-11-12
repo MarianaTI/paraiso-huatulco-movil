@@ -18,10 +18,20 @@
   font-weight: 700;
 }
 
-.card-title p:last-child {
+.card-title .servicio {
   font-weight: 600;
   /* color: #5e6f92; */
   color: #3b71fe;
+}
+
+.card-title .estatus {
+  background-color: #1d662f; 
+  color: #fff;
+  width: fit-content;
+  padding: 2px 6px;
+  border-radius: 12px;
+  margin-top: 8px;
+  font-size: 12px;
 }
 
 .card-title {

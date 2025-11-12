@@ -3,18 +3,25 @@ import OfflinePage from "@/components/OfflinePage";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
 import ReportRepo from "@/infraestructure/implementation/httpRequest/axios/ReportRepo";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Select from "react-select";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/style.css";
+import { format } from "date-fns";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Report() {
+  const today = new Date();
   const isOnline = useOnlineStatus();
   const [report, setReport] = useState([]);
   const [vendedor, setVendedor] = useState([]);
   const [services, setServices] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [range, setRange] = useState({ from: today, to: today });
+  const [open, setOpen] = useState(false);
+  const pickerRef = useRef(null);
   const user = useSelector((state) => state.user);
 
   const getToday = () => {
@@ -29,6 +36,7 @@ export default function Report() {
     end: getToday(),
     vendedor: "",
     servicio: "",
+    destino: "HX",
   });
 
   const formatter = new Intl.NumberFormat("es-MX", {
@@ -44,17 +52,19 @@ export default function Report() {
     const data = {
       start: params.start,
       end: params.end,
-      idu: isAdminOrOwner 
-        ? (params.vendedor || 0) 
-        : user._id,
+      idu: isAdminOrOwner ? params.vendedor || 0 : user._id,
       servicio: params.servicio || 0,
+      destino: params.destino || "HX",
     };
+
+    console.log("🚀 Enviando datos al backend:", data);
 
     const response = await getAllReportUseCase.run(
       data.start,
       data.end,
       data.idu,
-      data.servicio
+      data.servicio,
+      data.destino
     );
     setReport(response);
     console.log("response", response);
@@ -111,7 +121,18 @@ export default function Report() {
     if (params.start) {
       fetchReports();
     }
-    console.log(user.rol);
+
+    function handleClickOutside(event) {
+      if (pickerRef.current && !pickerRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
   }, [params]);
 
   const filteredReports = report.filter((item) => {
@@ -119,9 +140,41 @@ export default function Report() {
     return (
       item.agente?.toLowerCase().includes(term) ||
       item.servicio?.toLowerCase().includes(term) ||
-      item.observaciones?.toLowerCase().includes(term)
+      item.observaciones?.toLowerCase().includes(term) ||
+      item.estatus?.toLowerCase().includes(term) ||
+      item.folio?.toLowerCase().includes(term) 
     );
   });
+
+  const handleSelect = (val) => {
+    console.log("📅 Selección del usuario:", val);
+    setRange(val);
+
+    if (val?.from && val?.to) {
+      setParams((prev) => ({
+        ...prev,
+        start: format(val.from, "yyyy-MM-dd"),
+        end: format(val.to, "yyyy-MM-dd"),
+      }));
+      setOpen(false);
+    } else if (val?.from && !val?.to) {
+      setParams((prev) => ({
+        ...prev,
+        start: format(val.from, "yyyy-MM-dd"),
+        end: "",
+      }));
+    }
+  };
+
+  const formatted =
+    range?.from && range?.to
+      ? `${format(range.from, "dd/MM/yyyy")} - ${format(
+          range.to,
+          "dd/MM/yyyy"
+        )}`
+      : range?.from
+      ? format(range.from, "dd/MM/yyyy")
+      : "";
 
   return (
     <>
@@ -231,67 +284,130 @@ export default function Report() {
                     />
                   </div>
                 </div>
-                <label className="form-label-styled mt-2">
-                  Fecha de servicio
-                </label>
-                <input
-                  type="date"
-                  name="start"
-                  value={params.start}
-                  onChange={handleChange}
-                  className="mb-2 form-input-styled-report"
-                />
+                <div className="grid-form">
+                  <div className="grid-item">
+                    <label className="form-label-styled">Destino</label>
+                    <select
+                      className="form-input-styled-report w-full"
+                      value={params.destino}
+                      onChange={(e) =>
+                        setParams({
+                          ...params,
+                          destino: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="HX">Huatulco</option>
+                      <option value="PX">Puerto Escondido</option>
+                      <option value="OX">Oaxaca</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="relative w-full" ref={pickerRef}>
+                  <label className="form-label-styled block">
+                    Fecha de servicio
+                  </label>
+                  <input
+                    type="text"
+                    readOnly
+                    value={formatted}
+                    onClick={() => setOpen(!open)}
+                    placeholder="Selecciona rango de fechas"
+                    className="form-input-styled-report w-full cursor-pointer"
+                  />
+                  {open && (
+                    <div className="absolute z-[9999] bg-white shadow-lg rounded-lg p-2 mt-1">
+                      <DayPicker
+                        mode="range"
+                        selected={range}
+                        onSelect={handleSelect}
+                        captionLayout="dropdown" 
+                      />
+                    </div>
+                  )}
+                </div>
               </>
             ) : (
-              <div className="grid-form">
-                <div className="grid-item">
-                  <label className="form-label-styled">Servicio</label>
-                  <Select
-                    required
-                    className="basic-single py-2 mb-2 select-height"
-                    classNamePrefix="select"
-                    styles={{
-                      control: (provided) => ({
-                        ...provided,
-                        height: "40px",
-                        minHeight: "40px",
-                        borderRadius: "8px",
-                      }),
-                      valueContainer: (provided) => ({
-                        ...provided,
-                        height: "40px",
-                        padding: "0 8px",
-                      }),
-                      indicatorsContainer: (provided) => ({
-                        ...provided,
-                        height: "40px",
-                      }),
-                    }}
-                    name="servicio"
-                    value={services.find(
-                      (opt) => opt.value === params.servicio
-                    )}
-                    onChange={(selected) =>
-                      setParams({
-                        ...params,
-                        servicio: selected ? selected.value : 0,
-                      })
-                    }
-                    options={services}
-                    isClearable
-                  />
+              <>
+                <div className="grid-form">
+                  <div className="grid-item">
+                    <label className="form-label-styled">Servicio</label>
+                    <Select
+                      required
+                      className="basic-single py-2 mb-2 select-height"
+                      classNamePrefix="select"
+                      styles={{
+                        control: (provided) => ({
+                          ...provided,
+                          height: "40px",
+                          minHeight: "40px",
+                          borderRadius: "8px",
+                        }),
+                        valueContainer: (provided) => ({
+                          ...provided,
+                          height: "40px",
+                          padding: "0 8px",
+                        }),
+                        indicatorsContainer: (provided) => ({
+                          ...provided,
+                          height: "40px",
+                        }),
+                      }}
+                      name="servicio"
+                      value={services.find(
+                        (opt) => opt.value === params.servicio
+                      )}
+                      onChange={(selected) =>
+                        setParams({
+                          ...params,
+                          servicio: selected ? selected.value : 0,
+                        })
+                      }
+                      options={services}
+                      isClearable
+                    />
+                  </div>
+                  <div className="grid-item">
+                    <label className="form-label-styled">Destino</label>
+                    <select
+                      className="form-input-styled-report w-full"
+                      value={params.destino}
+                      onChange={(e) =>
+                        setParams({
+                          ...params,
+                          destino: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="HX">Huatulco</option>
+                      <option value="PX">Puerto Escondido</option>
+                      <option value="OX">Oaxaca</option>
+                    </select>
+                  </div>
                 </div>
-                <div className="grid-item">
-                  <label className="form-label-styled">Fecha de servicio</label>
+                <div className="relative w-full" ref={pickerRef}>
+                  <label className="form-label-styled block">
+                    Fecha de servicio
+                  </label>
                   <input
-                    type="date"
-                    name="start"
-                    value={params.start}
-                    onChange={handleChange}
-                    className="mb-2 form-input-styled-report"
+                    type="text"
+                    readOnly
+                    value={formatted}
+                    onClick={() => setOpen(!open)}
+                    placeholder="Selecciona rango de fechas"
+                    className="form-input-styled-report w-full cursor-pointer"
                   />
+                  {open && (
+                    <div className="absolute z-50 bg-white shadow-lg rounded-lg p-2 mt-1">
+                      <DayPicker
+                        mode="range"
+                        selected={range}
+                        onSelect={handleSelect}
+                      />
+                    </div>
+                  )}
                 </div>
-              </div>
+              </>
             )}
           </form>
           <main className="d-flex align-items-center gap-2">
@@ -314,6 +430,11 @@ export default function Report() {
               Descargar
             </a>
           </main>
+          <div className="pt-3">
+            <span className="description">
+              Un total de {filteredReports.length} reportes
+            </span>
+          </div>
           <div className="my-4">
             {filteredReports.length === 0 ? (
               <div
@@ -380,8 +501,14 @@ export default function Report() {
                 return (
                   <section className="card-container" key={index}>
                     <div className="card-title">
+                      <p>{item.folio}</p>
                       <p>{item.agente}</p>
-                      <p>{item.servicio}</p>
+                      <p className="servicio">{item.servicio}</p>
+                      {item.estatus === "pagado" ? (
+                        <p className="estatus">{item.estatus}</p>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                     <h3 className="title-grid-card mt-3">Pasajeros</h3>
                     <div className="card-content">
