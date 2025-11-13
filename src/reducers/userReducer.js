@@ -33,6 +33,16 @@ const userReducer = (state = initialState, action) => {
 
       return newState;
 
+    case "LOGOUT": 
+      Cookies.remove("user_session");
+      return {
+        _id: null,
+        nombre_comercial: null,
+        rol: null,
+        correo: null,
+        cuenta: null,
+      };
+
     default:
       return state;
   }

@@ -403,6 +403,7 @@ export default function Report() {
                         mode="range"
                         selected={range}
                         onSelect={handleSelect}
+                        captionLayout="dropdown" 
                       />
                     </div>
                   )}

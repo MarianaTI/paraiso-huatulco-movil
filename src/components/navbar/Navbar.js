@@ -3,15 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { HiBars3 } from "react-icons/hi2";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { TbLayoutDashboard, TbBuilding } from "react-icons/tb";
 import { LuTags, LuLogOut } from "react-icons/lu";
 import { MdOutlineTour } from "react-icons/md";
 import { HiOutlineDocument } from "react-icons/hi2";
 import { IoCalendarOutline } from "react-icons/io5";
+import { logout } from "@/actions/userActions";
 
 export default function Navbar() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
   const closeOffcanvas = () => {
@@ -31,6 +33,8 @@ export default function Navbar() {
     localStorage.removeItem("selectedRate");
     localStorage.removeItem("top");
     Cookies.remove("user_session");
+
+    dispatch(logout());
     router.push("/");
   };
 
